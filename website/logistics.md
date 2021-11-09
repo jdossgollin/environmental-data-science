@@ -1,12 +1,11 @@
 # Course logistics
 
-[![Discord Chat](/assets/discord_logo.svg#badge)](https://discord.gg/Z5qnVf8)
+### Rice Students Only
 
-### MIT Students Only
 [![Zoom Meeting](/assets/zoom_logo.svg#badge)](https://zoom.us/j/96183959527)
-[![Piazza Forum](/assets/piazza_logo.svg#badge)](https://piazza.com/mit/spring2021/6s083)
 [![Canvas LMS](/assets/canvas_logo.svg#badge)](https://canvas.mit.edu/courses/7590)
 [![MITx LMS](/assets/mitx_logo.svg#badge)](https://lms.mitx.mit.edu/courses/course-v1:MITx+6.S083r+2021_Spring/course/)
+[![Slack Workspace](/assets/slack_logo.svg#badge)](https://discord.gg/Z5qnVf8)
 
 > **Suggestion**: Bookmark this page for easy access to everything you need to follow this class! 
 
