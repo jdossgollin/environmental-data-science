@@ -38,7 +38,7 @@ struct Section
     name::String
     notebook_path::String
     video_id::String
-	preview_image_url::String
+    preview_image_url::String
 end
 
 struct Chapter
@@ -115,7 +115,7 @@ end
 
 function process_book_item(section::Section)
     println(section.notebook_path)
-    notebook  = Pluto.load_notebook_nobackup(section.notebook_path)
+    notebook = Pluto.load_notebook_nobackup(section.notebook_path)
     ordered_cells = notebook.cells
 
     # First, add the header to each cell
@@ -125,7 +125,8 @@ function process_book_item(section::Section)
     cells_dict = getfield(notebook, :cells_dict)
     cell_order = getfield(notebook, :cell_order)
 
-    if occursin("<iframe src=\"https://www.youtube", first_cell.code) || occursin("# Section header", first_cell.code)
+    if occursin("<iframe src=\"https://www.youtube", first_cell.code) ||
+       occursin("# Section header", first_cell.code)
         # We can just overwrite this cell
         first_cell.code = new_cell_code
         first_cell.code_folded = true
@@ -133,7 +134,7 @@ function process_book_item(section::Section)
         # We get to add a new cell
         new_cell = Pluto.Cell(new_cell_code)
         new_cell.code_folded = true
-        push!(cells_dict,new_cell.cell_id => new_cell)
+        push!(cells_dict, new_cell.cell_id => new_cell)
         insert!(cell_order, 1, new_cell.cell_id)
     end
 
@@ -144,14 +145,14 @@ function process_book_item(section::Section)
         end
     end
 
-#    num_deleted = 0
-#    for (i, cell) ∈ enumerate(ordered_cells)
-#         if length(strip(cell.code)) == 0 && !cell.code_folded
-#             delete!(cells_dict, cell.cell_id)
-#             deleteat!(cell_order, i - num_deleted)
-#             num_deleted += 1
-#         end
-#     end
+    #    num_deleted = 0
+    #    for (i, cell) ∈ enumerate(ordered_cells)
+    #         if length(strip(cell.code)) == 0 && !cell.code_folded
+    #             delete!(cells_dict, cell.cell_id)
+    #             deleteat!(cell_order, i - num_deleted)
+    #             num_deleted += 1
+    #         end
+    #     end
     setfield!(notebook, :cells_dict, cells_dict)
     setfield!(notebook, :cell_order, cell_order)
 
@@ -195,7 +196,7 @@ function sidebar_code(book_model)
     <img src="/assets/MIT_logo.svg" style="width: 80px; height: auto; display: inline">
     <img src="/assets/julia-logo.svg" style="margin-left:1em; width: 80px; height: auto; display: inline">
     <div style="font-weight: bold; margin-bottom: 0.5em"><a href="/semesters/">Spring 2021</a> <span style="opacity: 0.6;">| MIT 18.S191/6.S083/22.S092</span></div>
-    <h1><a href="/">Introduction to Computational Thinking</a></h1>
+    <h1><a href="/">Environmental Data Science</a></h1>
     <h2>Math from computation, math with computation</h2>
     <div style="line-height:18px; font-size: 15px; opacity: 0.85">by <a href="http://math.mit.edu/~edelman">Alan Edelman</a>, <a href="http://sistemas.fciencias.unam.mx/~dsanders/">David P. Sanders</a> &amp; <a href="https://people.csail.mit.edu/cel/">Charles E. Leiserson</a></div>
     </div>

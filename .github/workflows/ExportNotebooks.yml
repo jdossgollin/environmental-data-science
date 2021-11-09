@@ -1,76 +1,77 @@
-name: Spring 21 - Export Pluto notebooks & Deploy
+name: Spring 22 - Export Pluto notebooks & Deploy
 on:
-    push:
-        branches:
-            - Spring21
-    workflow_dispatch:
+  push:
+    branches:
+      - Spring22
+  workflow_dispatch:
 
 jobs:
-    build-and-deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Spring 21 source
-              uses: actions/checkout@v2
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Spring 21 source
+        uses: actions/checkout@v2
 
-            - name: Set up notebook state cache
-              uses: actions/cache@v2
-              with:
-                path: pluto_state_cache
-                key: ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml') }}-${{ hashFiles('**/*.jl') }}
-                restore-keys: |
-                    ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml') }}
+      - name: Set up notebook state cache
+        uses: actions/cache@v2
+        with:
+          path: pluto_state_cache
+          key: ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml') }}-${{ hashFiles('**/*.jl') }}
+          restore-keys: |
+            ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml') }}
 
-            - name: Checkout Fall 20 output
-              uses: actions/checkout@v2
-              with:
-                  path: Fall20-franklin-output
-                  ref: Fall20-franklin-output
+      - name: Checkout Fall 20 output
+        uses: actions/checkout@v2
+        with:
+          path: Fall20-franklin-output
+          ref: Fall20-franklin-output
 
-            - name: Install Julia
-              uses: julia-actions/setup-julia@v1
-              with:
-                  version: 1.6.0
-            - name: Run Pluto notebooks
-              run: julia --project=pluto-deployment-environment -e '
-                  import Pkg;
-                  Pkg.instantiate();
+      - name: Install Julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: 1.6.0
+      - name: Run Pluto notebooks
+        run: julia --project=pluto-deployment-environment -e '
+          import Pkg;
+          Pkg.instantiate();
 
-                  using PlutoSliderServer;
-                  github_action("."; Export_cache_dir="pluto_state_cache");'
-            - name: Franklin
-              run: julia -e '
-                  using Pkg;
-                  Pkg.add([
-                  Pkg.PackageSpec(name="NodeJS", version="1.1.1"),
-                  Pkg.PackageSpec(name="JSON", version="0.21.1"),
-                  Pkg.PackageSpec(name="Franklin", version="0.10.28"),
-                  ]);
-                  using NodeJS;
+          using PlutoSliderServer;
+          github_action("."; Export_cache_dir="pluto_state_cache");'
+      - name: Franklin
+        run:
+          julia -e '
+          using Pkg;
+          Pkg.add([
+          Pkg.PackageSpec(name="NodeJS", version="1.1.1"),
+          Pkg.PackageSpec(name="JSON", version="0.21.1"),
+          Pkg.PackageSpec(name="Franklin", version="0.10.28"),
+          ]);
+          using NodeJS;
 
-                  "== Run Franklin ==";
-                  cd("website");
+          "== Run Franklin ==";
+          cd("website");
 
-                  run(`$(npm_cmd()) install highlight.js`);
-                  using Franklin;
-                  optimize(;minify=false);
-                  mkdir("__site2");
-                  mv("__site", "__site2/Spring21");
-                  mv("../Fall20-franklin-output/Fall20", "__site2/Fall20");
+          run(`$(npm_cmd()) install highlight.js`);
+          using Franklin;
+          optimize(;minify=false);
+          mkdir("__site2");
+          mv("__site", "__site2/Spring21");
+          mv("../Fall20-franklin-output/Fall20", "__site2/Fall20");
 
-                  "== Place rendered notebooks in the website folder ==";
-                  cp("../notebooks", "__site2/Spring21/notebooks");
+          "== Place rendered notebooks in the website folder ==";
+          cp("../notebooks", "__site2/Spring21/notebooks");
 
-                  "== Extra website config files ==";
-                  write("__site2/index.html", """
-                  <!DOCTYPE html>
-                  <html>
-                  <head><meta charset="utf-8"><script>
-                  window.location.href=\"Spring21\"</script></head>
-                  <body></body></html>""");
-                  write("__site2/CNAME", "computationalthinking.mit.edu");'
-            - name: Build and Deploy
-              uses: JamesIves/github-pages-deploy-action@releases/v3
-              with:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  BRANCH: Spring21-franklin-output
-                  FOLDER: website/__site2
+          "== Extra website config files ==";
+          write("__site2/index.html", """
+          <!DOCTYPE html>
+          <html>
+          <head><meta charset="utf-8"><script>
+          window.location.href=\"Spring21\"</script></head>
+          <body></body></html>""");'
+          #write("__site2/CNAME", "computationalthinking.mit.edu");'
+      - name: Build and Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: Spring22-franklin-output
+          FOLDER: website/__site2
