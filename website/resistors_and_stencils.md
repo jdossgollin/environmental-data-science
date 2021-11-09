@@ -1,0 +1,1 @@
+{{ plutonotebookpage  ../notebooks/week14/resistors_and_stencils.jl }}
