@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Spring 21 source
+      - name: Checkout Spring 22 source
         uses: actions/checkout@v2
 
       - name: Set up notebook state cache
@@ -55,18 +55,18 @@ jobs:
           using Franklin;
           optimize(;minify=false);
           mkdir("__site2");
-          mv("__site", "__site2/Spring21");
+          mv("__site", "__site2/Spring22");
           mv("../Fall20-franklin-output/Fall20", "__site2/Fall20");
 
           "== Place rendered notebooks in the website folder ==";
-          cp("../notebooks", "__site2/Spring21/notebooks");
+          cp("../notebooks", "__site2/Spring22/notebooks");
 
           "== Extra website config files ==";
           write("__site2/index.html", """
           <!DOCTYPE html>
           <html>
           <head><meta charset="utf-8"><script>
-          window.location.href=\"Spring21\"</script></head>
+          window.location.href=\"Spring22\"</script></head>
           <body></body></html>""");'
           #write("__site2/CNAME", "computationalthinking.mit.edu");'
       - name: Build and Deploy
