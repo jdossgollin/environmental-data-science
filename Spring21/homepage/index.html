@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Environmental Data Science</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="James Doss-Gollin" />
+
+    <base target="_parent">
+
+    <script src="https://cdn.jsdelivr.net/npm/@observablehq/stdlib@3.3.1/dist/stdlib.js" defer></script>
+
+    <link rel="stylesheet" href="./index.css">
+
+    <script src="index.js" defer></script>
+</head>
+
+<body>
+    <div id="title" class="banner">
+
+        <h1>Julia: <strong>A Fresh Approach to Computing</strong></h1>
+    </div>
+    <!-- <img src="https://computationalthinking.mit.edu/Spring21/assets/MIT_logo.svg" class="logo"> -->
+
+    <blockquote class="banner">
+        <p>
+            This course uses cutting-edge interactive computing to 
+             to the modeling and analysis of environmental data with a rigorous grounding in probability, optimization, and understanding of underlying physical mechanisms.
+            This course will place a particular focus on the iterative process of building, computing, and critiquing predictive models of environmental processes.
+        </p>
+
+        <p>Upon completion, students are well trained to be scientific “trilinguals”, seeing and experimenting with mathematics interactively as math is meant to be seen, and ready to participate and contribute to open source development of large projects and ecosystems.</p>
+    </blockquote>
+
+    <main>
+        <!--
+        <div>
+            <h1>Three fields, one course</h1>
+
+            <div class="scrolly">
+                <div class="pillars">
+
+                    <div>
+                        <h3>Computer Science</h3>
+                        <ul>
+                            <li>visualization</li>
+                            <li>structure, abstraction</li>
+                            <li>type systems</li>
+                            <li>multiple dispatch</li>
+                            <li>dynamic dispatch</li>
+                            <li>two-language problem</li>
+                            <li>expression problem</li>
+                            <li>functional programming</li>
+                            <li>arrays</li>
+                            <li>matrices</li>
+                            <li>dataframes</li>
+                            <li>git, github</li>
+                            <li>version control</li>
+                            <li>collaboration</li>
+                            <li>devops</li>
+                            <li>language design</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Statistics</h3>
+                        <ul>
+                            <li>matrices</li>
+                        </ul>
+
+                    </div>
+                    <div>
+                        <h3>Environmental Science</h3>
+
+                        <ul>
+                            <li>extreme value analysis</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div>
+            <h1>Details</h1>
+
+            <blockquote>
+                <p>See also the course repository at <a href="https://github.com/mitmath/18S191">github.com/mitmath/18S191</a>.</p>
+            </blockquote>
+            <p></p>
+            <!--<blockquote>
+                <p><em><strong><a href="/Spring21/reviews/">What people are saying about the course!</a></strong></em></p>
+            </blockquote>-->
+            <h2 id="meet_our_staff">Meet your instructor</h2>
+            <p>
+                <strong><a href="http://dossgollin-lab.github.io">James Doss-Gollin</a></strong> is an assistant professor of Civil and Environmental Engineering at Rice University.
+                Dr. Doss-Gollin’s research is motivated by challenging questions at the intersection of climate dynamics, water management, data science, and decision science.
+                By developing methods for understanding and predicting spatiotemporally clustered hydroclimate risk, and for incorporating uncertain projections into sequential decision problems, he strives to enable the delivery of flexible and resilient infrastructure services.
+                Dr. Doss-Gollin completed his M.S. and Ph.D. in Earth and Environmental Engineering at Columbia and holds a B.S. in Mechanical Engineering from Yale University.
+                Prior to joining Rice University, he was a postdoctoral researcher in the Earth and Environmental Systems Institute at the Pennsylvania State University.
+            </p> 
+            <!--<p><strong>Assistants:</strong> <a href="https://www.csail.mit.edu/person/bola-malek">Bola Malek</a>, <a href="https://scholar.harvard.edu/logankilpatrick/home">Logan Kilpatrick</a></p>-->
+
+            <h2 id="meet_julia">Meet the Julia language</h2>
+            <p><a href="https://julialang.org/learning/classes/">widely used in classrooms.</a></p>
+
+            <h2 id = "course_description">Course Description</h2>
+            <p>
+                Sensors, satellites, people, robots, and drones collect a wealth of data describing environmental processes relevant for understanding and managing the natural and built environment.
+                Making sense of these data sets, sometimes vast and sometimes consisting of a few observations, requires integrating domain knowledge, computational methods, and statistical models. In a nutshell, data science.
+            </p>
+            <p>
+                The path from data and theory to models, inference, and ultimately decisions is long, winding, and perilous. In this course, you will learn not only how to fit models, but also how to interpret, critique, improve, and evaluate models and model-based inference. Specifically, you will learn a principled workflow for using data to inform decisions that:
+            </p>
+            <ol>
+                <li>credibly describes the physical processes that generated the data;</li>
+                <li>flexibly makes use of multiple sources of information;</li>
+                <li>transparently communicates imperfect modeling assumptions; and</li>
+                <li>allows you to reason about uncertainty using the language of probability theory.</li>
+            </ol><p>
+                Applications to water, climate, air, and geologic data will emphasize models for spatial and temporal data.
+            </p>
+
+            <h2 id="course_objectives">Course Objectives</h2>
+            <p>
+                Upon completing this course, students will be able to:
+            </p>
+            <ol>
+                <li>write down generative models for environmental data;</li>
+                <li>use reproducible software tools to download, open, and visualize data from publicly available
+                sources;</li>
+                <li>use Bayesian and maximum likelihood methods to conduct inference (“inverse modeling”) on
+                generative models of environmental data;</li>
+                <li>use simulation (“forward modeling”) to compare the logical implications of a predictive model
+                to data;</li>
+                <li>identify the assumptions that commonly applied data science methods make, and describe
+                where they are or are not appropriate to model environmental data; and</li>
+                <li>critically interpret statistical analyses of environmental data applied in academic journals,
+                government, and industry.</li>
+            </ol>
+        </div>
+        <div class="page-foot">
+            <div class="copyright">
+                <a href="https://github.com/mitmath/18S191/"><b>Edit this page on <img class="github-logo" src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></b></a><br>
+                Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
