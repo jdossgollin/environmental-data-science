@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - Spring22
+
   workflow_dispatch:
 
 jobs:
@@ -24,6 +25,7 @@ jobs:
         uses: julia-actions/setup-julia@v1
         with:
           version: 1.6.3
+
       - name: Run Pluto notebooks
         run: julia --project=pluto-deployment-environment -e '
           import Pkg;
@@ -31,6 +33,7 @@ jobs:
 
           using PlutoSliderServer;
           github_action("."; Export_cache_dir="pluto_state_cache");'
+
       - name: Franklin
         run: julia -e '
           using Pkg;
@@ -47,20 +50,22 @@ jobs:
           run(`$(npm_cmd()) install highlight.js`);
           using Franklin;
           optimize(;minify=false);
+          mkdir("__site2");
+          mv("__site", "__site2/Spring22");
 
           "== Place rendered notebooks in the website folder ==";
-          cp("../notebooks", "__site/notebooks");
+          cp("../notebooks", "__site2/Spring22/notebooks");
 
           "== Extra website config files ==";
-          write("__site/index.html", """
+          write("__site2/index.html", """
           <!DOCTYPE html>
           <html>
           <head><meta charset="utf-8"><script>
           window.location.href=\"Spring22\"</script></head>
-          <body></body></html>""")';
+          <body></body></html>""");'
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: Spring22-franklin-output
-          FOLDER: website/__site
+          FOLDER: website/__site2

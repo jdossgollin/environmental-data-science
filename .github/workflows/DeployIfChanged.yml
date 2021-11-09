@@ -1,4 +1,4 @@
-name: Spring 22 - Deploy slider server when notebooks change
+name: Spring 21 - Deploy slider server when notebooks change
 on:
     push:
         branches:
