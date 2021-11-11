@@ -18,7 +18,7 @@ The latter allows you to plug in values that you would have defined here.
              `prepath` to an empty string. Finally, adjust this if you want the
              deployed page to be in a subfolder e.g.: `YourPackage.jl/web/`.
 -->
-@def title       = "Environmental Data Scioence"
+@def title       = "Environmental Data Science"
 @def prepath     = "Spring22"
 @def description = """
                    Course website for Rice University CEVE 543: Environmental Data Science

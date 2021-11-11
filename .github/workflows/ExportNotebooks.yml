@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - Spring22
-
   workflow_dispatch:
 
 jobs:
@@ -21,11 +20,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml') }}
 
+      #- name: Checkout Fall 20 output
+      #  uses: actions/checkout@v2
+      #  with:
+      #    path: Fall20-franklin-output
+      #    ref: Fall20-franklin-output
+
       - name: Install Julia
         uses: julia-actions/setup-julia@v1
         with:
           version: 1.6.3
-
       - name: Run Pluto notebooks
         run: julia --project=pluto-deployment-environment -e '
           import Pkg;
@@ -33,7 +37,6 @@ jobs:
 
           using PlutoSliderServer;
           github_action("."; Export_cache_dir="pluto_state_cache");'
-
       - name: Franklin
         run: julia -e '
           using Pkg;
@@ -52,6 +55,7 @@ jobs:
           optimize(;minify=false);
           mkdir("__site2");
           mv("__site", "__site2/Spring22");
+          # mv("../Fall20-franklin-output/Fall20", "__site2/Fall20");
 
           "== Place rendered notebooks in the website folder ==";
           cp("../notebooks", "__site2/Spring22/notebooks");
@@ -62,7 +66,8 @@ jobs:
           <html>
           <head><meta charset="utf-8"><script>
           window.location.href=\"Spring22\"</script></head>
-          <body></body></html>""");'
+          <body></body></html>""");
+          write("__site2/CNAME", "jamesdossgollin.me/environmental-data-science/");'
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
