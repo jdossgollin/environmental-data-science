@@ -1,4 +1,4 @@
-# Cheatsheets
+# Julia Cheatsheets
 
 - [Getting Started with Julia - live](/basic_syntax/).
 - [Fastrack to Julia](https://juliadocs.github.io/Julia-Cheat-Sheet/) cheatsheet.
