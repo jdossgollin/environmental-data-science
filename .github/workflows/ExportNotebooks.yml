@@ -55,8 +55,6 @@ jobs:
           optimize(;minify=false);
           mkdir("__site2");
           mv("__site", "__site2/Spring22");
-          # mv("../Fall20-franklin-output/Fall20", "__site2/Fall20");
-
           "== Place rendered notebooks in the website folder ==";
           cp("../notebooks", "__site2/Spring22/notebooks");
 
