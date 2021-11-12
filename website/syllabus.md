@@ -7,6 +7,11 @@
 [![Canvas](/assets/canvas_logo.svg#badge)](https://canvas.mit.edu/courses/7590)
 [![Slack Chat](/assets/slack_logo.svg#badge)](https://discord.gg/Z5qnVf8)
 
+## Credits
+
+> Some material on this website (and the website template itself) is based on: _**Computational Thinking**, a live online Julia/Pluto textbook_
+> ([computationalthinking.mit.edu](https://computationalthinking.mit.edu)).
+
 ## Lectures
 
 | Lecture | Title | Date | Notebooks | Recording | Announcements |
