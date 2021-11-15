@@ -2,12 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>cheatsheets/index.html</loc>
-    <lastmod>2021-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>homework/index.html</loc>
     <lastmod>2021-11-15</lastmod>
     <changefreq>monthly</changefreq>
@@ -20,7 +14,7 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>logistics/index.html</loc>
+    <loc>useful_links/index.html</loc>
     <lastmod>2021-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
