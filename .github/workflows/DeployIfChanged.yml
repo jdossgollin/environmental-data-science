@@ -14,7 +14,7 @@ jobs:
             - name: Checkout Spring 22 source
               uses: actions/checkout@v2
 
-            - name: Push to Spring21-deploy
+            - name: Push to Spring22-deploy
               uses: JamesIves/github-pages-deploy-action@releases/v3
               with:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
