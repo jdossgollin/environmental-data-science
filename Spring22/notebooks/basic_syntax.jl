@@ -1,15 +1,14 @@
 ### A Pluto.jl notebook ###
-# v0.12.20
+# v0.17.1
 
 using Markdown
 using InteractiveUtils
 
 # ╔═╡ 0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
-md"# Get started with Julia - live
+md"# Get started with Julia
 
 Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto.](/Spring21/installation/)
 "
-
 
 # ╔═╡ 3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 md"## Variables
@@ -19,7 +18,6 @@ We can define a variable using `=` (assignment). Then we can use its value in ot
 
 # ╔═╡ 3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
 x = 3
-
 
 # ╔═╡ 59b66862-edeb-11ea-2d62-71dcc79dbfab
 y = 2x
@@ -57,8 +55,8 @@ md"For longer functions we use the following syntax with the `function` keyword 
 
 # ╔═╡ d73d3400-edeb-11ea-2dea-95e8c4a6563b
 function g(x, y)
-	z = x + y
-	return z^2
+    z = x + y
+    return z^2
 end
 
 # ╔═╡ e04ccf10-edeb-11ea-36d1-d11969e4b2f2
@@ -72,12 +70,11 @@ md"Use `for` to loop through a pre-determined set of values:"
 
 # ╔═╡ fe3fa290-edeb-11ea-121e-7114e5c573c1
 let s = 0
-	
-	for i in 1:10
-		s += i    # Equivalent to s = s + i
-	end
-	
-	s
+    for i in 1:10
+        s += i    # Equivalent to s = s + i
+    end
+
+    s
 end
 
 # ╔═╡ 394b0ec8-eded-11ea-31fb-27392068ef8f
@@ -93,13 +90,13 @@ But blocks of code like this are usually better inside functions, so that they c
 
 # ╔═╡ 683af3e2-eded-11ea-25a5-0d90bf099d98
 function mysum(n)
-	s = 0
-	
-	for i in 1:n
-		s += i    
-	end
-	
-	return s
+    s = 0
+
+    for i in 1:n
+        s += i
+    end
+
+    return s
 end
 
 # ╔═╡ 76764ea2-eded-11ea-1aa6-296f3421de1c
@@ -124,11 +121,10 @@ We can then use `if` to control what we do based on that value:"
 
 # ╔═╡ bc6b124e-eded-11ea-0290-b3760cb81024
 if a < 5
-	"small"
-	
+    "small"
+
 else
-	"big"
-	
+    "big"
 end
 
 # ╔═╡ cfb21014-eded-11ea-1261-3bc30952a88e
@@ -176,8 +172,10 @@ md"## 2D arrays (matrices)"
 md"We can make small matrices (2D arrays) with square brackets too:"
 
 # ╔═╡ 04f175f2-edef-11ea-0882-712548ebb7a3
-M = [1 2
-	 3 4]
+M = [
+    1 2
+    3 4
+]
 
 # ╔═╡ 0a8ac112-edef-11ea-1e99-cf7c7808c4f5
 typeof(M)
