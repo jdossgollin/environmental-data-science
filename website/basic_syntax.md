@@ -1,1 +1,1 @@
-{{ plutonotebookpage ../notebooks/basic_syntax.jl }}
+{{ plutonotebookpage ../notebooks/tutorials/basic_syntax.jl }}
