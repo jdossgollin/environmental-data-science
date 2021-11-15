@@ -8,7 +8,7 @@
 
 ## Stats code
 
-- All code examples from the Statistical Rethinking book have been coded in [`Turing.jl` here](https://github.com/StatisticalRethinkingJulia/TuringModels.jl)
+- Code examples from the Statistical Rethinking book have been coded in `Turing.jl` [here](https://statisticalrethinkingjulia.github.io/TuringModels.jl/) (the original is R)
 
 ## Julia tips and tricks
 
