@@ -1,5 +1,7 @@
 # First-time setup: Install Julia & Pluto
 
+> This page comes from the [MIT Computational Thinking course](https://computationalthinking.mit.edu/)
+
 **Video version:**
 
 {{youtube installation}}
@@ -9,13 +11,15 @@
 \\
 **Text and pictures version:**
 
-## Step 1: Install Julia 1.6.0
+## Step 1: Install Julia 1.6.3
 
-Go to [https://julialang.org/downloads](https://julialang.org/downloads) and download the current stable release, Julia 1.6.0, using the correct version for your operating system (Linux x86, Mac, Windows, etc).
+Go to [https://julialang.org/downloads](https://julialang.org/downloads) and download the current stable release, Julia 1.6.3, using the correct version for your operating system (Linux x86, Mac, Windows, etc).
 
 ## Step 2: Run Julia
 
-After installing, **make sure that you can run Julia**. On some systems, this means searching for the "Julia 1.6.0" program installed on your computer; in others, it means running the command `julia` in a terminal. Make sure that you can execute `1 + 1`:
+After installing, **make sure that you can run Julia**.
+On some systems, this means searching for the "Julia 1.6.3" program installed on your computer; in others, it means running the command `julia` in a terminal.
+Make sure that you can execute `1 + 1`:
 
 ![image](https://user-images.githubusercontent.com/6933510/91439734-c573c780-e86d-11ea-8169-0c97a7013e8d.png)
 
@@ -23,14 +27,18 @@ After installing, **make sure that you can run Julia**. On some systems, this me
 
 ## Step 3: Install [`Pluto`](https://github.com/fonsp/Pluto.jl)
 
-Next we will install the [**Pluto notebook**](https://github.com/fonsp/Pluto.jl/blob/master/README.md) that we will be using during the course. Pluto is a Julia _programming environment_ designed for interactivity and quick experiments.
+Next we will install the [**Pluto notebook**](https://github.com/fonsp/Pluto.jl/blob/master/README.md) that we will be using during the course.
+Pluto is a Julia _programming environment_ designed for interactivity and quick experiments.
 
-Open the **Julia REPL**. This is the command-line interface to Julia, similar to the previous screenshot.
+Open the **Julia REPL**.
+This is the command-line interface to Julia, similar to the previous screenshot.
 
 Here you type _Julia commands_, and when you press ENTER, it runs, and you see the result.
 
-To install Pluto, we want to run a _package manager command_. To switch from _Julia_ mode to _Pkg_ mode, type `]` (closing square bracket) at the `julia>` prompt:
-```julia
+To install Pluto, we want to run a _package manager command_.
+To switch from _Julia_ mode to _Pkg_ mode, type `]` (closing square bracket) at the `julia>` prompt:
+
+```julia-repl
 julia> ]
 
 (@v1.6) pkg>
@@ -41,7 +49,7 @@ The line turns blue and the prompt changes to `pkg>`, telling you that you are n
 To install Pluto, run the following (case sensitive) command to *add* (install) the package to your system by downloading it from the internet.
 You should only need to do this *once* for each installation of Julia:
 
-```julia
+```julia-repl
 (@v1.6) pkg> add Pluto
 ```
 
@@ -52,16 +60,18 @@ This might take a couple of minutes, so you can go get yourself a cup of tea!
 You can now close the terminal.
 
 ## Step 4: Use a modern browser: Mozilla Firefox or Google Chrome
+
 We need a modern browser to view Pluto notebooks with. Firefox and Chrome work best.
 
+## Second time: _Running Pluto & opening a notebook_
 
-# Second time: _Running Pluto & opening a notebook_
 Repeat the following steps whenever you want to work on a project or homework assignment.
 
 ## Step 1: Start Pluto
 
 Start the Julia REPL, like you did during the setup. In the REPL, type:
-```julia
+
+```julia-repl
 julia> using Pluto
 
 julia> Pluto.run()
@@ -73,8 +83,8 @@ The terminal tells us to go to `http://localhost:1234/` (or a similar URL). Let'
 
 ![image](https://user-images.githubusercontent.com/6933510/91441391-6a8f9f80-e870-11ea-94d0-4ef91b4e2242.png)
 
-> If you're curious about what a _Pluto notebook_ looks like, have a look at the **sample notebooks**. Samples 1, 2 and 6 may be useful for learning some basics of Julia programming. 
-> 
+> If you're curious about what a _Pluto notebook_ looks like, have a look at the **sample notebooks**. Samples 1, 2 and 6 may be useful for learning some basics of Julia programming.
+
 > If you want to hear the story behind Pluto, have a look a the [JuliaCon presentation](https://www.youtube.com/watch?v=IAF8DjrQSSk).
 
 If nothing happens in the browser the first time, close Julia and try again. And please let us know!
