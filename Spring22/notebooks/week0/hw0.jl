@@ -23,20 +23,6 @@ md"""
 
 First of all, **_welcome to the course!_**
 I am excited to teach you about the exciting world of modeling and understanding environmental data.
-
-This is a Pluto notebook.
-It lets us write text, math, and code.
-This particular notebook doesn't have any code -- just text and math!
-Soon we'll see notebooks that have code.
-
-Everyone has different backgrounds.
-This purpose of this assignment is to help you assess how well your background prepares you for this course.
-You should have some exposure to probability, linear algebra, and calculus.
-Some coding experience will also come in handy -- it's not a strict prerequisite, but if you've never coded you're likely to need to put in a bit of extra work.
-The purpose of this assignment is to help you assesss whether you're ready for this class.
-
-That said, **its purpose is not to gatekeep or push you away!**
-If you're interested in this class but struggle with this assignment, please reach out before you drop the class!
 """
 
 # ╔═╡ 6f5bd5e3-429a-4aac-b5f9-e2d45d537b43
@@ -44,19 +30,29 @@ md"""
 ## Instructions
 
 Although you will be allowed to work in groups for some later homeworks, _work alone for this assignment_.
-Please turn in your answers to this course as a `.pdf` file on Courseworks using the Assignments tab.
+Turn in your answers to this course as a `.pdf` file on Courseworks using the Assignments tab.
 You can type your answers (for example using LaTeX) or write clearly by hand and scan them (please make sure the scanned document is legible!)
 You will receive full credit for this homework if you submit complete answers, by the due date, and following the submission instructions, regardless of how many questions you answer correctly.
+You can use a computer, calculator, or any other tool that you would like -- remember, this is _for you_.
 
-The purpose of this assignment is for you to evaluate whether this class is a good fit for you.
-Use the following rubric:
+Everyone has different backgrounds.
+**This purpose of this assignment is to help you assess how well your background prepares you for this course.**
+You should have some exposure to probability, linear algebra, and calculus.
+Some coding experience will also come in handy -- it's not a strict prerequisite, but if you've never coded you're likely to need to put in a bit of extra work.
+The purpose of this assignment is to help you assesss whether you're ready for this class.
 
-* If you find that you are able to answer all questions easily, the first several weeks of this class may be easy for you.
-* If you are able to answer most questions, but need to look up some material and/or have some questions that you are unable to answer, you are well-prepared for this class.
-* If you are able to answer some of the questions easily, need to look up information for some others, and ar eunable to answer some questions, this class is a good fit for you but some self-study may be helpful during the first weeks.
-* If you are unable to answer most or all of these questions, this class will be challenging for you and you should not enroll without talking to me or the TA.
+Answer the following questions to the best of your ability.
+If you get stuck on a problem, move on!
+_Don't spend more than a couple hours on this assignment_; its objective is to help you assess how many of these problems you can answer _easily_ (I already know you can do anything if you work hard enough at it 💪)!
 
-> Answer all questions that are in gray like this!
+Use the following rubric as a guide
+
+* if you have no trouble answering 60-100% of these questions, you are in the right class
+* if you are able to correctly answer 40-60% of the questions, you will be successful as long as you work to refresh your linear algebra and calculus (_this would have been me during my first year of grad school!_)
+* If you score well below 40%, you should talk to me
+
+Just to be clear, **the purpose of this assignment is not to gatekeep!**
+If you're excited to take this class but are struggling with this homework, please reach out before you drop the class!
 """
 
 # ╔═╡ 5c073471-32a9-41fd-b0c9-4c66cc3e26bd
@@ -78,6 +74,27 @@ md"""
 > Why are you taking this course? What do you hope to learn?
 """
 
+# ╔═╡ cc0a307c-950e-4e3e-b9f5-6eb84bdf2136
+md"""
+## Linear algebra
+
+Let
+
+```math
+A = \left[ \begin{matrix} 1 & 2 \\ 2 & 4 \end{matrix} \right], \quad\\
+B = \left[ \begin{matrix} 1 & 2 \\ 3 & 4 \end{matrix} \right], \quad\\
+x = \left[ \begin{matrix} 2 \\ 1 \end{matrix} \right], \quad\\
+```
+
+> What is $A + B$?
+
+> What is $AB$?
+
+> What is the largest eigenvalue of $A$?
+
+> What is the eigenvector associated with that largest eigenvalue of $A$?
+"""
+
 # ╔═╡ 4274082c-7e83-4593-9676-9d88ac0defca
 md"""
 ## Probability and random variables
@@ -90,15 +107,11 @@ y &\sim \mathcal{N}(\mu_y, \sigma_y) \\
 w &\sim \mathcal{N}(\mu_w, \sigma_w)
 \end{align}
 ```
-"""
 
-# ╔═╡ bfe731be-71d7-4eee-a5f3-ad3d61dc12a6
-md"""
-where the notation $y \sim \mathcal{N}(\mu, \sigma)$ means that $y$ is a random variable with mean $\mu$ and standard deviation $\sigma$.
-"""
+where the notation $y \sim \mathcal{N}(\mu, \sigma)$ means that $y$ is a Normally distributed (i.e., Gaussian) random variable with mean $\mu$ and standard deviation $\sigma$.
 
-# ╔═╡ 672003ef-1bb1-489c-b3b5-b5078a982487
-md"""
+> Letting $\mathbb{E}[x]$ denote the expectation of $x$, what is $\mathbb{E}[y^2]?$
+
 > If $y$ and $w$ are independent, what is the distribution of $y + w$?
 
 Now let us consider a random 5-card poker hand delt from a [standard 52-card deck](https://en.wikipedia.org/wiki/Standard_52-card_deck).
@@ -107,30 +120,28 @@ Now let us consider a random 5-card poker hand delt from a [standard 52-card dec
 
 > What is the probability that the 5-card hand is a flush (all cards of the same suit).
 
-Also consider the following longer problems
-
-A spam filter is designed based on common words and phrases.
-Suppose that 75% of email is spam (and so 25% of email is not spam).
-In 25% of spam emails, the phrase “congratulations” is used, whereas this phrase is used in only 10% of non-spam emails.
-A new email has just arrived, which includes the word “congratulations”.
-
-> What is the probability that this email is spam?
-
 A coin is tossed repeatedly until it lands Tails for the first time.
 Let $Y$ be the number of tosses that are required (including the final one that lands Tails).
 
 > If it is a fair coin (equal probability of heads or tails), what is the probability that $Y = 1$? $Y = 2$? $Y = 100$? (You don't have to calculate an exact number here -- just write the expression)
 """
 
+# ╔═╡ 98435ed1-2313-4485-920e-addb368a184f
+md"""
+## Calculus and optimization
+
+> Find $x_1$ that maximizes $h(x_1) = \frac{1}{3}x_1^3 - \frac{1}{2} x_1^2 - 6 x_1 + \frac{27}{2}$ subject to $x_1 \in [−4, 4]$.
+
+> Find the minimum value of $h(x_1)$ subject to the constraint that $x_1 \in [−4, 4]$.
+"""
+
 # ╔═╡ 775c6345-b6af-4a0a-a1cc-40a5b6a65afc
 md"""
 ## Statistics and data analysis
 
-The following question is more open-ended than the previous questions.
-Please note that I do not expect everyone who enrolls in the course to be able to answer all of these questions.
-Please answer to the best of your abilities and be as clear as possible about any assumptions you have made.
-If there are questions that you don’t know how to answer, please indicate that.
-If you would like to use a computer or calculator for this problem, you may do so but please indicate on your answer that you used a computer or calculator (you will not be penalized!)
+The following question is more open-ended than the previous questions; there may not be a single "right" answer.
+Answer to the best of your abilities and be as clear as possible about any assumptions you have made.
+If there are questions that you don't know how to answer, that's fine -- as the original instructions stated, guard your time!
 
 Water quality data has been collected at a lake for several years. Answer the following questions given the data below:
 """
@@ -173,7 +184,7 @@ md"""
 
 > Now let us say that you wanted to use the Normal distribution to fit the original DO data. This distribution has 2 parameters: mean and standard deviation. Discuss which values you would use for this data, and then use the Normal distribution to compute the probability that DO < 8 mg/L.
 
-> Do you think it is a good idea to use the Normal distribution with this data? Why or why not? Would you take logs of the data first? If you say yes, then use that procedure to estimate the probability that DO < 8mg/L from that data. Which one agrees better with your original analysis? How would you assess whether the Normal distribution applied to the original data or to the logs of the data is a better choice in this case?
+> Do you think it is a good idea to use the Normal distribution with this data? Why or why not? Would you transform the data first? If you say yes, then use that procedure to estimate the probability that DO < 8mg/L from that data. Which one agrees better with your original analysis? How would you assess whether the Normal distribution applied to the original data or to the logs of the data is a better choice in this case?
 
 > In the first data frame, we see that whether or not dead fish were found was also recorded for each event. What is the probability or chance of finding dead fish in the lake? What is the probability of finding dead fish if DO < 8 mg/L? What is the probability of finding dead fish if DO > 8 mg/L?
 
@@ -929,9 +940,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─a2181260-e6cd-11ea-2a69-8d9d31d1ef0e
 # ╟─6f5bd5e3-429a-4aac-b5f9-e2d45d537b43
 # ╟─5c073471-32a9-41fd-b0c9-4c66cc3e26bd
+# ╟─cc0a307c-950e-4e3e-b9f5-6eb84bdf2136
 # ╟─4274082c-7e83-4593-9676-9d88ac0defca
-# ╟─bfe731be-71d7-4eee-a5f3-ad3d61dc12a6
-# ╟─672003ef-1bb1-489c-b3b5-b5078a982487
+# ╟─98435ed1-2313-4485-920e-addb368a184f
 # ╟─775c6345-b6af-4a0a-a1cc-40a5b6a65afc
 # ╟─70d94571-6c34-4e89-a256-49bbad8cdd57
 # ╟─eeee51eb-29aa-44aa-b07d-8272db7c4ac2
