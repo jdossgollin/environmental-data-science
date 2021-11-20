@@ -1,15 +1,21 @@
 # Useful Links
 
-## Julia cheat sheets
+## Cheat sheet notebooks
 
 - [Plots and visualizations](/plots_tutorial/)
+- [Plotting cheatsheet](https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf)
+
+## Cheat sheets on the web
+
 - JuliaDocs: [Fastrack to Julia](https://juliadocs.github.io/Julia-Cheat-Sheet/) cheatsheet
 - [QuantEcon group](https://quantecon.org): [MATLAB-Julia-Python comparative cheatsheet](https://cheatsheets.quantecon.org/)
-- [Plots.jl cheatsheet](https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf)
 
-## Stats code
+## Helpful stats codes
 
 - Code examples from the Statistical Rethinking book have been coded in `Turing.jl` [here](https://statisticalrethinkingjulia.github.io/TuringModels.jl/) (the original is R)
+- the [Stan users guide](https://mc-stan.org/docs/2_28/reference-manual/index.html) offers detailed and practical advice on probabilistic modeling using the Stan language, which is similar to `Turing.jl` in many ways.
+- the [`Turing.ml` tutorials](https://turing.ml/dev/tutorials/) offer an introduction to modeling with Turing
+- the [Earth and Environmental Data Science](earth-env-data-science.github.io/) textbook by Ryan Abernathey and colleagues is freely available online. This is a very different _and complementary_ take on data science from this course (it's a big field). If you're looking for best practices in the analysis of gridded climate data, you should check out this course.
 
 ## Julia tips and tricks
 
