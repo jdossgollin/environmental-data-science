@@ -33,20 +33,24 @@
 <div style="font-weight: bold; margin-bottom: 0.5em">Spring 2022<span style="opacity: 0.6;"> | CEVE 543</span></div>
 <h1><a href="/environmental-data-science/Spring22/">Environmental Data Science</a></h1>
 <!--<h2>Math from computation, math with computation</h2>-->
-<div style="line-height:18px; font-size: 15px; opacity: 0.85">by <a href="https://jdossgollin.github.io">Dr. James Doss-Gollin</a></a></div>
+<div style="line-height:18px; font-size: 15px; opacity: 0.85">by <a href="/environmental-data-science/Spring22/instructor/">Dr. James Doss-Gollin</a></a></div>
 </div>
 <br>
 <style>
 </style>
 <nav class="sidebar-nav" style="opacity: 0.9">
 <a class="sidebar-nav-item " href="/environmental-data-science/Spring22/"><b>Welcome</b></a>
-<!--<a class="sidebar-nav-item {{ispage /reviews/}}active{{end}}" href="/environmental-data-science/Spring22/reviews/">Class Reviews</a>-->
+<a class="sidebar-nav-item active" href="/environmental-data-science/Spring22/instructor/">Instructor</a>
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/policies/">Course Policies</a>
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/topics/">Lectures and Topics</a>
 <a class="sidebar-nav-item " href="/environmental-data-science/Spring22/homework/">Homework</a>
-<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/syllabus/">Syllabus</a>
 <a class="sidebar-nav-item " href="/environmental-data-science/Spring22/references/">References</a>
 <br>
+<!--
 <div class="course-section">Module 1: Course Intro</div>
-<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/installation/"><b>1.1</b> - <em>Installing software</em></a>
+<a class="sidebar-nav-item {{ispage /installation/}}active{{end}}" href="/environmental-data-science/Spring22/01_installation/"><b>1.1</b> - <em>Installing software</em></a>
+<a class="sidebar-nav-item {{ispage /installation/}}active{{end}}" href="/environmental-data-science/Spring22/01_basic_syntax/"><b>1.1</b> - <em>Basic syntax</em></a>
+-->
 <br>
 <br>
 <div style="opacity: 0.6;">Class website inspired by <a href="https://computationalthinking.mit.edu/">Julia: A Fresh Approach to Computing</a>, MIT Class, A. Edelman, D. Sanders, et.al.</div>
@@ -58,47 +62,24 @@
 
 
 <!-- Content appended here -->
-<div class="franklin-content"><style>
-
-.content {
-    max-width: 100%;
-    margin-right: 0px;
-    padding: 0px;
-    overflow-y: hidden;
-    height: 100vh;
-}
-.franklin-content {
-    padding: 0px;
-}
-.page-foot {
-    display: none;
-}
-.plutopage {
-    height: 100vh;
-}
-.smallscreenlink {
-    display: none;
-}
-@media (max-width: 768px) {
-    .franklin-content {
-        padding: 0px;
-    }
-}
-</style>
-
-<iframe width="100%" height="100%"
-src="../notebooks/tutorials/basic_syntax.html"
-class="plutopage"
-frameborder="0"
-allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; display-capture; document-domain; encrypted-media; execution-while-not-rendered; execution-while-out-of-viewport; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; navigation-override; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; wake-lock; screen-wake-lock; vr; web-share; xr-spatial-tracking"
-allowfullscreen></iframe>
-
-<a class="smallscreenlink" href="../notebooks/tutorials/basic_syntax.html"></a>
-
+<div class="franklin-content"><h1 id="your_instructor"><a href="#your_instructor">Your Instructor</a></h1>
+<h2 id="standard_bio"><a href="#standard_bio">Standard bio</a></h2>
+<p><a href="https://jdossgollin.github.io/">James Doss-Gollin</a> is an assistant professor in the department of Civil and Environmental Engineering at Rice University. Dr. Doss-Gollin’s research is motivated by challenging questions at the intersection of climate dynamics, water management, data science, and decision science. By developing methods for understanding and predicting spatiotemporally clustered hydroclimate risk, and for incorporating uncertain projections into sequential decision problems, he strives to enable the delivery of flexible and resilient infrastructure services. Dr. Doss-Gollin completed his M.S. and Ph.D. in Earth and Environmental Engineering at Columbia and holds a B.S. in Mechanical Engineering from Yale University. Prior to joining Rice University, he was a postdoctoral researcher in the Earth and Environmental Systems Institute at the Pennsylvania State University.</p>
+<h2 id="relevant_code"><a href="#relevant_code">Relevant code</a></h2>
+<p>I use environmental data science every day&#33; Here are a few code repositories that you can use to get a sense of how I use these tools to learn and conduct research</p>
+<ul>
+<li><p>my <a href="https://github.com/jdossgollin/2021-TXtreme"><code>2021-TXtreme</code></a> repository uses Python to analyze temperature and population data over Texas</p>
+</li>
+<li><p>my <a href="https://github.com/jdossgollin/2020-advent-code"><code>2020-advent-code</code></a> repository contains my solutions for the first 18 days of the &quot;<a href="https://adventofcode.com/2020">Advent of Code</a>&quot; challenge using Julia</p>
+</li>
+<li><p>my <a href="https://github.com/jdossgollin/environmental-data-science/"><code>environmental-data-science</code></a> repository contains the source code for this website&#33;</p>
+</li>
+</ul>
+<p>See more examples on my <a href="https://github.com/jdossgollin/">GitHub page</a>.</p>
 <div class="page-foot">
   <div class="copyright">
     <a href="https://github.com/jdossgollin/environmental-data-science/"><b>Edit this page on <img class="github-logo" src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></img></b></a></br>
-    Last modified: November 17, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    Last modified: November 20, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

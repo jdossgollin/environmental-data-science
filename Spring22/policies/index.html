@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+  <link rel="stylesheet" href="/environmental-data-science/Spring22/css/franklin.css">
+<link rel="stylesheet" href="/environmental-data-science/Spring22/css/poole_hyde.css">
+<link rel="stylesheet" href="/environmental-data-science/Spring22/css/custom.css">
+<!-- style adjustments -->
+<style>
+  html {font-size: 17px;}
+  .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;}
+  @media (min-width: 940px) {
+    .franklin-content {width: 100%; margin-left: auto; margin-right: auto;}
+  }
+  @media (max-width: 768px) {
+    .franklin-content {padding-left: 6%; padding-right: 6%;}
+  }
+</style>
+<link rel="icon" href="/environmental-data-science/Spring22/assets/favicon.png">
+
+   <title>Environmental Data Science</title>  
+</head>
+<body>
+<div class="sidebar">
+<div class="container sidebar-sticky">
+<div class="sidebar-about">
+<br>
+<img src="/environmental-data-science/Spring22/assets/rice_logo.svg" style="width: 80px; height: auto; display: inline">
+<img src="/environmental-data-science/Spring22/assets/julia-logo.svg" style="margin-left:1em; width: 80px; height: auto; display: inline">
+<div style="font-weight: bold; margin-bottom: 0.5em">Spring 2022<span style="opacity: 0.6;"> | CEVE 543</span></div>
+<h1><a href="/environmental-data-science/Spring22/">Environmental Data Science</a></h1>
+<!--<h2>Math from computation, math with computation</h2>-->
+<div style="line-height:18px; font-size: 15px; opacity: 0.85">by <a href="/environmental-data-science/Spring22/instructor/">Dr. James Doss-Gollin</a></a></div>
+</div>
+<br>
+<style>
+</style>
+<nav class="sidebar-nav" style="opacity: 0.9">
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/"><b>Welcome</b></a>
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/instructor/">Instructor</a>
+<a class="sidebar-nav-item active" href="/environmental-data-science/Spring22/policies/">Course Policies</a>
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/topics/">Lectures and Topics</a>
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/homework/">Homework</a>
+<a class="sidebar-nav-item " href="/environmental-data-science/Spring22/references/">References</a>
+<br>
+<!--
+<div class="course-section">Module 1: Course Intro</div>
+<a class="sidebar-nav-item {{ispage /installation/}}active{{end}}" href="/environmental-data-science/Spring22/01_installation/"><b>1.1</b> - <em>Installing software</em></a>
+<a class="sidebar-nav-item {{ispage /installation/}}active{{end}}" href="/environmental-data-science/Spring22/01_basic_syntax/"><b>1.1</b> - <em>Basic syntax</em></a>
+-->
+<br>
+<br>
+<div style="opacity: 0.6;">Class website inspired by <a href="https://computationalthinking.mit.edu/">Julia: A Fresh Approach to Computing</a>, MIT Class, A. Edelman, D. Sanders, et.al.</div>
+<br>
+</nav>
+</div>
+</div>
+<div class="content container">
+
+
+<!-- Content appended here -->
+<div class="franklin-content"><h1 id="course_policies"><a href="#course_policies">Course Policies</a></h1>
+<h2 id="course_organization"><a href="#course_organization">Course organization</a></h2>
+<p>Basic information:</p>
+<ol>
+<li><p>Classes will be held Tuesday and Thursday from 2:30-3:45PM</p>
+</li>
+<li><p>Office hours will held weekly at a time to be determined</p>
+</li>
+</ol>
+<p>This course will combine synchronous and asynchronous learning</p>
+<ol>
+<li><p>Asynchronous lectures will be released on Fridays.  This lecture will be paired with a code notebook &#40;you&#39;ll learn about those&#41; that will be posted on this website. You should run  the code in time with the asynchronous lecture.</p>
+</li>
+<li><p>On Tuesdays we will review content, answer questions, and work on practice problems &#40;related to the homework&#41;.</p>
+</li>
+<li><p>Homeworks will be due on Thursday before class. On Thursdays we will review the homework, examine case studies, and preview topics for the next week.</p>
+</li>
+<li><p>This schedule will be modified as needed.</p>
+</li>
+</ol>
+<h2 id="course_description"><a href="#course_description">Course Description</a></h2>
+<p>Sensors, satellites, people, robots, and drones collect a wealth of data describing environmental processes relevant for understanding and managing the natural and built environment. Making sense of these data sets, sometimes vast and sometimes consisting of a few observations, requires integrating domain knowledge, computational methods, and statistical models. In a nutshell, data science.</p>
+<p>The path from data and theory to models, inference, and ultimately decisions is long, winding, and perilous. In this course, you will learn not only how to fit models, but also how to interpret, critique, improve, and evaluate models and model-based inference. Specifically, you will learn a principled workflow for using data to inform decisions that:</p>
+<ol>
+<li><p>credibly describes the physical processes that generated the data;</p>
+</li>
+<li><p>flexibly makes use of multiple sources of information;</p>
+</li>
+<li><p>transparently communicates imperfect modeling assumptions; and</p>
+</li>
+<li><p>allows you to reason about uncertainty using the language of probability theory.</p>
+</li>
+</ol>
+<p>Applications to water, climate, air, and geologic data will emphasize models for spatial and temporal data.</p>
+<h2 id="course_objectives"><a href="#course_objectives">Course objectives</a></h2>
+<p>Upon completing this course, students will be able to:</p>
+<ol>
+<li><p>Write down generative models for environmental data;</p>
+</li>
+<li><p>use reproducible software tools to download, open, and visualize data from publicly available sources;</p>
+</li>
+<li><p>use Bayesian and maximum likelihood methods to conduct inference &#40;“inverse modeling”&#41; on generative models of environmental data;</p>
+</li>
+<li><p>use simulation &#40;“forward modeling”&#41; to compare the logical implications of a predictive model to data;</p>
+</li>
+<li><p>identify the assumptions that commonly applied data science methods make, and describe where they are or are not appropriate to model environmental data; and&lt;</p>
+</li>
+<li><p>critically interpret statistical analyses of environmental data applied in academic journals, government, and industry.</p>
+</li>
+</ol>
+<h2 id="grading"><a href="#grading">Grading</a></h2>
+<ol>
+<li><p>Weekly problem sets &#40;50&#37;&#41;</p>
+<ol>
+<li><p>Homeworks will contain both written assignments and Julia data analysis</p>
+</li>
+<li><p>Problem sets should be submitted as Pluto notebooks to Canvas and are due at the beginning of class on the due date. Since we will discuss homework assignments in class, *late homework will not be accepted.<sup id="fnref:latehw"><a href="#fndef:latehw" class="fnref">[1]</a></sup></p>
+</li>
+<li><p>Students may discuss problem sets with classmates, but must come up with unique solutions and turn in their own answers.</p>
+</li>
+<li><p>Each homework assignment will be graded for explanation of concepts, code clarity / readability, code accuracy, and technical correctness.</p>
+</li>
+<li><p>For some assignments, you will be asked to review another student&#39;s code and give feedback on code clarity/readability. Peer reviews will not affect your grade, but the quality of the peer review you give will be factored into your homework grade.</p>
+</li>
+<li><p>Your lowest homework grade will be dropped.</p>
+</li>
+</ol>
+</li>
+<li><p>Three exams &#40;50&#37; total&#41;</p>
+<ol>
+<li><p>The first two will be given in class and the third during the final exam slot.</p>
+</li>
+<li><p>Exams will emphasize students’ ability to understand and critique statistical methods and their interpretations.</p>
+</li>
+<li><p>All exams will be weighted equally</p>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="required_references"><a href="#required_references">Required references</a></h2>
+<p>There are no assigned textbooks. Save your money&#33; However, if you do not have a working laptop that you can bring to class, please contact me ASAP&#33;</p>
+<h2 id="honor_code"><a href="#honor_code">Honor code</a></h2>
+<p>In this course, all students will be held to the standards of the Rice Honor Code, a code that you pledged to honor when you matriculated at this institution. If you are unfamiliar with the details of this code and how it is administered, you should consult the Honor System Handbook at <a href="http://honor.rice.edu/honor-system-handbook/">http://honor.rice.edu/honor-system-handbook/</a>. This handbook outlines the University’s expectations for the integrity of your academic work, the procedures for resolving alleged violations of those expectations, and the rights and responsibilities of students and faculty members throughout the process.</p>
+<h2 id="disability_resource_center"><a href="#disability_resource_center">Disability Resource Center</a></h2>
+<p>If you have a documented disability or other condition that may affect academic performance you should:</p>
+<ol>
+<li><p>make sure this documentation is on file with the Disability Resource Center &#40;Allen Center, Room 111 / <a href="mailto:adarice@rice.edu">adarice@rice.edu</a> / x5841&#41; to determine the accommodations you need; and</p>
+</li>
+<li><p>talk with me to discuss your accommodation needs.</p>
+</li>
+</ol>
+<h2 id="other_accommodations"><a href="#other_accommodations">Other Accommodations</a></h2>
+<p>If any of our class meetings conflict with your religious events, student athletics, or other non-negotiable scheduling conflict, please let me know ASAP so that we can make arrangements.</p>
+<table class="fndef" id="fndef:latehw">
+    <tr>
+        <td class="fndef-backref"><a href="#fnref:latehw">[1]</a></td>
+        <td class="fndef-content">I know this is an unforgiving policy. But it&#39;s worth it to be able to discuss homework in class, when it is fresh in everyones&#39; minds. If you&#39;re not done, turn in whatever you have. And you can drop your lowest assignment.</td>
+    </tr>
+</table>
+
+<div class="page-foot">
+  <div class="copyright">
+    <a href="https://github.com/jdossgollin/environmental-data-science/"><b>Edit this page on <img class="github-logo" src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></img></b></a></br>
+    Last modified: November 20, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+    </div>  <!-- div: content container -->
+
+    
+    <script>
+        var els =  document.querySelectorAll(".language-julia")
+        for (var i=0, l = els.length; i < l; i++) {
+            var el = els[i]
+            var out = el.parentNode.nextSibling
+            if (out.tagName === "PRE") {
+                out.className = out.className + " code-output"
+            }
+        }
+    </script>
+    
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-28835595-11"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-28835595-11');
+    </script>
+    -->
+  </body>
+</html>

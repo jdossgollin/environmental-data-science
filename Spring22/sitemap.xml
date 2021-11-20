@@ -2,56 +2,74 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>homework/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <loc>01_basic_syntax/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>references/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>installation/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <loc>00_hw0/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>syllabus/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <loc>01_bdt/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>hw0/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <loc>policies/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>01_installation/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>homework/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>topics/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>basic_syntax/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <loc>instructor/index.html</loc>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>plots_tutorial/index.html</loc>
-    <lastmod>2021-11-17</lastmod>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>homepage/index/</loc>
-    <lastmod>2021-11-17</lastmod>
+    <lastmod>2021-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
