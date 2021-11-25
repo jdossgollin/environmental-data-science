@@ -23,17 +23,6 @@ md"""
 
 First of all, **_welcome to the course!_**
 I am excited to teach you about the exciting world of modeling and understanding environmental data.
-"""
-
-# ╔═╡ 6f5bd5e3-429a-4aac-b5f9-e2d45d537b43
-md"""
-## Instructions
-
-Although you will be allowed to work in groups for some later homeworks, _work alone for this assignment_.
-Turn in your answers to this course as a `.pdf` file on Courseworks using the Assignments tab.
-You can type your answers (for example using LaTeX) or write clearly by hand and scan them (please make sure the scanned document is legible!)
-You will receive full credit for this homework if you submit complete answers, by the due date, and following the submission instructions, regardless of how many questions you answer correctly.
-You can use a computer, calculator, or any other tool that you would like -- remember, this is _for you_.
 
 Everyone has different backgrounds.
 **This purpose of this assignment is to help you assess how well your background prepares you for this course.**
@@ -41,10 +30,18 @@ You should have some exposure to probability, linear algebra, and calculus.
 Some coding experience will also come in handy -- it's not a strict prerequisite, but if you've never coded you're likely to need to put in a bit of extra work.
 The purpose of this assignment is to help you assesss whether you're ready for this class.
 
+## Instructions
+
+* Submit this assignment as a `.pdf` file on Canvas. You can type or scan your answers.
+* You will get full credit if you turn this assignment in, regardless of how many correct answers you have
+* You will not be penalized for turning this assignment in late. Simply explain why you are turning it in late.
+* Although you will be allowed to work in groups for some later homeworks, _work alone for this assignment_.
+* You can use a computer, calculator, or any other tool that you would like -- remember, this is _for you_.
+* **Don't spend more than a couple hours on this assignment**; its objective is to help you assess how many of these problems you can answer _easily_ (I already know you can do anything if you work hard enough at it 💪)!
+
+
 Answer the following questions to the best of your ability.
 If you get stuck on a problem, move on!
-_Don't spend more than a couple hours on this assignment_; its objective is to help you assess how many of these problems you can answer _easily_ (I already know you can do anything if you work hard enough at it 💪)!
-
 Use the following rubric as a guide
 
 * if you have no trouble answering 60-100% of these questions, you are in the right class
@@ -52,7 +49,7 @@ Use the following rubric as a guide
 * If you score well below 40%, you should talk to me
 
 Just to be clear, **the purpose of this assignment is not to gatekeep!**
-If you're excited to take this class but are struggling with this homework, please reach out before you drop the class!
+If you're excited to take this class but find this assignment difficult, please reach out before you drop the class!
 """
 
 # ╔═╡ 5c073471-32a9-41fd-b0c9-4c66cc3e26bd
@@ -938,7 +935,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╔═╡ Cell order:
 # ╟─fafae38e-e852-11ea-1208-732b4744e4c2
 # ╟─a2181260-e6cd-11ea-2a69-8d9d31d1ef0e
-# ╟─6f5bd5e3-429a-4aac-b5f9-e2d45d537b43
 # ╟─5c073471-32a9-41fd-b0c9-4c66cc3e26bd
 # ╟─cc0a307c-950e-4e3e-b9f5-6eb84bdf2136
 # ╟─4274082c-7e83-4593-9676-9d88ac0defca
