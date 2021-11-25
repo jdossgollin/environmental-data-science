@@ -4,7 +4,7 @@ The following syllabus will be adjusted as needed.
 
 | Week | Topic | Notebooks | Homeworks |
 |:----:|:-----:|:---------:|:----------:|
-| 0 | Self-assessment | | [HW0](00_hw0)[^1] |
+| 0 | Self-assessment | | [HW0](/00_hw0/)[^1] |
 | | **Module 1: fundamentals**| |
 | 1 | Introduction to the course and tools | | |
 | 2 | Probability fundamentals | | |
