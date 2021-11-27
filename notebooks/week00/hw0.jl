@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.1
+# v0.17.2
 
 using Markdown
 using InteractiveUtils
@@ -179,11 +179,6 @@ citizen_water_quality = DataFrame(
 md"""
 > Based on what you estimated above about the probability or likelihood of new data, is this sample consistent with the data that was collected previously? Specifically what is the chance that 4 out of 5 events are Y (DO < 8mg/L)? Discuss how you approached the problem. Note that you can think of this as 4 `true` in a row followed by a `false`, or as 4 `true` out of 5. What is the difference? Which one did you choose? Why?
 
-> Now let us say that you wanted to use the Normal distribution to fit the original DO data. This distribution has 2 parameters: mean and standard deviation. Discuss which values you would use for this data, and then use the Normal distribution to compute the probability that DO < 8 mg/L.
-
-> Do you think it is a good idea to use the Normal distribution with this data? Why or why not? Would you transform the data first? If you say yes, then use that procedure to estimate the probability that DO < 8mg/L from that data. Which one agrees better with your original analysis? How would you assess whether the Normal distribution applied to the original data or to the logs of the data is a better choice in this case?
-
-> In the first data frame, we see that whether or not dead fish were found was also recorded for each event. What is the probability or chance of finding dead fish in the lake? What is the probability of finding dead fish if DO < 8 mg/L? What is the probability of finding dead fish if DO > 8 mg/L?
 
 > Now let us introduce some notation: let
 
@@ -192,9 +187,9 @@ y_i = \begin{cases} 1 & \text{if dead fish found} \\ 0 & \text{else} \end{cases}
 ```
 and
 ```math
-y_i = \begin{cases} 1 & \text{DO} > 8 \text{mg/L} \\ 0 & \text{else} \end{cases}
+x_i = \begin{cases} 1 & \text{DO} > 8 \text{mg/L} \\ 0 & \text{else} \end{cases}
 ```
-Now if we are interested in the joint probability $P(y = 1, y=1)$ we could estimate this as all the events were estimated and DO < 8 mg/L, divided by the total number events – similarly for the other joint probabilities.
+Now if we are interested in the joint probability $P(y = 1, xZ=1)$ we could estimate this as all the events were estimated and DO < 8 mg/L, divided by the total number events – similarly for the other joint probabilities.
 
 Looking at our data frame, we would estimate $P(y=1,x=1)=\frac{2}{10}$.
 
@@ -205,10 +200,7 @@ Events 1, 2, 8, and 9 correspond to $x = 1$.
 So we have 4 observations that $x = 1$, of which 2 have $y = 1$.
 Thus a simple estimate of $P(y = 1|x = 1)$ is $\frac{2}{4} = \frac{1}{2}$.
 
-> What are all the other conditional probabilities that we can estimate? 
-
-> Now that you have estimated these conditional probabilities, what is the probability that DO < 8mg/L if a couple taking a walk spotted a dead fish?
-How did you compute this?
+> Now that you have estimated these conditional probabilities, what is the probability that DO < 8mg/L if a couple taking a walk spotted a dead fish? How did you compute this?
 
 > Suppose that you had been given only the joint probabilities that you computed, and also the marginal probabilities $P(x = 1)$ and $P(y = 1)$: could you compute $P (x = 1|y = 1)$? Lay out your argument in plain English.
 """
