@@ -59,15 +59,16 @@ This is a great way to build some intuition about how Julia and Pluto work.
 """
 
 # ╔═╡ f9d7250a-706f-11eb-104d-3f07c59f7174
-md"## Requirements for HW1
+md"""
+## Requirements for HW1
 
 - Install Julia and set up Pluto    
 - Do the required Exercises
-"
+"""
 
 # ╔═╡ 430a260e-6cbb-11eb-34af-31366543c9dc
 md"""## Installation
-Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto](installation/).
+Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto](../../installation/).
 
 One you have Julia and Pluto installed, you can click the button at the top right of this page and follow the instructions to edit this notebook locally and submit.
 """
