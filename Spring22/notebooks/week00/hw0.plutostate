@@ -1,6 +1,8 @@
-��bonds��cell_results��$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e��queued±published_objects��running¦output��body�	�<div class="markdown"><h1>Homework 0: some self-assessment</h1>
+��bonds��cell_results��$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e��queued±published_objects��running¦output��body�
+<div class="markdown"><h1>Homework 0: some self-assessment</h1>
 <p>First of all, <strong><em>welcome to the course&#33;</em></strong> I am excited to teach you about the exciting world of modeling and understanding environmental data.</p>
 <p>Everyone has different backgrounds. <strong>This purpose of this assignment is to help you assess how well your background prepares you for this course.</strong> You should have some exposure to probability, linear algebra, and calculus. Some coding experience will also come in handy – it&#39;s not a strict prerequisite, but if you&#39;ve never coded you&#39;re likely to need to put in a bit of extra work. The purpose of this assignment is to help you assesss whether you&#39;re ready for this class.</p>
+<p><strong>This assignment is ungraded – don&#39;t submit anything</strong></p>
 <h2>Instructions</h2>
 <ul>
 <li><p>Submit this assignment as a <code>.pdf</code> file on Canvas. You can type or scan your answers.</p>
@@ -26,7 +28,8 @@
 </li>
 </ul>
 <p>Just to be clear, <strong>the purpose of this assignment is not to gatekeep&#33;</strong> If you&#39;re excited to take this class but find this assignment difficult, please reach out before you drop the class&#33;</p>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AX��rootassignee��cell_id�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�depends_on_disabled_cells§runtime�u��errored��$67626d97-e7da-41e2-afb1-cb41525291e4��queued±published_objects��running¦output��body�
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[�
+5�rootassignee��cell_id�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�depends_on_disabled_cells§runtimeͅ5�errored��$67626d97-e7da-41e2-afb1-cb41525291e4��queued±published_objects��running¦output��body�
 �<div class="markdown"><blockquote>
 <p>Based on what you estimated above about the probability or likelihood of new data, is this sample consistent with the data that was collected previously? Specifically what is the chance that 4 out of 5 events are Y &#40;DO &lt; 8mg/L&#41;? Discuss how you approached the problem. Note that you can think of this as 4 <code>true</code> in a row followed by a <code>false</code>, or as 4 <code>true</code> out of 5. What is the difference? Which one did you choose? Why?</p>
 </blockquote>
@@ -48,15 +51,15 @@
 <blockquote>
 <p>Suppose that you had been given only the joint probabilities that you computed, and also the marginal probabilities <span class="tex">$P&#40;x &#61; 1&#41;$</span> and <span class="tex">$P&#40;y &#61; 1&#41;$</span>: could you compute <span class="tex">$P &#40;x &#61; 1|y &#61; 1&#41;$</span>? Lay out your argument in plain English.</p>
 </blockquote>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AZF(�rootassignee��cell_id�$67626d97-e7da-41e2-afb1-cb41525291e4�depends_on_disabled_cells§runtime�!��errored��$a6020a7f-36fe-4e43-be41-7c00e0ea7804��queued±published_objects��running¦output��body��rows�����true�text/plain����true�text/plain����true�text/plain����true�text/plain����false�text/plain�objectid�31d89a3b5e3f5842�schema��names��DO < 8 mg/L�types��Bool�persist_js_state¤mime�"application/vnd.pluto.table+object�last_run_timestamp�A�o�\����rootassignee�citizen_water_quality�cell_id�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�depends_on_disabled_cells§runtime�y�errored��$98435ed1-2313-4485-920e-addb368a184f��queued±published_objects��running¦output��body�<<div class="markdown"><h2>Calculus and optimization</h2>
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[�(|�rootassignee��cell_id�$67626d97-e7da-41e2-afb1-cb41525291e4�depends_on_disabled_cells§runtime�)�errored��$a6020a7f-36fe-4e43-be41-7c00e0ea7804��queued±published_objects��running¦output��body��rows�����true�text/plain����true�text/plain����true�text/plain����true�text/plain����false�text/plain�objectid�2062826524aeb431�schema��names��DO < 8 mg/L�types��Bool�persist_js_state¤mime�"application/vnd.pluto.table+object�last_run_timestamp�A�sx՗�rootassignee�citizen_water_quality�cell_id�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�depends_on_disabled_cells§runtime͹��errored��$98435ed1-2313-4485-920e-addb368a184f��queued±published_objects��running¦output��body�<<div class="markdown"><h2>Calculus and optimization</h2>
 <blockquote>
 <p>Find <span class="tex">$x_1$</span> that maximizes <span class="tex">$h&#40;x_1&#41; &#61; \frac&#123;1&#125;&#123;3&#125;x_1^3 - \frac&#123;1&#125;&#123;2&#125; x_1^2 - 6 x_1 &#43; \frac&#123;27&#125;&#123;2&#125;$</span> subject to <span class="tex">$x_1 \in &#91;−4, 4&#93;$</span>.</p>
 </blockquote>
 <blockquote>
 <p>Find the minimum value of <span class="tex">$h&#40;x_1&#41;$</span> subject to the constraint that <span class="tex">$x_1 \in &#91;−4, 4&#93;$</span>.</p>
 </blockquote>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AZݬrootassignee��cell_id�$98435ed1-2313-4485-920e-addb368a184f�depends_on_disabled_cells§runtime���errored��$fafae38e-e852-11ea-1208-732b4744e4c2��queued±published_objects��running¦output��body�P<div class="markdown"><p><em>Homework 0, version 1 – Fall 2022</em></p>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AX_Ĭrootassignee��cell_id�$fafae38e-e852-11ea-1208-732b4744e4c2�depends_on_disabled_cells§runtime�(<�errored��$eeee51eb-29aa-44aa-b07d-8272db7c4ac2��queued±published_objects��running¦output��body�<div class="markdown"><blockquote>
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[�旬rootassignee��cell_id�$98435ed1-2313-4485-920e-addb368a184f�depends_on_disabled_cells§runtime���errored��$fafae38e-e852-11ea-1208-732b4744e4c2��queued±published_objects��running¦output��body�P<div class="markdown"><p><em>Homework 0, version 1 – Fall 2022</em></p>
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[��ɬrootassignee��cell_id�$fafae38e-e852-11ea-1208-732b4744e4c2�depends_on_disabled_cells§runtime�-��errored��$eeee51eb-29aa-44aa-b07d-8272db7c4ac2��queued±published_objects��running¦output��body�<div class="markdown"><blockquote>
 <p>What are the average and the median of the Dissolved Oxygen &#40;DO&#41; concentration?</p>
 </blockquote>
 <blockquote>
@@ -81,10 +84,10 @@
 <p>What did you assume about the data in the calculations above? Can you name the process or probability distribution you used?</p>
 </blockquote>
 <p>A new data set was collected by a citizen group. This data is shown below. Unfortunately they did not report the actual DO values because their sensor can only report whether the value is above or below 8mg/L.</p>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AZ(R�rootassignee��cell_id�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�depends_on_disabled_cells§runtime�h�errored��$775c6345-b6af-4a0a-a1cc-40a5b6a65afc��queued±published_objects��running¦output��body�5<div class="markdown"><h2>Statistics and data analysis</h2>
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[�:�rootassignee��cell_id�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�depends_on_disabled_cells§runtime�P�errored��$775c6345-b6af-4a0a-a1cc-40a5b6a65afc��queued±published_objects��running¦output��body�5<div class="markdown"><h2>Statistics and data analysis</h2>
 <p>The following question is more open-ended than the previous questions; there may not be a single &quot;right&quot; answer. Answer to the best of your abilities and be as clear as possible about any assumptions you have made. If there are questions that you don&#39;t know how to answer, that&#39;s fine – as the original instructions stated, guard your time&#33;</p>
 <p>Water quality data has been collected at a lake for several years. Answer the following questions given the data below:</p>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AZT�rootassignee��cell_id�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�depends_on_disabled_cells§runtime�}�errored��$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136��queued±published_objects��running¦output��body�<div class="markdown"><h2>Linear algebra</h2>
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[��0�rootassignee��cell_id�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�depends_on_disabled_cells§runtime��errored��$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136��queued±published_objects��running¦output��body�<div class="markdown"><h2>Linear algebra</h2>
 <p>Let</p>
 <p class="tex">$$A &#61; \left&#91; \begin&#123;matrix&#125; 1 &amp; 2 \\ 2 &amp; 4 \end&#123;matrix&#125; \right&#93;, \quad\\
 B &#61; \left&#91; \begin&#123;matrix&#125; 1 &amp; 2 \\ 3 &amp; 4 \end&#123;matrix&#125; \right&#93;, \quad\\
@@ -101,8 +104,8 @@ x &#61; \left&#91; \begin&#123;matrix&#125; 2 \\ 1 \end&#123;matrix&#125; \right
 <blockquote>
 <p>What is the eigenvector associated with that largest eigenvalue of <span class="tex">$A$</span>?</p>
 </blockquote>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AY�լrootassignee��cell_id�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�depends_on_disabled_cells§runtime�q�errored��$70d94571-6c34-4e89-a256-49bbad8cdd57��queued±published_objects��running¦output��body��rows�����6�text/plain��true�text/plain����6�text/plain��false�text/plain����9�text/plain��true�text/plain����11�text/plain��false�text/plain����120�text/plain��false�text/plain����11�text/plain��false�text/plain����9�text/plain��false�text/plain����7�text/plain��false�text/plain�	���5�text/plain��true�text/plain�
-���9�text/plain��false�text/plain�objectid�45fb0ed62e613ea0�schema��names��DO [mg/L]�Dead Fish Present�types��Int64�Bool�persist_js_state¤mime�"application/vnd.pluto.table+object�last_run_timestamp�A�o�\�o�rootassignee�water_quality�cell_id�$70d94571-6c34-4e89-a256-49bbad8cdd57�depends_on_disabled_cells§runtime�]�errored��$4274082c-7e83-4593-9676-9d88ac0defca��queued±published_objects��running¦output��body��<div class="markdown"><h2>Probability and random variables</h2>
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[��	�rootassignee��cell_id�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�depends_on_disabled_cells§runtime�*0�errored��$70d94571-6c34-4e89-a256-49bbad8cdd57��queued±published_objects��running¦output��body��rows�����6�text/plain��true�text/plain����6�text/plain��false�text/plain����9�text/plain��true�text/plain����11�text/plain��false�text/plain����120�text/plain��false�text/plain����11�text/plain��false�text/plain����9�text/plain��false�text/plain����7�text/plain��false�text/plain�	���5�text/plain��true�text/plain�
+���9�text/plain��false�text/plain�objectid�45560245e132a694�schema��names��DO [mg/L]�Dead Fish Present�types��Int64�Bool�persist_js_state¤mime�"application/vnd.pluto.table+object�last_run_timestamp�A�sx����rootassignee�water_quality�cell_id�$70d94571-6c34-4e89-a256-49bbad8cdd57�depends_on_disabled_cells§runtime�����errored��$4274082c-7e83-4593-9676-9d88ac0defca��queued±published_objects��running¦output��body��<div class="markdown"><h2>Probability and random variables</h2>
 <p>Define <span class="tex">$y$</span> and <span class="tex">$w$</span> as random variables</p>
 <p class="tex">$$\begin&#123;align&#125;
 y &amp;\sim \mathcal&#123;N&#125;&#40;\mu_y, \sigma_y&#41; \\
@@ -126,7 +129,7 @@ w &amp;\sim \mathcal&#123;N&#125;&#40;\mu_w, \sigma_w&#41;
 <blockquote>
 <p>If it is a fair coin &#40;equal probability of heads or tails&#41;, what is the probability that <span class="tex">$Y &#61; 1$</span>? <span class="tex">$Y &#61; 2$</span>? <span class="tex">$Y &#61; 100$</span>? &#40;You don&#39;t have to calculate an exact number here – just write the expression&#41;</p>
 </blockquote>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AY�?�rootassignee��cell_id�$4274082c-7e83-4593-9676-9d88ac0defca�depends_on_disabled_cells§runtime�18�errored��$75f821f9-121e-4bdd-9feb-8e3bfecd415c��queued±published_objects��running¦output��body�<script>const getParentCell = el => el.closest("pluto-cell")
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[�ٺ�rootassignee��cell_id�$4274082c-7e83-4593-9676-9d88ac0defca�depends_on_disabled_cells§runtime�Kd�errored��$75f821f9-121e-4bdd-9feb-8e3bfecd415c��queued±published_objects��running¦output��body�<script>const getParentCell = el => el.closest("pluto-cell")
 
 const getHeaders = () => {
 	const depth = Math.max(1, Math.min(6, 3)) // should be in range 1:6
@@ -291,7 +294,7 @@ return tocNode
 .plutoui-toc.indent section a.H6 {
 	padding-left: 50px;
 }
-</style>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�\C̬rootassignee��cell_id�$75f821f9-121e-4bdd-9feb-8e3bfecd415c�depends_on_disabled_cells§runtime�   N�errored��$5c073471-32a9-41fd-b0c9-4c66cc3e26bd��queued±published_objects��running¦output��body��<div class="markdown"><h2>Open-ended questions</h2>
+</style>�persist_js_state¤mime�text/html�last_run_timestamp�A�sw��۬rootassignee��cell_id�$75f821f9-121e-4bdd-9feb-8e3bfecd415c�depends_on_disabled_cells§runtime�   )Akh�errored��$5c073471-32a9-41fd-b0c9-4c66cc3e26bd��queued±published_objects��running¦output��body��<div class="markdown"><h2>Open-ended questions</h2>
 <blockquote>
 <p>Have you ever taken a linear algebra course before? If so, what course?</p>
 </blockquote>
@@ -313,162 +316,148 @@ return tocNode
 <blockquote>
 <p>Why are you taking this course? What do you hope to learn?</p>
 </blockquote>
-</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�o�AY��rootassignee��cell_id�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�depends_on_disabled_cells§runtime��errored±cell_dependencies��$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e��precedence_heuristic	�cell_id�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�downstream_cells_map��upstream_cells_map��@md_str��getindex��$67626d97-e7da-41e2-afb1-cb41525291e4��precedence_heuristic	�cell_id�$67626d97-e7da-41e2-afb1-cb41525291e4�downstream_cells_map��upstream_cells_map��@md_str��getindex��$a6020a7f-36fe-4e43-be41-7c00e0ea7804��precedence_heuristic	�cell_id�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�downstream_cells_map��citizen_water_quality��upstream_cells_map��DataFrame��=>��$98435ed1-2313-4485-920e-addb368a184f��precedence_heuristic	�cell_id�$98435ed1-2313-4485-920e-addb368a184f�downstream_cells_map��upstream_cells_map��@md_str��getindex��$fafae38e-e852-11ea-1208-732b4744e4c2��precedence_heuristic	�cell_id�$fafae38e-e852-11ea-1208-732b4744e4c2�downstream_cells_map��upstream_cells_map��@md_str��getindex��$eeee51eb-29aa-44aa-b07d-8272db7c4ac2��precedence_heuristic	�cell_id�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�downstream_cells_map��upstream_cells_map��@md_str��getindex��$775c6345-b6af-4a0a-a1cc-40a5b6a65afc��precedence_heuristic	�cell_id�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�downstream_cells_map��upstream_cells_map��@md_str��getindex��$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136��precedence_heuristic	�cell_id�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�downstream_cells_map��upstream_cells_map��@md_str��getindex��$70d94571-6c34-4e89-a256-49bbad8cdd57��precedence_heuristic	�cell_id�$70d94571-6c34-4e89-a256-49bbad8cdd57�downstream_cells_map��water_quality��upstream_cells_map��DataFrame��=>��$4274082c-7e83-4593-9676-9d88ac0defca��precedence_heuristic	�cell_id�$4274082c-7e83-4593-9676-9d88ac0defca�downstream_cells_map��upstream_cells_map��@md_str��getindex��$75f821f9-121e-4bdd-9feb-8e3bfecd415c��precedence_heuristic�cell_id�$75f821f9-121e-4bdd-9feb-8e3bfecd415c�downstream_cells_map��Statistics��Symbolics��Distributions��PlutoUI��DataFrames��upstream_cells_map��TableOfContents��$5c073471-32a9-41fd-b0c9-4c66cc3e26bd��precedence_heuristic	�cell_id�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�downstream_cells_map��upstream_cells_map��@md_str��getindex��cell_execution_order��$75f821f9-121e-4bdd-9feb-8e3bfecd415c�$fafae38e-e852-11ea-1208-732b4744e4c2�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�$4274082c-7e83-4593-9676-9d88ac0defca�$98435ed1-2313-4485-920e-addb368a184f�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�$70d94571-6c34-4e89-a256-49bbad8cdd57�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�$67626d97-e7da-41e2-afb1-cb41525291e4�last_hot_reload_time�        �shortpath�hw0.jl�process_status�ready�path�_/home/runner/work/environmental-data-science/environmental-data-science/notebooks/week00/hw0.jl�last_save_time�A�o�AB�n�cell_order��$fafae38e-e852-11ea-1208-732b4744e4c2�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�$4274082c-7e83-4593-9676-9d88ac0defca�$98435ed1-2313-4485-920e-addb368a184f�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�$70d94571-6c34-4e89-a256-49bbad8cdd57�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�$67626d97-e7da-41e2-afb1-cb41525291e4�$75f821f9-121e-4bdd-9feb-8e3bfecd415c�nbpkg��installed_versions��Statistics�stdlib�Symbolics�4.1.0�Distributions�0.25.29�DataFrames�1.2.2�PlutoUI�0.7.19�terminal_outputs��Statistics�,�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
+</div>�persist_js_state¤mime�text/html�last_run_timestamp�A�s[�M�rootassignee��cell_id�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�depends_on_disabled_cells§runtime�0�errored±cell_dependencies��$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e��precedence_heuristic	�cell_id�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�downstream_cells_map��upstream_cells_map��@md_str��getindex��$67626d97-e7da-41e2-afb1-cb41525291e4��precedence_heuristic	�cell_id�$67626d97-e7da-41e2-afb1-cb41525291e4�downstream_cells_map��upstream_cells_map��@md_str��getindex��$a6020a7f-36fe-4e43-be41-7c00e0ea7804��precedence_heuristic	�cell_id�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�downstream_cells_map��citizen_water_quality��upstream_cells_map��DataFrame��=>��$98435ed1-2313-4485-920e-addb368a184f��precedence_heuristic	�cell_id�$98435ed1-2313-4485-920e-addb368a184f�downstream_cells_map��upstream_cells_map��@md_str��getindex��$fafae38e-e852-11ea-1208-732b4744e4c2��precedence_heuristic	�cell_id�$fafae38e-e852-11ea-1208-732b4744e4c2�downstream_cells_map��upstream_cells_map��@md_str��getindex��$eeee51eb-29aa-44aa-b07d-8272db7c4ac2��precedence_heuristic	�cell_id�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�downstream_cells_map��upstream_cells_map��@md_str��getindex��$775c6345-b6af-4a0a-a1cc-40a5b6a65afc��precedence_heuristic	�cell_id�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�downstream_cells_map��upstream_cells_map��@md_str��getindex��$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136��precedence_heuristic	�cell_id�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�downstream_cells_map��upstream_cells_map��@md_str��getindex��$70d94571-6c34-4e89-a256-49bbad8cdd57��precedence_heuristic	�cell_id�$70d94571-6c34-4e89-a256-49bbad8cdd57�downstream_cells_map��water_quality��upstream_cells_map��DataFrame��=>��$4274082c-7e83-4593-9676-9d88ac0defca��precedence_heuristic	�cell_id�$4274082c-7e83-4593-9676-9d88ac0defca�downstream_cells_map��upstream_cells_map��@md_str��getindex��$75f821f9-121e-4bdd-9feb-8e3bfecd415c��precedence_heuristic�cell_id�$75f821f9-121e-4bdd-9feb-8e3bfecd415c�downstream_cells_map��Statistics��Symbolics��Distributions��PlutoUI��DataFrames��upstream_cells_map��TableOfContents��$5c073471-32a9-41fd-b0c9-4c66cc3e26bd��precedence_heuristic	�cell_id�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�downstream_cells_map��upstream_cells_map��@md_str��getindex��cell_execution_order��$75f821f9-121e-4bdd-9feb-8e3bfecd415c�$fafae38e-e852-11ea-1208-732b4744e4c2�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�$4274082c-7e83-4593-9676-9d88ac0defca�$98435ed1-2313-4485-920e-addb368a184f�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�$70d94571-6c34-4e89-a256-49bbad8cdd57�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�$67626d97-e7da-41e2-afb1-cb41525291e4�last_hot_reload_time�        �shortpath�hw0.jl�process_status�ready�path�_/home/runner/work/environmental-data-science/environmental-data-science/notebooks/week00/hw0.jl�last_save_time�A�s[})R�cell_order��$fafae38e-e852-11ea-1208-732b4744e4c2�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�$5c073471-32a9-41fd-b0c9-4c66cc3e26bd�$cc0a307c-950e-4e3e-b9f5-6eb84bdf2136�$4274082c-7e83-4593-9676-9d88ac0defca�$98435ed1-2313-4485-920e-addb368a184f�$775c6345-b6af-4a0a-a1cc-40a5b6a65afc�$70d94571-6c34-4e89-a256-49bbad8cdd57�$eeee51eb-29aa-44aa-b07d-8272db7c4ac2�$a6020a7f-36fe-4e43-be41-7c00e0ea7804�$67626d97-e7da-41e2-afb1-cb41525291e4�$75f821f9-121e-4bdd-9feb-8e3bfecd415c�nbpkg��installed_versions��Statistics�stdlib�Symbolics�4.1.0�Distributions�0.25.29�DataFrames�1.2.2�PlutoUI�0.7.19�terminal_outputs��Statistics�(�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
 [32m[1m   Installed[22m[39m PooledArrays ────────────── v1.3.0
 [32m[1m   Installed[22m[39m InvertedIndices ─────────── v1.1.0
-[32m[1m   Installed[22m[39m Rmath_jll ───────────────── v0.3.0+0
 [32m[1m   Installed[22m[39m AbstractTrees ───────────── v0.3.4
-[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
-[32m[1m   Installed[22m[39m InverseFunctions ────────── v0.1.2
-[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
 [32m[1m   Installed[22m[39m Static ──────────────────── v0.4.0
-[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
-[32m[1m   Installed[22m[39m Rmath ───────────────────── v0.7.0
-[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
-[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
 [32m[1m   Installed[22m[39m MicroCollections ────────── v0.1.1
-[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
+[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
+[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
 [32m[1m   Installed[22m[39m TimerOutputs ────────────── v0.5.13
 [32m[1m   Installed[22m[39m StatsFuns ───────────────── v0.9.13
-[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
-[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
-[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
 [32m[1m   Installed[22m[39m Parameters ──────────────── v0.12.3
+[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
+[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
+[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
+[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
+[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
+[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
+[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
+[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
+[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
 [32m[1m   Installed[22m[39m Latexify ────────────────── v0.15.9
 [32m[1m   Installed[22m[39m PrettyTables ────────────── v1.2.3
-[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
-[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
-[32m[1m   Installed[22m[39m IrrationalConstants ─────── v0.1.1
-[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
-[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
-[32m[1m   Installed[22m[39m QuadGK ──────────────────── v2.4.2
-[32m[1m   Installed[22m[39m DocStringExtensions ─────── v0.8.6
-[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
-[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
-[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
 [32m[1m   Installed[22m[39m Combinatorics ───────────── v1.0.2
+[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
 [32m[1m   Installed[22m[39m LabelledArrays ──────────── v1.6.6
+[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
 [32m[1m   Installed[22m[39m ChangesOfVariables ──────── v0.1.1
-[32m[1m   Installed[22m[39m SortingAlgorithms ───────── v1.0.1
 [32m[1m   Installed[22m[39m ChainRulesCore ──────────── v1.11.1
+[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
 [32m[1m   Installed[22m[39m DataFrames ──────────────── v1.2.2
 [32m[1m   Installed[22m[39m DefineSingletons ────────── v0.1.1
-[32m[1m   Installed[22m[39m FillArrays ──────────────── v0.12.7
-[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
-[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
-[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
-[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MultivariatePolynomials ─── v0.3.18
-[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
-[32m[1m   Installed[22m[39m OpenSpecFun_jll ─────────── v0.5.5+0
-[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
+[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
+[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
 [32m[1m   Installed[22m[39m RecipesBase ─────────────── v1.1.2
-[32m[1m   Installed[22m[39m Missings ────────────────── v1.0.2
 [32m[1m   Installed[22m[39m DiffRules ───────────────── v1.4.0
+[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
 [32m[1m   Installed[22m[39m ExprTools ───────────────── v0.1.6
-[32m[1m   Installed[22m[39m JLLWrappers ─────────────── v1.3.0
-[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
-[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
-[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
-[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
 [32m[1m   Installed[22m[39m DynamicPolynomials ──────── v0.3.21
-[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
 [32m[1m   Installed[22m[39m Setfield ────────────────── v0.8.0
+[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
 [32m[1m   Installed[22m[39m Symbolics ───────────────── v4.1.0
 [32m[1m   Installed[22m[39m Metatheory ──────────────── v1.3.2
+[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
 [32m[1m   Installed[22m[39m CommonSolve ─────────────── v0.2.0
+[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
 [32m[1m   Installed[22m[39m Compat ──────────────────── v3.40.0
 [32m[1m   Installed[22m[39m Adapt ───────────────────── v3.3.1
-[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
-[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m InitialValues ───────────── v0.2.11
-[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m ThreadsX ────────────────── v0.1.8
+[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m TreeViews ───────────────── v0.3.0
 [32m[1m   Installed[22m[39m Baselet ─────────────────── v0.1.1
-[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m EllipsisNotation ────────── v1.1.1
-[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MacroTools ──────────────── v0.5.9
 [32m[1m   Installed[22m[39m DomainSets ──────────────── v0.5.9
-[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
-[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m SymbolicUtils ───────────── v0.18.1
-[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
 [32m[1m   Installed[22m[39m BangBang ────────────────── v0.3.32
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Project.toml`
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Manifest.toml`
+[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m  No Changes[22m[39m to `/tmp/jl_4PpEiI/Project.toml`
+[32m[1m    Updating[22m[39m `/tmp/jl_4PpEiI/Manifest.toml`
+ [90m [8e850b90] [39m[91m- libblastrampoline_jll[39m
+ [90m [4536629a] [39m[91m- OpenBLAS_jll[39m
 [32m[1mPrecompiling[22m[39m project...
-[32m  ✓ [39m[90mAdapt[39m
 [32m  ✓ [39m[90mCompositionsBase[39m
+[32m  ✓ [39m[90mAdapt[39m
+[32m  ✓ [39m[90mRequires[39m
 [32m  ✓ [39m[90mInvertedIndices[39m
-[32m  ✓ [39m[90mIrrationalConstants[39m
-[32m  ✓ [39m[90mFillArrays[39m
 [32m  ✓ [39m[90mDefineSingletons[39m
-[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mRecipesBase[39m
-[32m  ✓ [39m[90mOpenLibm_jll[39m
 [32m  ✓ [39m[90mCommonSolve[39m
 [32m  ✓ [39m[90mIfElse[39m
 [32m  ✓ [39m[90mAbstractTrees[39m
 [32m  ✓ [39m[90mConstructionBase[39m
-[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mCompositeTypes[39m
 [32m  ✓ [39m[90mUnPack[39m
-[32m  ✓ [39m[90mExprTools[39m
+[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mBijections[39m
-[32m  ✓ [39m[90mStatsAPI[39m
-[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mExprTools[39m
 [32m  ✓ [39m[90mLaTeXStrings[39m
-[32m  ✓ [39m[90mPDMats[39m
-[32m  ✓ [39m[90mCompilerSupportLibraries_jll[39m
-[32m  ✓ [39m[90mMutableArithmetics[39m
+[32m  ✓ [39m[90mPooledArrays[39m
+[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mBaselet[39m
 [32m  ✓ [39m[90mAutoHashEquals[39m
 [32m  ✓ [39m[90mMacroTools[39m
-[32m  ✓ [39m[90mBaselet[39m
-[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mArgCheck[39m
 [32m  ✓ [39m[90mCombinatorics[39m
+[32m  ✓ [39m[90mMutableArithmetics[39m
 [32m  ✓ [39m[90mTermInterface[39m
 [32m  ✓ [39m[90mTreeViews[39m
-[32m  ✓ [39m[90mInverseFunctions[39m
-[32m  ✓ [39m[90mInitialValues[39m
 [32m  ✓ [39m[90mFormatting[39m
-[32m  ✓ [39m[90mDocStringExtensions[39m
-[32m  ✓ [39m[90mMissings[39m
-[32m  ✓ [39m[90mPooledArrays[39m
-[32m  ✓ [39m[90mRequires[39m
+[32m  ✓ [39m[90mInitialValues[39m
+[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mCompat[39m
+[32m  ✓ [39m[90mStatsAPI[39m
+[32m  ✓ [39m[90mPDMats[39m
 [32m  ✓ [39m[90mAbstractPlutoDingetjes[39m
-[32m  ✓ [39m[90mReferenceables[39m
-[32m  ✓ [39m[90mJLLWrappers[39m
-[32m  ✓ [39m[90mParameters[39m
-[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
-[32m  ✓ [39m[90mStatic[39m
-[32m  ✓ [39m[90mTimerOutputs[39m
-[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mDensityInterface[39m
+[32m  ✓ [39m[90mReferenceables[39m
+[33m  ✓ [39m[90mParsers[39m
+[32m  ✓ [39m[90mParameters[39m
+[32m  ✓ [39m[90mStatic[39m
+[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
+[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mTimerOutputs[39m
+[32m  ✓ [39m[90mStaticArrays[39m
 [32m  ✓ [39m[90mSetfield[39m
 [32m  ✓ [39m[90mLatexify[39m
-[32m  ✓ [39m[90mStaticArrays[39m
+[32m  ✓ [39m[90mJLLWrappers[39m
 [32m  ✓ [39m[90mChainRulesCore[39m
+[33m  ✓ [39m[90mJSON[39m
 [32m  ✓ [39m[90mDataStructures[39m
+[32m  ✓ [39m[90mArrayInterface[39m
+[32m  ✓ [39m[90mSplittablesBase[39m
+[32m  ✓ [39m[90mOpenSpecFun_jll[39m
 [32m  ✓ [39m[90mPrettyTables[39m
 [32m  ✓ [39m[90mRmath_jll[39m
-[32m  ✓ [39m[90mOpenSpecFun_jll[39m
-[32m  ✓ [39m[90mSplittablesBase[39m
-[32m  ✓ [39m[90mArrayInterface[39m
 [32m  ✓ [39m[90mBangBang[39m
 [32m  ✓ [39m[90mLogExpFunctions[39m
 [32m  ✓ [39m[90mQuadGK[39m
 [32m  ✓ [39m[90mSortingAlgorithms[39m
-[32m  ✓ [39m[90mMultivariatePolynomials[39m
-[32m  ✓ [39m[90mRmath[39m
 [32m  ✓ [39m[90mEllipsisNotation[39m
-[32m  ✓ [39mPlutoUI
-[32m  ✓ [39m[90mMicroCollections[39m
+[32m  ✓ [39m[90mMultivariatePolynomials[39m
 [32m  ✓ [39m[90mLabelledArrays[39m
+[32m  ✓ [39m[90mRmath[39m
+[32m  ✓ [39m[90mMicroCollections[39m
 [32m  ✓ [39m[90mRecursiveArrayTools[39m
+[32m  ✓ [39mPlutoUI
 [32m  ✓ [39m[90mSpecialFunctions[39m
 [32m  ✓ [39m[90mStatsBase[39m
 [32m  ✓ [39m[90mIntervalSets[39m
@@ -484,163 +473,150 @@ return tocNode
 [32m  ✓ [39mDataFrames
 [32m  ✓ [39m[90mSymbolicUtils[39m
 [32m  ✓ [39mSymbolics
-  85 dependencies successfully precompiled in 84 seconds (15 already precompiled)
-�Symbolics�,�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
+  80 dependencies successfully precompiled in 90 seconds (20 already precompiled)
+  [33m2[39m dependencies precompiled but different versions are currently loaded. Restart julia to access the new versions
+�Symbolics�(�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
 [32m[1m   Installed[22m[39m PooledArrays ────────────── v1.3.0
 [32m[1m   Installed[22m[39m InvertedIndices ─────────── v1.1.0
-[32m[1m   Installed[22m[39m Rmath_jll ───────────────── v0.3.0+0
 [32m[1m   Installed[22m[39m AbstractTrees ───────────── v0.3.4
-[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
-[32m[1m   Installed[22m[39m InverseFunctions ────────── v0.1.2
-[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
 [32m[1m   Installed[22m[39m Static ──────────────────── v0.4.0
-[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
-[32m[1m   Installed[22m[39m Rmath ───────────────────── v0.7.0
-[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
-[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
 [32m[1m   Installed[22m[39m MicroCollections ────────── v0.1.1
-[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
+[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
+[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
 [32m[1m   Installed[22m[39m TimerOutputs ────────────── v0.5.13
 [32m[1m   Installed[22m[39m StatsFuns ───────────────── v0.9.13
-[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
-[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
-[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
 [32m[1m   Installed[22m[39m Parameters ──────────────── v0.12.3
+[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
+[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
+[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
+[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
+[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
+[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
+[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
+[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
+[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
 [32m[1m   Installed[22m[39m Latexify ────────────────── v0.15.9
 [32m[1m   Installed[22m[39m PrettyTables ────────────── v1.2.3
-[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
-[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
-[32m[1m   Installed[22m[39m IrrationalConstants ─────── v0.1.1
-[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
-[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
-[32m[1m   Installed[22m[39m QuadGK ──────────────────── v2.4.2
-[32m[1m   Installed[22m[39m DocStringExtensions ─────── v0.8.6
-[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
-[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
-[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
 [32m[1m   Installed[22m[39m Combinatorics ───────────── v1.0.2
+[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
 [32m[1m   Installed[22m[39m LabelledArrays ──────────── v1.6.6
+[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
 [32m[1m   Installed[22m[39m ChangesOfVariables ──────── v0.1.1
-[32m[1m   Installed[22m[39m SortingAlgorithms ───────── v1.0.1
 [32m[1m   Installed[22m[39m ChainRulesCore ──────────── v1.11.1
+[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
 [32m[1m   Installed[22m[39m DataFrames ──────────────── v1.2.2
 [32m[1m   Installed[22m[39m DefineSingletons ────────── v0.1.1
-[32m[1m   Installed[22m[39m FillArrays ──────────────── v0.12.7
-[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
-[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
-[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
-[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MultivariatePolynomials ─── v0.3.18
-[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
-[32m[1m   Installed[22m[39m OpenSpecFun_jll ─────────── v0.5.5+0
-[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
+[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
+[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
 [32m[1m   Installed[22m[39m RecipesBase ─────────────── v1.1.2
-[32m[1m   Installed[22m[39m Missings ────────────────── v1.0.2
 [32m[1m   Installed[22m[39m DiffRules ───────────────── v1.4.0
+[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
 [32m[1m   Installed[22m[39m ExprTools ───────────────── v0.1.6
-[32m[1m   Installed[22m[39m JLLWrappers ─────────────── v1.3.0
-[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
-[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
-[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
-[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
 [32m[1m   Installed[22m[39m DynamicPolynomials ──────── v0.3.21
-[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
 [32m[1m   Installed[22m[39m Setfield ────────────────── v0.8.0
+[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
 [32m[1m   Installed[22m[39m Symbolics ───────────────── v4.1.0
 [32m[1m   Installed[22m[39m Metatheory ──────────────── v1.3.2
+[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
 [32m[1m   Installed[22m[39m CommonSolve ─────────────── v0.2.0
+[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
 [32m[1m   Installed[22m[39m Compat ──────────────────── v3.40.0
 [32m[1m   Installed[22m[39m Adapt ───────────────────── v3.3.1
-[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
-[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m InitialValues ───────────── v0.2.11
-[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m ThreadsX ────────────────── v0.1.8
+[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m TreeViews ───────────────── v0.3.0
 [32m[1m   Installed[22m[39m Baselet ─────────────────── v0.1.1
-[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m EllipsisNotation ────────── v1.1.1
-[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MacroTools ──────────────── v0.5.9
 [32m[1m   Installed[22m[39m DomainSets ──────────────── v0.5.9
-[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
-[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m SymbolicUtils ───────────── v0.18.1
-[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
 [32m[1m   Installed[22m[39m BangBang ────────────────── v0.3.32
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Project.toml`
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Manifest.toml`
+[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m  No Changes[22m[39m to `/tmp/jl_4PpEiI/Project.toml`
+[32m[1m    Updating[22m[39m `/tmp/jl_4PpEiI/Manifest.toml`
+ [90m [8e850b90] [39m[91m- libblastrampoline_jll[39m
+ [90m [4536629a] [39m[91m- OpenBLAS_jll[39m
 [32m[1mPrecompiling[22m[39m project...
-[32m  ✓ [39m[90mAdapt[39m
 [32m  ✓ [39m[90mCompositionsBase[39m
+[32m  ✓ [39m[90mAdapt[39m
+[32m  ✓ [39m[90mRequires[39m
 [32m  ✓ [39m[90mInvertedIndices[39m
-[32m  ✓ [39m[90mIrrationalConstants[39m
-[32m  ✓ [39m[90mFillArrays[39m
 [32m  ✓ [39m[90mDefineSingletons[39m
-[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mRecipesBase[39m
-[32m  ✓ [39m[90mOpenLibm_jll[39m
 [32m  ✓ [39m[90mCommonSolve[39m
 [32m  ✓ [39m[90mIfElse[39m
 [32m  ✓ [39m[90mAbstractTrees[39m
 [32m  ✓ [39m[90mConstructionBase[39m
-[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mCompositeTypes[39m
 [32m  ✓ [39m[90mUnPack[39m
-[32m  ✓ [39m[90mExprTools[39m
+[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mBijections[39m
-[32m  ✓ [39m[90mStatsAPI[39m
-[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mExprTools[39m
 [32m  ✓ [39m[90mLaTeXStrings[39m
-[32m  ✓ [39m[90mPDMats[39m
-[32m  ✓ [39m[90mCompilerSupportLibraries_jll[39m
-[32m  ✓ [39m[90mMutableArithmetics[39m
+[32m  ✓ [39m[90mPooledArrays[39m
+[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mBaselet[39m
 [32m  ✓ [39m[90mAutoHashEquals[39m
 [32m  ✓ [39m[90mMacroTools[39m
-[32m  ✓ [39m[90mBaselet[39m
-[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mArgCheck[39m
 [32m  ✓ [39m[90mCombinatorics[39m
+[32m  ✓ [39m[90mMutableArithmetics[39m
 [32m  ✓ [39m[90mTermInterface[39m
 [32m  ✓ [39m[90mTreeViews[39m
-[32m  ✓ [39m[90mInverseFunctions[39m
-[32m  ✓ [39m[90mInitialValues[39m
 [32m  ✓ [39m[90mFormatting[39m
-[32m  ✓ [39m[90mDocStringExtensions[39m
-[32m  ✓ [39m[90mMissings[39m
-[32m  ✓ [39m[90mPooledArrays[39m
-[32m  ✓ [39m[90mRequires[39m
+[32m  ✓ [39m[90mInitialValues[39m
+[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mCompat[39m
+[32m  ✓ [39m[90mStatsAPI[39m
+[32m  ✓ [39m[90mPDMats[39m
 [32m  ✓ [39m[90mAbstractPlutoDingetjes[39m
-[32m  ✓ [39m[90mReferenceables[39m
-[32m  ✓ [39m[90mJLLWrappers[39m
-[32m  ✓ [39m[90mParameters[39m
-[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
-[32m  ✓ [39m[90mStatic[39m
-[32m  ✓ [39m[90mTimerOutputs[39m
-[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mDensityInterface[39m
+[32m  ✓ [39m[90mReferenceables[39m
+[33m  ✓ [39m[90mParsers[39m
+[32m  ✓ [39m[90mParameters[39m
+[32m  ✓ [39m[90mStatic[39m
+[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
+[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mTimerOutputs[39m
+[32m  ✓ [39m[90mStaticArrays[39m
 [32m  ✓ [39m[90mSetfield[39m
 [32m  ✓ [39m[90mLatexify[39m
-[32m  ✓ [39m[90mStaticArrays[39m
+[32m  ✓ [39m[90mJLLWrappers[39m
 [32m  ✓ [39m[90mChainRulesCore[39m
+[33m  ✓ [39m[90mJSON[39m
 [32m  ✓ [39m[90mDataStructures[39m
+[32m  ✓ [39m[90mArrayInterface[39m
+[32m  ✓ [39m[90mSplittablesBase[39m
+[32m  ✓ [39m[90mOpenSpecFun_jll[39m
 [32m  ✓ [39m[90mPrettyTables[39m
 [32m  ✓ [39m[90mRmath_jll[39m
-[32m  ✓ [39m[90mOpenSpecFun_jll[39m
-[32m  ✓ [39m[90mSplittablesBase[39m
-[32m  ✓ [39m[90mArrayInterface[39m
 [32m  ✓ [39m[90mBangBang[39m
 [32m  ✓ [39m[90mLogExpFunctions[39m
 [32m  ✓ [39m[90mQuadGK[39m
 [32m  ✓ [39m[90mSortingAlgorithms[39m
-[32m  ✓ [39m[90mMultivariatePolynomials[39m
-[32m  ✓ [39m[90mRmath[39m
 [32m  ✓ [39m[90mEllipsisNotation[39m
-[32m  ✓ [39mPlutoUI
-[32m  ✓ [39m[90mMicroCollections[39m
+[32m  ✓ [39m[90mMultivariatePolynomials[39m
 [32m  ✓ [39m[90mLabelledArrays[39m
+[32m  ✓ [39m[90mRmath[39m
+[32m  ✓ [39m[90mMicroCollections[39m
 [32m  ✓ [39m[90mRecursiveArrayTools[39m
+[32m  ✓ [39mPlutoUI
 [32m  ✓ [39m[90mSpecialFunctions[39m
 [32m  ✓ [39m[90mStatsBase[39m
 [32m  ✓ [39m[90mIntervalSets[39m
@@ -656,163 +632,150 @@ return tocNode
 [32m  ✓ [39mDataFrames
 [32m  ✓ [39m[90mSymbolicUtils[39m
 [32m  ✓ [39mSymbolics
-  85 dependencies successfully precompiled in 84 seconds (15 already precompiled)
-�Distributions�,�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
+  80 dependencies successfully precompiled in 90 seconds (20 already precompiled)
+  [33m2[39m dependencies precompiled but different versions are currently loaded. Restart julia to access the new versions
+�Distributions�(�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
 [32m[1m   Installed[22m[39m PooledArrays ────────────── v1.3.0
 [32m[1m   Installed[22m[39m InvertedIndices ─────────── v1.1.0
-[32m[1m   Installed[22m[39m Rmath_jll ───────────────── v0.3.0+0
 [32m[1m   Installed[22m[39m AbstractTrees ───────────── v0.3.4
-[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
-[32m[1m   Installed[22m[39m InverseFunctions ────────── v0.1.2
-[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
 [32m[1m   Installed[22m[39m Static ──────────────────── v0.4.0
-[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
-[32m[1m   Installed[22m[39m Rmath ───────────────────── v0.7.0
-[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
-[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
 [32m[1m   Installed[22m[39m MicroCollections ────────── v0.1.1
-[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
+[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
+[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
 [32m[1m   Installed[22m[39m TimerOutputs ────────────── v0.5.13
 [32m[1m   Installed[22m[39m StatsFuns ───────────────── v0.9.13
-[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
-[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
-[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
 [32m[1m   Installed[22m[39m Parameters ──────────────── v0.12.3
+[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
+[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
+[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
+[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
+[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
+[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
+[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
+[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
+[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
 [32m[1m   Installed[22m[39m Latexify ────────────────── v0.15.9
 [32m[1m   Installed[22m[39m PrettyTables ────────────── v1.2.3
-[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
-[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
-[32m[1m   Installed[22m[39m IrrationalConstants ─────── v0.1.1
-[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
-[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
-[32m[1m   Installed[22m[39m QuadGK ──────────────────── v2.4.2
-[32m[1m   Installed[22m[39m DocStringExtensions ─────── v0.8.6
-[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
-[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
-[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
 [32m[1m   Installed[22m[39m Combinatorics ───────────── v1.0.2
+[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
 [32m[1m   Installed[22m[39m LabelledArrays ──────────── v1.6.6
+[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
 [32m[1m   Installed[22m[39m ChangesOfVariables ──────── v0.1.1
-[32m[1m   Installed[22m[39m SortingAlgorithms ───────── v1.0.1
 [32m[1m   Installed[22m[39m ChainRulesCore ──────────── v1.11.1
+[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
 [32m[1m   Installed[22m[39m DataFrames ──────────────── v1.2.2
 [32m[1m   Installed[22m[39m DefineSingletons ────────── v0.1.1
-[32m[1m   Installed[22m[39m FillArrays ──────────────── v0.12.7
-[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
-[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
-[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
-[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MultivariatePolynomials ─── v0.3.18
-[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
-[32m[1m   Installed[22m[39m OpenSpecFun_jll ─────────── v0.5.5+0
-[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
+[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
+[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
 [32m[1m   Installed[22m[39m RecipesBase ─────────────── v1.1.2
-[32m[1m   Installed[22m[39m Missings ────────────────── v1.0.2
 [32m[1m   Installed[22m[39m DiffRules ───────────────── v1.4.0
+[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
 [32m[1m   Installed[22m[39m ExprTools ───────────────── v0.1.6
-[32m[1m   Installed[22m[39m JLLWrappers ─────────────── v1.3.0
-[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
-[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
-[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
-[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
 [32m[1m   Installed[22m[39m DynamicPolynomials ──────── v0.3.21
-[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
 [32m[1m   Installed[22m[39m Setfield ────────────────── v0.8.0
+[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
 [32m[1m   Installed[22m[39m Symbolics ───────────────── v4.1.0
 [32m[1m   Installed[22m[39m Metatheory ──────────────── v1.3.2
+[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
 [32m[1m   Installed[22m[39m CommonSolve ─────────────── v0.2.0
+[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
 [32m[1m   Installed[22m[39m Compat ──────────────────── v3.40.0
 [32m[1m   Installed[22m[39m Adapt ───────────────────── v3.3.1
-[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
-[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m InitialValues ───────────── v0.2.11
-[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m ThreadsX ────────────────── v0.1.8
+[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m TreeViews ───────────────── v0.3.0
 [32m[1m   Installed[22m[39m Baselet ─────────────────── v0.1.1
-[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m EllipsisNotation ────────── v1.1.1
-[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MacroTools ──────────────── v0.5.9
 [32m[1m   Installed[22m[39m DomainSets ──────────────── v0.5.9
-[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
-[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m SymbolicUtils ───────────── v0.18.1
-[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
 [32m[1m   Installed[22m[39m BangBang ────────────────── v0.3.32
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Project.toml`
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Manifest.toml`
+[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m  No Changes[22m[39m to `/tmp/jl_4PpEiI/Project.toml`
+[32m[1m    Updating[22m[39m `/tmp/jl_4PpEiI/Manifest.toml`
+ [90m [8e850b90] [39m[91m- libblastrampoline_jll[39m
+ [90m [4536629a] [39m[91m- OpenBLAS_jll[39m
 [32m[1mPrecompiling[22m[39m project...
-[32m  ✓ [39m[90mAdapt[39m
 [32m  ✓ [39m[90mCompositionsBase[39m
+[32m  ✓ [39m[90mAdapt[39m
+[32m  ✓ [39m[90mRequires[39m
 [32m  ✓ [39m[90mInvertedIndices[39m
-[32m  ✓ [39m[90mIrrationalConstants[39m
-[32m  ✓ [39m[90mFillArrays[39m
 [32m  ✓ [39m[90mDefineSingletons[39m
-[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mRecipesBase[39m
-[32m  ✓ [39m[90mOpenLibm_jll[39m
 [32m  ✓ [39m[90mCommonSolve[39m
 [32m  ✓ [39m[90mIfElse[39m
 [32m  ✓ [39m[90mAbstractTrees[39m
 [32m  ✓ [39m[90mConstructionBase[39m
-[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mCompositeTypes[39m
 [32m  ✓ [39m[90mUnPack[39m
-[32m  ✓ [39m[90mExprTools[39m
+[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mBijections[39m
-[32m  ✓ [39m[90mStatsAPI[39m
-[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mExprTools[39m
 [32m  ✓ [39m[90mLaTeXStrings[39m
-[32m  ✓ [39m[90mPDMats[39m
-[32m  ✓ [39m[90mCompilerSupportLibraries_jll[39m
-[32m  ✓ [39m[90mMutableArithmetics[39m
+[32m  ✓ [39m[90mPooledArrays[39m
+[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mBaselet[39m
 [32m  ✓ [39m[90mAutoHashEquals[39m
 [32m  ✓ [39m[90mMacroTools[39m
-[32m  ✓ [39m[90mBaselet[39m
-[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mArgCheck[39m
 [32m  ✓ [39m[90mCombinatorics[39m
+[32m  ✓ [39m[90mMutableArithmetics[39m
 [32m  ✓ [39m[90mTermInterface[39m
 [32m  ✓ [39m[90mTreeViews[39m
-[32m  ✓ [39m[90mInverseFunctions[39m
-[32m  ✓ [39m[90mInitialValues[39m
 [32m  ✓ [39m[90mFormatting[39m
-[32m  ✓ [39m[90mDocStringExtensions[39m
-[32m  ✓ [39m[90mMissings[39m
-[32m  ✓ [39m[90mPooledArrays[39m
-[32m  ✓ [39m[90mRequires[39m
+[32m  ✓ [39m[90mInitialValues[39m
+[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mCompat[39m
+[32m  ✓ [39m[90mStatsAPI[39m
+[32m  ✓ [39m[90mPDMats[39m
 [32m  ✓ [39m[90mAbstractPlutoDingetjes[39m
-[32m  ✓ [39m[90mReferenceables[39m
-[32m  ✓ [39m[90mJLLWrappers[39m
-[32m  ✓ [39m[90mParameters[39m
-[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
-[32m  ✓ [39m[90mStatic[39m
-[32m  ✓ [39m[90mTimerOutputs[39m
-[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mDensityInterface[39m
+[32m  ✓ [39m[90mReferenceables[39m
+[33m  ✓ [39m[90mParsers[39m
+[32m  ✓ [39m[90mParameters[39m
+[32m  ✓ [39m[90mStatic[39m
+[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
+[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mTimerOutputs[39m
+[32m  ✓ [39m[90mStaticArrays[39m
 [32m  ✓ [39m[90mSetfield[39m
 [32m  ✓ [39m[90mLatexify[39m
-[32m  ✓ [39m[90mStaticArrays[39m
+[32m  ✓ [39m[90mJLLWrappers[39m
 [32m  ✓ [39m[90mChainRulesCore[39m
+[33m  ✓ [39m[90mJSON[39m
 [32m  ✓ [39m[90mDataStructures[39m
+[32m  ✓ [39m[90mArrayInterface[39m
+[32m  ✓ [39m[90mSplittablesBase[39m
+[32m  ✓ [39m[90mOpenSpecFun_jll[39m
 [32m  ✓ [39m[90mPrettyTables[39m
 [32m  ✓ [39m[90mRmath_jll[39m
-[32m  ✓ [39m[90mOpenSpecFun_jll[39m
-[32m  ✓ [39m[90mSplittablesBase[39m
-[32m  ✓ [39m[90mArrayInterface[39m
 [32m  ✓ [39m[90mBangBang[39m
 [32m  ✓ [39m[90mLogExpFunctions[39m
 [32m  ✓ [39m[90mQuadGK[39m
 [32m  ✓ [39m[90mSortingAlgorithms[39m
-[32m  ✓ [39m[90mMultivariatePolynomials[39m
-[32m  ✓ [39m[90mRmath[39m
 [32m  ✓ [39m[90mEllipsisNotation[39m
-[32m  ✓ [39mPlutoUI
-[32m  ✓ [39m[90mMicroCollections[39m
+[32m  ✓ [39m[90mMultivariatePolynomials[39m
 [32m  ✓ [39m[90mLabelledArrays[39m
+[32m  ✓ [39m[90mRmath[39m
+[32m  ✓ [39m[90mMicroCollections[39m
 [32m  ✓ [39m[90mRecursiveArrayTools[39m
+[32m  ✓ [39mPlutoUI
 [32m  ✓ [39m[90mSpecialFunctions[39m
 [32m  ✓ [39m[90mStatsBase[39m
 [32m  ✓ [39m[90mIntervalSets[39m
@@ -828,163 +791,150 @@ return tocNode
 [32m  ✓ [39mDataFrames
 [32m  ✓ [39m[90mSymbolicUtils[39m
 [32m  ✓ [39mSymbolics
-  85 dependencies successfully precompiled in 84 seconds (15 already precompiled)
-�PlutoUI�,�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
+  80 dependencies successfully precompiled in 90 seconds (20 already precompiled)
+  [33m2[39m dependencies precompiled but different versions are currently loaded. Restart julia to access the new versions
+�PlutoUI�(�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
 [32m[1m   Installed[22m[39m PooledArrays ────────────── v1.3.0
 [32m[1m   Installed[22m[39m InvertedIndices ─────────── v1.1.0
-[32m[1m   Installed[22m[39m Rmath_jll ───────────────── v0.3.0+0
 [32m[1m   Installed[22m[39m AbstractTrees ───────────── v0.3.4
-[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
-[32m[1m   Installed[22m[39m InverseFunctions ────────── v0.1.2
-[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
 [32m[1m   Installed[22m[39m Static ──────────────────── v0.4.0
-[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
-[32m[1m   Installed[22m[39m Rmath ───────────────────── v0.7.0
-[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
-[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
 [32m[1m   Installed[22m[39m MicroCollections ────────── v0.1.1
-[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
+[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
+[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
 [32m[1m   Installed[22m[39m TimerOutputs ────────────── v0.5.13
 [32m[1m   Installed[22m[39m StatsFuns ───────────────── v0.9.13
-[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
-[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
-[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
 [32m[1m   Installed[22m[39m Parameters ──────────────── v0.12.3
+[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
+[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
+[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
+[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
+[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
+[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
+[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
+[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
+[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
 [32m[1m   Installed[22m[39m Latexify ────────────────── v0.15.9
 [32m[1m   Installed[22m[39m PrettyTables ────────────── v1.2.3
-[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
-[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
-[32m[1m   Installed[22m[39m IrrationalConstants ─────── v0.1.1
-[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
-[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
-[32m[1m   Installed[22m[39m QuadGK ──────────────────── v2.4.2
-[32m[1m   Installed[22m[39m DocStringExtensions ─────── v0.8.6
-[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
-[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
-[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
 [32m[1m   Installed[22m[39m Combinatorics ───────────── v1.0.2
+[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
 [32m[1m   Installed[22m[39m LabelledArrays ──────────── v1.6.6
+[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
 [32m[1m   Installed[22m[39m ChangesOfVariables ──────── v0.1.1
-[32m[1m   Installed[22m[39m SortingAlgorithms ───────── v1.0.1
 [32m[1m   Installed[22m[39m ChainRulesCore ──────────── v1.11.1
+[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
 [32m[1m   Installed[22m[39m DataFrames ──────────────── v1.2.2
 [32m[1m   Installed[22m[39m DefineSingletons ────────── v0.1.1
-[32m[1m   Installed[22m[39m FillArrays ──────────────── v0.12.7
-[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
-[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
-[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
-[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MultivariatePolynomials ─── v0.3.18
-[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
-[32m[1m   Installed[22m[39m OpenSpecFun_jll ─────────── v0.5.5+0
-[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
+[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
+[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
 [32m[1m   Installed[22m[39m RecipesBase ─────────────── v1.1.2
-[32m[1m   Installed[22m[39m Missings ────────────────── v1.0.2
 [32m[1m   Installed[22m[39m DiffRules ───────────────── v1.4.0
+[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
 [32m[1m   Installed[22m[39m ExprTools ───────────────── v0.1.6
-[32m[1m   Installed[22m[39m JLLWrappers ─────────────── v1.3.0
-[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
-[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
-[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
-[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
 [32m[1m   Installed[22m[39m DynamicPolynomials ──────── v0.3.21
-[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
 [32m[1m   Installed[22m[39m Setfield ────────────────── v0.8.0
+[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
 [32m[1m   Installed[22m[39m Symbolics ───────────────── v4.1.0
 [32m[1m   Installed[22m[39m Metatheory ──────────────── v1.3.2
+[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
 [32m[1m   Installed[22m[39m CommonSolve ─────────────── v0.2.0
+[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
 [32m[1m   Installed[22m[39m Compat ──────────────────── v3.40.0
 [32m[1m   Installed[22m[39m Adapt ───────────────────── v3.3.1
-[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
-[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m InitialValues ───────────── v0.2.11
-[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m ThreadsX ────────────────── v0.1.8
+[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m TreeViews ───────────────── v0.3.0
 [32m[1m   Installed[22m[39m Baselet ─────────────────── v0.1.1
-[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m EllipsisNotation ────────── v1.1.1
-[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MacroTools ──────────────── v0.5.9
 [32m[1m   Installed[22m[39m DomainSets ──────────────── v0.5.9
-[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
-[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m SymbolicUtils ───────────── v0.18.1
-[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
 [32m[1m   Installed[22m[39m BangBang ────────────────── v0.3.32
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Project.toml`
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Manifest.toml`
+[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m  No Changes[22m[39m to `/tmp/jl_4PpEiI/Project.toml`
+[32m[1m    Updating[22m[39m `/tmp/jl_4PpEiI/Manifest.toml`
+ [90m [8e850b90] [39m[91m- libblastrampoline_jll[39m
+ [90m [4536629a] [39m[91m- OpenBLAS_jll[39m
 [32m[1mPrecompiling[22m[39m project...
-[32m  ✓ [39m[90mAdapt[39m
 [32m  ✓ [39m[90mCompositionsBase[39m
+[32m  ✓ [39m[90mAdapt[39m
+[32m  ✓ [39m[90mRequires[39m
 [32m  ✓ [39m[90mInvertedIndices[39m
-[32m  ✓ [39m[90mIrrationalConstants[39m
-[32m  ✓ [39m[90mFillArrays[39m
 [32m  ✓ [39m[90mDefineSingletons[39m
-[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mRecipesBase[39m
-[32m  ✓ [39m[90mOpenLibm_jll[39m
 [32m  ✓ [39m[90mCommonSolve[39m
 [32m  ✓ [39m[90mIfElse[39m
 [32m  ✓ [39m[90mAbstractTrees[39m
 [32m  ✓ [39m[90mConstructionBase[39m
-[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mCompositeTypes[39m
 [32m  ✓ [39m[90mUnPack[39m
-[32m  ✓ [39m[90mExprTools[39m
+[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mBijections[39m
-[32m  ✓ [39m[90mStatsAPI[39m
-[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mExprTools[39m
 [32m  ✓ [39m[90mLaTeXStrings[39m
-[32m  ✓ [39m[90mPDMats[39m
-[32m  ✓ [39m[90mCompilerSupportLibraries_jll[39m
-[32m  ✓ [39m[90mMutableArithmetics[39m
+[32m  ✓ [39m[90mPooledArrays[39m
+[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mBaselet[39m
 [32m  ✓ [39m[90mAutoHashEquals[39m
 [32m  ✓ [39m[90mMacroTools[39m
-[32m  ✓ [39m[90mBaselet[39m
-[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mArgCheck[39m
 [32m  ✓ [39m[90mCombinatorics[39m
+[32m  ✓ [39m[90mMutableArithmetics[39m
 [32m  ✓ [39m[90mTermInterface[39m
 [32m  ✓ [39m[90mTreeViews[39m
-[32m  ✓ [39m[90mInverseFunctions[39m
-[32m  ✓ [39m[90mInitialValues[39m
 [32m  ✓ [39m[90mFormatting[39m
-[32m  ✓ [39m[90mDocStringExtensions[39m
-[32m  ✓ [39m[90mMissings[39m
-[32m  ✓ [39m[90mPooledArrays[39m
-[32m  ✓ [39m[90mRequires[39m
+[32m  ✓ [39m[90mInitialValues[39m
+[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mCompat[39m
+[32m  ✓ [39m[90mStatsAPI[39m
+[32m  ✓ [39m[90mPDMats[39m
 [32m  ✓ [39m[90mAbstractPlutoDingetjes[39m
-[32m  ✓ [39m[90mReferenceables[39m
-[32m  ✓ [39m[90mJLLWrappers[39m
-[32m  ✓ [39m[90mParameters[39m
-[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
-[32m  ✓ [39m[90mStatic[39m
-[32m  ✓ [39m[90mTimerOutputs[39m
-[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mDensityInterface[39m
+[32m  ✓ [39m[90mReferenceables[39m
+[33m  ✓ [39m[90mParsers[39m
+[32m  ✓ [39m[90mParameters[39m
+[32m  ✓ [39m[90mStatic[39m
+[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
+[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mTimerOutputs[39m
+[32m  ✓ [39m[90mStaticArrays[39m
 [32m  ✓ [39m[90mSetfield[39m
 [32m  ✓ [39m[90mLatexify[39m
-[32m  ✓ [39m[90mStaticArrays[39m
+[32m  ✓ [39m[90mJLLWrappers[39m
 [32m  ✓ [39m[90mChainRulesCore[39m
+[33m  ✓ [39m[90mJSON[39m
 [32m  ✓ [39m[90mDataStructures[39m
+[32m  ✓ [39m[90mArrayInterface[39m
+[32m  ✓ [39m[90mSplittablesBase[39m
+[32m  ✓ [39m[90mOpenSpecFun_jll[39m
 [32m  ✓ [39m[90mPrettyTables[39m
 [32m  ✓ [39m[90mRmath_jll[39m
-[32m  ✓ [39m[90mOpenSpecFun_jll[39m
-[32m  ✓ [39m[90mSplittablesBase[39m
-[32m  ✓ [39m[90mArrayInterface[39m
 [32m  ✓ [39m[90mBangBang[39m
 [32m  ✓ [39m[90mLogExpFunctions[39m
 [32m  ✓ [39m[90mQuadGK[39m
 [32m  ✓ [39m[90mSortingAlgorithms[39m
-[32m  ✓ [39m[90mMultivariatePolynomials[39m
-[32m  ✓ [39m[90mRmath[39m
 [32m  ✓ [39m[90mEllipsisNotation[39m
-[32m  ✓ [39mPlutoUI
-[32m  ✓ [39m[90mMicroCollections[39m
+[32m  ✓ [39m[90mMultivariatePolynomials[39m
 [32m  ✓ [39m[90mLabelledArrays[39m
+[32m  ✓ [39m[90mRmath[39m
+[32m  ✓ [39m[90mMicroCollections[39m
 [32m  ✓ [39m[90mRecursiveArrayTools[39m
+[32m  ✓ [39mPlutoUI
 [32m  ✓ [39m[90mSpecialFunctions[39m
 [32m  ✓ [39m[90mStatsBase[39m
 [32m  ✓ [39m[90mIntervalSets[39m
@@ -1000,163 +950,150 @@ return tocNode
 [32m  ✓ [39mDataFrames
 [32m  ✓ [39m[90mSymbolicUtils[39m
 [32m  ✓ [39mSymbolics
-  85 dependencies successfully precompiled in 84 seconds (15 already precompiled)
-�DataFrames�,�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
+  80 dependencies successfully precompiled in 90 seconds (20 already precompiled)
+  [33m2[39m dependencies precompiled but different versions are currently loaded. Restart julia to access the new versions
+�DataFrames�(�[32m[1m   Installed[22m[39m AutoHashEquals ──────────── v0.2.0
 [32m[1m   Installed[22m[39m PooledArrays ────────────── v1.3.0
 [32m[1m   Installed[22m[39m InvertedIndices ─────────── v1.1.0
-[32m[1m   Installed[22m[39m Rmath_jll ───────────────── v0.3.0+0
 [32m[1m   Installed[22m[39m AbstractTrees ───────────── v0.3.4
-[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
-[32m[1m   Installed[22m[39m InverseFunctions ────────── v0.1.2
-[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
 [32m[1m   Installed[22m[39m Static ──────────────────── v0.4.0
-[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
-[32m[1m   Installed[22m[39m Rmath ───────────────────── v0.7.0
-[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
-[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m PDMats ──────────────────── v0.11.3
 [32m[1m   Installed[22m[39m MicroCollections ────────── v0.1.1
-[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m UnPack ──────────────────── v1.0.2
+[32m[1m   Installed[22m[39m DataStructures ──────────── v0.18.10
+[32m[1m   Installed[22m[39m IfElse ──────────────────── v0.1.1
 [32m[1m   Installed[22m[39m TimerOutputs ────────────── v0.5.13
 [32m[1m   Installed[22m[39m StatsFuns ───────────────── v0.9.13
-[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
-[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
-[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
 [32m[1m   Installed[22m[39m Parameters ──────────────── v0.12.3
+[32m[1m   Installed[22m[39m TermInterface ───────────── v0.2.3
+[32m[1m   Installed[22m[39m SpecialFunctions ────────── v1.8.1
+[32m[1m   Installed[22m[39m ConstructionBase ────────── v1.3.0
+[32m[1m   Installed[22m[39m LaTeXStrings ────────────── v1.3.0
+[32m[1m   Installed[22m[39m Distributions ───────────── v0.25.29
+[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
+[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
+[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
+[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
+[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
+[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
 [32m[1m   Installed[22m[39m Latexify ────────────────── v0.15.9
 [32m[1m   Installed[22m[39m PrettyTables ────────────── v1.2.3
-[32m[1m   Installed[22m[39m Bijections ──────────────── v0.1.3
-[32m[1m   Installed[22m[39m NaNMath ─────────────────── v0.3.5
-[32m[1m   Installed[22m[39m IrrationalConstants ─────── v0.1.1
-[32m[1m   Installed[22m[39m StatsAPI ────────────────── v1.0.0
-[32m[1m   Installed[22m[39m Formatting ──────────────── v0.4.2
-[32m[1m   Installed[22m[39m QuadGK ──────────────────── v2.4.2
-[32m[1m   Installed[22m[39m DocStringExtensions ─────── v0.8.6
-[32m[1m   Installed[22m[39m StaticArrays ────────────── v1.2.13
-[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
-[32m[1m   Installed[22m[39m ArrayInterface ──────────── v3.1.40
 [32m[1m   Installed[22m[39m Combinatorics ───────────── v1.0.2
+[32m[1m   Installed[22m[39m LogExpFunctions ─────────── v0.3.5
 [32m[1m   Installed[22m[39m LabelledArrays ──────────── v1.6.6
+[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
 [32m[1m   Installed[22m[39m ChangesOfVariables ──────── v0.1.1
-[32m[1m   Installed[22m[39m SortingAlgorithms ───────── v1.0.1
 [32m[1m   Installed[22m[39m ChainRulesCore ──────────── v1.11.1
+[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
 [32m[1m   Installed[22m[39m DataFrames ──────────────── v1.2.2
 [32m[1m   Installed[22m[39m DefineSingletons ────────── v0.1.1
-[32m[1m   Installed[22m[39m FillArrays ──────────────── v0.12.7
-[32m[1m   Installed[22m[39m DensityInterface ────────── v0.3.3
-[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
-[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
-[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MultivariatePolynomials ─── v0.3.18
-[32m[1m   Installed[22m[39m SciMLBase ───────────────── v1.19.4
-[32m[1m   Installed[22m[39m OpenSpecFun_jll ─────────── v0.5.5+0
-[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
+[32m[1m   Installed[22m[39m Referenceables ──────────── v0.1.2
+[32m[1m   Installed[22m[39m Requires ────────────────── v1.1.3
 [32m[1m   Installed[22m[39m RecipesBase ─────────────── v1.1.2
-[32m[1m   Installed[22m[39m Missings ────────────────── v1.0.2
 [32m[1m   Installed[22m[39m DiffRules ───────────────── v1.4.0
+[32m[1m   Installed[22m[39m RecursiveArrayTools ─────── v2.20.0
 [32m[1m   Installed[22m[39m ExprTools ───────────────── v0.1.6
-[32m[1m   Installed[22m[39m JLLWrappers ─────────────── v1.3.0
-[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
-[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
-[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
-[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Crayons ─────────────────── v4.0.4
 [32m[1m   Installed[22m[39m DynamicPolynomials ──────── v0.3.21
-[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m CompositionsBase ────────── v0.1.1
 [32m[1m   Installed[22m[39m Setfield ────────────────── v0.8.0
+[32m[1m   Installed[22m[39m PlutoUI ─────────────────── v0.7.19
+[32m[1m   Installed[22m[39m Transducers ─────────────── v0.4.67
 [32m[1m   Installed[22m[39m Symbolics ───────────────── v4.1.0
 [32m[1m   Installed[22m[39m Metatheory ──────────────── v1.3.2
+[32m[1m   Installed[22m[39m ArgCheck ────────────────── v2.1.0
 [32m[1m   Installed[22m[39m CommonSolve ─────────────── v0.2.0
+[32m[1m   Installed[22m[39m SplittablesBase ─────────── v0.1.14
+[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
 [32m[1m   Installed[22m[39m Compat ──────────────────── v3.40.0
 [32m[1m   Installed[22m[39m Adapt ───────────────────── v3.3.1
-[32m[1m   Installed[22m[39m RuntimeGeneratedFunctions ─ v0.5.3
-[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m InitialValues ───────────── v0.2.11
-[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m ThreadsX ────────────────── v0.1.8
+[32m[1m   Installed[22m[39m Preferences ─────────────── v1.2.2
 [32m[1m   Installed[22m[39m TreeViews ───────────────── v0.3.0
 [32m[1m   Installed[22m[39m Baselet ─────────────────── v0.1.1
-[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m EllipsisNotation ────────── v1.1.1
-[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m CompositeTypes ──────────── v0.1.2
 [32m[1m   Installed[22m[39m MacroTools ──────────────── v0.5.9
 [32m[1m   Installed[22m[39m DomainSets ──────────────── v0.5.9
-[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
-[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m StatsBase ───────────────── v0.33.12
 [32m[1m   Installed[22m[39m SymbolicUtils ───────────── v0.18.1
-[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m   Installed[22m[39m ZygoteRules ─────────────── v0.2.2
+[32m[1m   Installed[22m[39m AbstractPlutoDingetjes ──── v1.1.1
+[32m[1m   Installed[22m[39m IntervalSets ────────────── v0.5.3
 [32m[1m   Installed[22m[39m BangBang ────────────────── v0.3.32
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Project.toml`
-[32m[1m  No Changes[22m[39m to `/tmp/jl_ZTJUn3/Manifest.toml`
+[32m[1m   Installed[22m[39m MutableArithmetics ──────── v0.2.22
+[32m[1m  No Changes[22m[39m to `/tmp/jl_4PpEiI/Project.toml`
+[32m[1m    Updating[22m[39m `/tmp/jl_4PpEiI/Manifest.toml`
+ [90m [8e850b90] [39m[91m- libblastrampoline_jll[39m
+ [90m [4536629a] [39m[91m- OpenBLAS_jll[39m
 [32m[1mPrecompiling[22m[39m project...
-[32m  ✓ [39m[90mAdapt[39m
 [32m  ✓ [39m[90mCompositionsBase[39m
+[32m  ✓ [39m[90mAdapt[39m
+[32m  ✓ [39m[90mRequires[39m
 [32m  ✓ [39m[90mInvertedIndices[39m
-[32m  ✓ [39m[90mIrrationalConstants[39m
-[32m  ✓ [39m[90mFillArrays[39m
 [32m  ✓ [39m[90mDefineSingletons[39m
-[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mRecipesBase[39m
-[32m  ✓ [39m[90mOpenLibm_jll[39m
 [32m  ✓ [39m[90mCommonSolve[39m
 [32m  ✓ [39m[90mIfElse[39m
 [32m  ✓ [39m[90mAbstractTrees[39m
 [32m  ✓ [39m[90mConstructionBase[39m
-[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mCompositeTypes[39m
 [32m  ✓ [39m[90mUnPack[39m
-[32m  ✓ [39m[90mExprTools[39m
+[32m  ✓ [39m[90mNaNMath[39m
 [32m  ✓ [39m[90mBijections[39m
-[32m  ✓ [39m[90mStatsAPI[39m
-[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mExprTools[39m
 [32m  ✓ [39m[90mLaTeXStrings[39m
-[32m  ✓ [39m[90mPDMats[39m
-[32m  ✓ [39m[90mCompilerSupportLibraries_jll[39m
-[32m  ✓ [39m[90mMutableArithmetics[39m
+[32m  ✓ [39m[90mPooledArrays[39m
+[32m  ✓ [39m[90mCrayons[39m
+[32m  ✓ [39m[90mBaselet[39m
 [32m  ✓ [39m[90mAutoHashEquals[39m
 [32m  ✓ [39m[90mMacroTools[39m
-[32m  ✓ [39m[90mBaselet[39m
-[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mArgCheck[39m
 [32m  ✓ [39m[90mCombinatorics[39m
+[32m  ✓ [39m[90mMutableArithmetics[39m
 [32m  ✓ [39m[90mTermInterface[39m
 [32m  ✓ [39m[90mTreeViews[39m
-[32m  ✓ [39m[90mInverseFunctions[39m
-[32m  ✓ [39m[90mInitialValues[39m
 [32m  ✓ [39m[90mFormatting[39m
-[32m  ✓ [39m[90mDocStringExtensions[39m
-[32m  ✓ [39m[90mMissings[39m
-[32m  ✓ [39m[90mPooledArrays[39m
-[32m  ✓ [39m[90mRequires[39m
+[32m  ✓ [39m[90mInitialValues[39m
+[32m  ✓ [39m[90mPreferences[39m
 [32m  ✓ [39m[90mCompat[39m
+[32m  ✓ [39m[90mStatsAPI[39m
+[32m  ✓ [39m[90mPDMats[39m
 [32m  ✓ [39m[90mAbstractPlutoDingetjes[39m
-[32m  ✓ [39m[90mReferenceables[39m
-[32m  ✓ [39m[90mJLLWrappers[39m
-[32m  ✓ [39m[90mParameters[39m
-[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
-[32m  ✓ [39m[90mStatic[39m
-[32m  ✓ [39m[90mTimerOutputs[39m
-[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mChangesOfVariables[39m
 [32m  ✓ [39m[90mDensityInterface[39m
+[32m  ✓ [39m[90mReferenceables[39m
+[33m  ✓ [39m[90mParsers[39m
+[32m  ✓ [39m[90mParameters[39m
+[32m  ✓ [39m[90mStatic[39m
+[32m  ✓ [39m[90mRuntimeGeneratedFunctions[39m
+[32m  ✓ [39m[90mZygoteRules[39m
+[32m  ✓ [39m[90mTimerOutputs[39m
+[32m  ✓ [39m[90mStaticArrays[39m
 [32m  ✓ [39m[90mSetfield[39m
 [32m  ✓ [39m[90mLatexify[39m
-[32m  ✓ [39m[90mStaticArrays[39m
+[32m  ✓ [39m[90mJLLWrappers[39m
 [32m  ✓ [39m[90mChainRulesCore[39m
+[33m  ✓ [39m[90mJSON[39m
 [32m  ✓ [39m[90mDataStructures[39m
+[32m  ✓ [39m[90mArrayInterface[39m
+[32m  ✓ [39m[90mSplittablesBase[39m
+[32m  ✓ [39m[90mOpenSpecFun_jll[39m
 [32m  ✓ [39m[90mPrettyTables[39m
 [32m  ✓ [39m[90mRmath_jll[39m
-[32m  ✓ [39m[90mOpenSpecFun_jll[39m
-[32m  ✓ [39m[90mSplittablesBase[39m
-[32m  ✓ [39m[90mArrayInterface[39m
 [32m  ✓ [39m[90mBangBang[39m
 [32m  ✓ [39m[90mLogExpFunctions[39m
 [32m  ✓ [39m[90mQuadGK[39m
 [32m  ✓ [39m[90mSortingAlgorithms[39m
-[32m  ✓ [39m[90mMultivariatePolynomials[39m
-[32m  ✓ [39m[90mRmath[39m
 [32m  ✓ [39m[90mEllipsisNotation[39m
-[32m  ✓ [39mPlutoUI
-[32m  ✓ [39m[90mMicroCollections[39m
+[32m  ✓ [39m[90mMultivariatePolynomials[39m
 [32m  ✓ [39m[90mLabelledArrays[39m
+[32m  ✓ [39m[90mRmath[39m
+[32m  ✓ [39m[90mMicroCollections[39m
 [32m  ✓ [39m[90mRecursiveArrayTools[39m
+[32m  ✓ [39mPlutoUI
 [32m  ✓ [39m[90mSpecialFunctions[39m
 [32m  ✓ [39m[90mStatsBase[39m
 [32m  ✓ [39m[90mIntervalSets[39m
@@ -1172,8 +1109,9 @@ return tocNode
 [32m  ✓ [39mDataFrames
 [32m  ✓ [39m[90mSymbolicUtils[39m
 [32m  ✓ [39mSymbolics
-  85 dependencies successfully precompiled in 84 seconds (15 already precompiled)
-�enabled÷restart_recommended_msg��restart_required_msg��busy_packages��instantiatedëcell_inputs��$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e��cell_id�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�running_disabled¤code�Hmd"""
+  80 dependencies successfully precompiled in 90 seconds (20 already precompiled)
+  [33m2[39m dependencies precompiled but different versions are currently loaded. Restart julia to access the new versions
+�enabled÷restart_recommended_msg��restart_required_msg��busy_packages��instantiatedëcell_inputs��$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e��cell_id�$a2181260-e6cd-11ea-2a69-8d9d31d1ef0e�running_disabled¤code��md"""
 # Homework 0: some self-assessment
 
 First of all, **_welcome to the course!_**
@@ -1184,6 +1122,8 @@ Everyone has different backgrounds.
 You should have some exposure to probability, linear algebra, and calculus.
 Some coding experience will also come in handy -- it's not a strict prerequisite, but if you've never coded you're likely to need to put in a bit of extra work.
 The purpose of this assignment is to help you assesss whether you're ready for this class.
+
+**This assignment is ungraded -- don't submit anything**
 
 ## Instructions
 
@@ -1338,4 +1278,4 @@ end�code_folded��$5c073471-32a9-41fd-b0c9-4c66cc3e26bd��cell_id�$5c073471-32a9-4
 > Have you ever used Julia before?
 
 > Why are you taking this course? What do you hope to learn?
-"""�code_foldedënotebook_id�$b1093fb8-60ea-11ec-359d-31e8df6de958�in_temp_dir�
+"""�code_foldedënotebook_id�$e22da630-68b8-11ec-0d35-dbd4c5d517a2�in_temp_dir�
