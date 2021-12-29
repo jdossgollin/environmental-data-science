@@ -68,7 +68,7 @@ md"""
 
 # ╔═╡ 430a260e-6cbb-11eb-34af-31366543c9dc
 md"""## Installation
-Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto](../../installation/).
+Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto](/environmental-data-science/Spring22/installation/).
 
 One you have Julia and Pluto installed, you can click the button at the top right of this page and follow the instructions to edit this notebook locally and submit.
 """
@@ -220,12 +220,7 @@ end
 md"""
 ## Rubric
 
-* Installing Julia & Pluto (i.e., turning in something) -- 40 points
-* Filling in name & netID -- 10 points
-* Exercise 1 -- 25 points
-* Exercise 2 -- 25 points
-
-Partial credit will be applied where possible!
+See rubric on Canvas
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
