@@ -6,8 +6,8 @@ using InteractiveUtils
 
 # ╔═╡ 48c4bef4-c5ba-4ef3-bc9c-50039eaeb60f
 begin
-	using PlutoUI
-	TableOfContents()
+    using PlutoUI
+    TableOfContents()
 end
 
 # ╔═╡ 9b1923fd-6247-4a1d-bd93-d1183bdcc565
@@ -67,7 +67,7 @@ md"## Requirements for HW1
 
 # ╔═╡ 430a260e-6cbb-11eb-34af-31366543c9dc
 md"""## Installation
-Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto](/Spring22/01_installation/).
+Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto](/installation/).
 
 One you have Julia and Pluto installed, you can click the button at the top right of this page and follow the instructions to edit this notebook locally and submit.
 """
@@ -174,27 +174,27 @@ This function will take, as inputs, μ, σ, and N.
 
 # ╔═╡ 5f3aa9a5-3201-4e6e-b925-ea103abecf3b
 function exercise_2(μ, σ, N)
-	x_dist = Normal(μ, σ)
-	x_sims = 1 # this is wrong; draw N samples of x
-	x_q95 = 0.5 # wrong; estimate the 95th percentile of these
-	y_sims = x_sims .^2 .- x_sims # this is right. But **why do we need the `.`**?
-	y_q95 = 0.5 # this is wrong; estimate the 95th perecntile of y
-	# return the difference
-	return 0
+    x_dist = Normal(μ, σ)
+    x_sims = 1 # this is wrong; draw N samples of x
+    x_q95 = 0.5 # wrong; estimate the 95th percentile of these
+    y_sims = x_sims .^ 2 .- x_sims # this is right. But **why do we need the `.`**?
+    y_q95 = 0.5 # this is wrong; estimate the 95th perecntile of y
+    # return the difference
+    return 0
 end
 
 # ╔═╡ 22d08726-3953-4c9e-b08b-6839e91d0f5e
 let
-	N = 100_000
-	μ, σ = (3.5, 1.5)
+    N = 100_000
+    μ, σ = (3.5, 1.5)
     result2 = exercise_2(μ, σ, N)
-	target2 = 23.6674
+    target2 = 23.6674
     if result2 == 0
         md"""
       !!! warning "Returns Zero"
           `exercise_2` returned the default value of zero. Did you forget to update the `return` statement?
       		"""
-	elseif abs(result2 - target2) < 1 # large buffer!
+    elseif abs(result2 - target2) < 1 # large buffer!
         md"""
       !!! correct
           Well done!
