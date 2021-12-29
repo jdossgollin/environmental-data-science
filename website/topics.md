@@ -2,11 +2,11 @@
 
 The following syllabus will be adjusted as needed.
 
-| Week | Topic | Notebooks | Homeworks |
+| Week | Topic | Notebooks | HW |
 |:----:|:-----:|:---------:|:----------:|
 | 0 | Self-assessment | | [HW0](/00_hw0/)[^1] |
-| | **Module 1: fundamentals**| |
-| 1 | Introduction to the course and tools | | |
+| | **Module 1: fundamentals** | 
+| 1 | Introduction to the course and tools | [`basic_syntax`](/01_basic_syntax/) | [HW 1](/01_hw1/) |
 | 2 | Probability fundamentals | | |
 | 3 | Inference | | |
 | | **Module 2: regression and modeling**| |
@@ -24,11 +24,10 @@ The following syllabus will be adjusted as needed.
 | 14 | Special topics | | |
 |  | Exam 3 (time TBD) | | |
 
+[^1] -- _HW0 is ungraded_
+
 ## Credits
 
 > Some material on this website (and the website template itself) is based on: _**Computational Thinking**, a live online Julia/Pluto textbook_
 > ([computationalthinking.mit.edu](https://computationalthinking.mit.edu)).
 
-## Notes
-
-[^1]: HW0 is ungraded

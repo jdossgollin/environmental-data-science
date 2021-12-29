@@ -35,11 +35,11 @@ Applications to water, climate, air, and geologic data will emphasize models for
 
 Upon completing this course, students will be able to:
 
-1. Write down generative models for environmental data;
 1. use reproducible software tools to download, open, and visualize data from publicly available sources;
+1. use simulation (“forward modeling”) to compare a generative model to data;
 1. use Bayesian and maximum likelihood methods to conduct inference (“inverse modeling”) on generative models of environmental data;
-1. use simulation (“forward modeling”) to compare the logical implications of a predictive model to data;
-1. identify the assumptions that commonly applied data science methods make, and describe where they are or are not appropriate to model environmental data; and<
+1. identify the assumptions that commonly applied data science methods make, and describe where they are or are not appropriate to model environmental data;
+1. clearly and effectively communicate analyses of environmental data to technical and non-technical audiences; and
 1. critically interpret statistical analyses of environmental data applied in academic journals, government, and industry.
 
 ## Grading

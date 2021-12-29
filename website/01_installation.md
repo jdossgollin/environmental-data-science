@@ -11,14 +11,14 @@
 \\
 **Text and pictures version:**
 
-## Step 1: Install Julia 1.6.3
+## Step 1: Install Julia 1.7
 
-Go to [https://julialang.org/downloads](https://julialang.org/downloads) and download the current stable release, Julia 1.6.3, using the correct version for your operating system (Linux x86, Mac, Windows, etc).
+Go to [https://julialang.org/downloads](https://julialang.org/downloads) and download the current stable release, Julia 1.7.1, using the correct version for your operating system (Linux x86, Mac, Windows, etc).
 
 ## Step 2: Run Julia
 
 After installing, **make sure that you can run Julia**.
-On some systems, this means searching for the "Julia 1.6.3" program installed on your computer; in others, it means running the command `julia` in a terminal.
+On some systems, this means searching for the "Julia 1.7" program installed on your computer; in others, it means running the command `julia` in a terminal.
 Make sure that you can execute `1 + 1`:
 
 ![image](https://user-images.githubusercontent.com/6933510/91439734-c573c780-e86d-11ea-8169-0c97a7013e8d.png)
@@ -41,7 +41,7 @@ To switch from _Julia_ mode to _Pkg_ mode, type `]` (closing square bracket) at 
 ```julia-repl
 julia> ]
 
-(@v1.6) pkg>
+(@v1.7) pkg>
 ```
 
 The line turns blue and the prompt changes to `pkg>`, telling you that you are now in _package manager mode_. This mode allows you to do operations on **packages** (also called libraries).
@@ -50,7 +50,7 @@ To install Pluto, run the following (case sensitive) command to *add* (install) 
 You should only need to do this *once* for each installation of Julia:
 
 ```julia-repl
-(@v1.6) pkg> add Pluto
+(@v1.7) pkg> add Pluto
 ```
 
 This might take a couple of minutes, so you can go get yourself a cup of tea!
@@ -100,14 +100,16 @@ For example, homework 0 is available [here](/00_hw0/). Go to this page, and on t
 **The first thing we will want to do is to save the notebook somewhere on our own computer; see below.** 
 
 ## Step 2b: Opening an existing notebook file
+
 When you launch Pluto for the second time, your recent notebooks will appear in the main menu. You can click on them to continue where you left off.
 
 If you want to run a local notebook file that you have not opened before, then you need to enter its _full path_ into the blue box in the main menu. More on finding full paths in step 3.
 
 ## Step 3: Saving a notebook
+
 We first need a folder to save our homework in. Open your file explorer and create one. 
 
-Next, we need to know the _absolute path_ of that folder. Here's how you do that in [Windows](https://www.top-password.com/blog/copy-full-path-of-a-folder-file-in-windows/), [MacOS](https://www.josharcher.uk/code/find-path-to-folder-on-mac/) and [Ubuntu]().
+Next, we need to know the _absolute path_ of that folder. Here's how you do that in [Windows](https://www.top-password.com/blog/copy-full-path-of-a-folder-file-in-windows/), [MacOS](https://www.josharcher.uk/code/find-path-to-folder-on-mac/) and Ubuntu.
 
 For example, you might have:
 
@@ -117,7 +119,7 @@ For example, you might have:
 
 - `/home/fonsi/Documents/18S191_assignments/` on Ubuntu
 
-Now that we know the absolute path, go back to your Pluto notebook, and at the top of the page, click on _"Save notebook..."_. 
+Now that we know the absolute path, go back to your Pluto notebook, and at the top of the page, click on _"Save notebook..."_.
 
 ![image](https://user-images.githubusercontent.com/6933510/91444741-77fb5880-e875-11ea-8f6b-02c1c319e7f3.png)
 
