@@ -1,5 +1,8 @@
 # Course Policies
 
+**This should be a living document.**
+If you have any suggestions for changes to this document, email me -- changes are encouraged!
+
 ## Course organization
 
 Basic information:
@@ -51,10 +54,29 @@ Upon completing this course, students will be able to:
     1. Each homework assignment will be graded for explanation of concepts, code clarity / readability, code accuracy, and technical correctness.
     1. For some assignments, you will be asked to review another student's code and give feedback on code clarity/readability. Peer reviews will not affect your grade, but the quality of the peer review you give will be factored into your homework grade.
     1. Your lowest homework grade will be dropped.
-1. Three exams (50% total)
+1. Weekly discussions (10%)
+    1. To prepare for class on Tuesdays, you should use Canvas to ask a question about the upcoming homework (due Thursday) or material covered in readings / lecture videos.
+    1. These will be due every week on Monday at 11:59PM so that your comments can be incorporated into class lecture. Think of these as free points for staying engaged with the class!
+    1. Use the Discussions features of Canvas to comment
+    1. All discussions are graded as follows:
+        1. Thoughtful comments related to class that raise a common challenge or interesting question get 2 points
+        1. Comments that ask something already covered or do not engage significantly with the material get 1 point
+    1. Your lowest score will be dropped.
+1. Three exams (40% total)
     1. The first two will be given in class and the third during the final exam slot.
     1. Exams will emphasize students’ ability to understand and critique statistical methods and their interpretations.
     1. All exams will be weighted equally
+
+## COVID-19
+
+We continue to experience significant uncertainty due to the global COVID-19 pandemic.
+Fortunately, this course is easy to move online as needed.
+
+1. If you are feeling unwell or think you may have been exposed to COVID, **stay home**. I will make sure remote participants are included in class. (But if you're healthy, please come to class if we are meeting in person!)
+1. Please follow Rice's health guidance (i.e., masking) fully. This is a basic and non-negotiable part of creating a supportive learning environment.
+1. If you or a loved one is sick and you need an accommodation, please reach out. Due dates are not flexible but grading is. Take care of yourself!
+
+We will be flexible and adaptive to maximize your learning while ensuring everyone is safe.
 
 ## Required references
 
