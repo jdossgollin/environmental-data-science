@@ -6,7 +6,7 @@ The following syllabus will be adjusted as needed.
 |:----:|:-----:|:---------:|:----------:|
 | 0 | Self-assessment | | [HW0](/00_hw0/)[^1] |
 | | **Module 1: fundamentals** | 
-| 1 | Introduction to the course and tools | [`basic_syntax`](/01_basic_syntax/) | [HW 1](/01_hw1/) |
+| 1 | Introduction to the course and tools | [`basic_syntax`](/01_basic_syntax/) [`mosquitos`](/01_mosquitos/) | [HW 1](/01_hw1/) |
 | 2 | Probability fundamentals | | |
 | 3 | Inference | | |
 | | **Module 2: regression and modeling**| |
