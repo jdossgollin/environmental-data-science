@@ -38,7 +38,7 @@ You may already have experience programming in a language like Matlab, R, or Pyt
 These are all great languages with great libraries and we could use them for this course.
 However, Julia is a particularly exciting language to use for this course.
 
-Julia is a relatively new language, but it's being used for exciting applications in [climate science](https://clima.caltech.edu/2020/06/08/clima-0-1-a-first-milestone-in-the-next-generation-of-climate-models/), [machine learning](https://sciml.ai/), [astronomy](https://juliacomputing.com/case-studies/celeste/), and lots more. 
+Julia is a relatively new language, but it's being used for exciting applications in [climate science](https://clima.caltech.edu/2020/06/08/clima-0-1-a-first-milestone-in-the-next-generation-of-climate-models/), [machine learning](https://sciml.ai/), [astronomy](https://juliacomputing.com/case-studies/celeste/), and [lots of other important applications](https://juliacomputing.com/case-studies/). 
 All the cool kids are learning Julia, and there are lots of great features that support advanced use cases.
 
 That said, the two pieces that will be most relevant for this course are that it is intuitive and fast.
@@ -238,7 +238,7 @@ StatsBase = "~0.33.14"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.0"
+julia_version = "1.7.1"
 manifest_format = "2.0"
 
 [[deps.AbstractPlutoDingetjes]]
