@@ -4,6 +4,13 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 05616b15-728b-47ee-8d8d-d030dbe0bdb7
+begin
+	using Pkg
+	#Pkg.upgrade_manifest()
+	Pkg.update()
+end
+
 # ╔═╡ 48c4bef4-c5ba-4ef3-bc9c-50039eaeb60f
 begin
     using PlutoUI
@@ -46,6 +53,8 @@ I am excited to teach you about the exciting world of modeling and understanding
 
 This is a short assignment to get you set up and familiar with the toolkit we'll use this semester.
 If you run into issues, please post on the `HW1 & installing Julia / Pluto` thread (go to Canvas and then Discussions).
+
+Make sure you've seen this week's lectures and found the notebooks on the course website!
 """
 
 # ╔═╡ 31a8fbf8-e6ce-11ea-2c66-4b4d02b41995
@@ -227,12 +236,13 @@ See rubric on Canvas
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
 Distributions = "~0.25.37"
-PlutoUI = "~0.7.27"
+PlutoUI = "~0.7.29"
 StatsBase = "~0.33.14"
 """
 
@@ -240,7 +250,7 @@ StatsBase = "~0.33.14"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.0"
+julia_version = "1.7.1"
 manifest_format = "2.0"
 
 [[deps.AbstractPlutoDingetjes]]
@@ -260,9 +270,9 @@ uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "4c26b4e9e91ca528ea212927326ece5918a04b47"
+git-tree-sha1 = "926870acb6cbcf029396f2f2de030282b6bc1941"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.11.2"
+version = "1.11.4"
 
 [[deps.ChangesOfVariables]]
 deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
@@ -479,9 +489,9 @@ uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "fed057115644d04fba7f4d768faeeeff6ad11a60"
+git-tree-sha1 = "7711172ace7c40dc8449b7aed9d2d6f1cf56a5bd"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.27"
+version = "0.7.29"
 
 [[deps.Preferences]]
 deps = ["TOML"]
@@ -619,6 +629,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─fafae38e-e852-11ea-1208-732b4744e4c2
 # ╠═cdff6730-e785-11ea-2546-4969521b33a7
 # ╠═7308bc54-e6cd-11ea-0eab-83f7535edf25
+# ╟─05616b15-728b-47ee-8d8d-d030dbe0bdb7
 # ╟─a2181260-e6cd-11ea-2a69-8d9d31d1ef0e
 # ╟─31a8fbf8-e6ce-11ea-2c66-4b4d02b41995
 # ╟─f9d7250a-706f-11eb-104d-3f07c59f7174

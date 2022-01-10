@@ -20,12 +20,6 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>01_bdt/index.html</loc>
-    <lastmod>2022-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>policies/index.html</loc>
     <lastmod>2022-01-10</lastmod>
     <changefreq>monthly</changefreq>
