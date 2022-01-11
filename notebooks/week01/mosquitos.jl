@@ -20,6 +20,11 @@ _When running this notebook for the first time, this could take a couple minutes
 Hang in there!_
 """
 
+# ╔═╡ 29d092ad-1698-44df-be33-98fbcb2ea8fd
+md"""
+**Rice Students:** the video recording accompanying this lecture is available [on Canvas](https://canvas.rice.edu/courses/48366/external_tools/3891) (click the link to the left or open Canvas, click on Media Gallery, and then `01_mosquitos`.
+"""
+
 # ╔═╡ 2588a9fd-dd34-44d5-aaa9-5045b1b4ae49
 md"""
 # Getting started with Julia
@@ -27,7 +32,15 @@ md"""
 Welcome to CEVE 543: Environmental Data Science!
 In this class we will use the Julia programming language to develop fundamental insights into statistical methods and how you can use them to extract useful insights from environmental data.
 
-In this short notebook you'll get up and running with Julia.
+## Objective
+
+In this notebook, you'll get up and running with Julia.
+You'll also learn some tools that will help you with HW1, and you'll get a better understanding of why computation is so useful for understanding (and doing!) data science.
+
+## Before we start
+
+1. Get Julia and Pluto up and running (click "Software Installation" on the course website)
+1. Watch [Statistics Without the Agonizing Pain](https://www.youtube.com/watch?v=5Dnw46eC-0o) by John Rauser (~10 minutes)
 """
 
 # ╔═╡ 2622d7ed-80db-4276-9690-7bcebf67c82c
@@ -69,12 +82,9 @@ That said, you may find some external resources are helpful.
 md"""
 ## Stats with Julia
 
-In this class we will use computation and simulation to build fundamental insight into statistical processes without dwelling on agonizing details.
-For a sense of what I mean, watch the YouTube video [Statistics Without the Agonizing Pain](https://www.youtube.com/watch?v=5Dnw46eC-0o) by John Rauser (10 minutes).
-
-Julia is an example of a language that we could do this kind of analysis in!
+In this class we will use computation and simulation to build fundamental insight into statistical processes without dwelling on "agonizing" details.
+Julia is an example of a language that we could use to do the sort of analysis that Rauser describes!
 Here we'll repeat his analysis of the influence of beer on mosquito bites.
-Our purpose here is to introduce you to some fundamental topics in Julia.
 """
 
 # ╔═╡ 1c7e3b61-3b6c-4c1e-9853-1c66ff096c8c
@@ -145,17 +155,18 @@ This is always a good practice when we're going to do something more than once.
 function get_shuffled_difference(y1, y2)
 
 	# concatenate the data into one vector, then shuffle it
-	yall = vcat(y1, y2)
-	yshuffled = shuffle(yall)
+	y_all = vcat(y1, y2)
+	y_shuffled = shuffle(y_all)
 
+	# create groups consistent w/ skeptic's argument
 	N1 = length(y1) # how many obs in the first vector?
-	ynew1 = yshuffled[1:N1]
-	ynew2 = yshuffled[N1+1:end]
+	ynew1 = y_shuffled[1:N1]
+	ynew2 = y_shuffled[N1+1:end]
 
 	# get the difference
 	difference = mean(ynew1) - mean(ynew2)
 	return difference
-end
+end;
 
 # ╔═╡ e732579a-c20c-4ba9-93d3-fa80950dd1ff
 get_shuffled_difference(beer, water)
@@ -206,9 +217,11 @@ function plot_diffs(diffs, obs)
 	p = histogram(
 		diffs,
 		xlabel="Difference",
-		ylabel="Number of samples",
+		ylabel="Proportion of samples",
 		label="If Skeptic is Right",
-		bins=25,
+		bins=-6:0.5:6,
+		legend=:topleft,
+		normalize=true,
 	)
 	vline!(p, [obs], label="Observed", linewidth=2)
 	return p
@@ -1131,6 +1144,7 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╟─753b2ed0-71cd-11ec-2fd7-89e556b46d44
 # ╠═a0b53953-eb58-4076-a29b-86138d9d532a
+# ╟─29d092ad-1698-44df-be33-98fbcb2ea8fd
 # ╟─2588a9fd-dd34-44d5-aaa9-5045b1b4ae49
 # ╟─2622d7ed-80db-4276-9690-7bcebf67c82c
 # ╟─111b90f5-fe9e-4e8d-a0db-e7af274b1c1d
