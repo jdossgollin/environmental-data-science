@@ -6,10 +6,10 @@ using InteractiveUtils
 
 # ╔═╡ a0b53953-eb58-4076-a29b-86138d9d532a
 begin
-	using Plots
-	using PlutoUI
-	using Random: shuffle
-	using StatsBase: mean
+    using Plots
+    using PlutoUI
+    using Random: shuffle
+    using StatsBase: mean
 end
 
 # ╔═╡ 753b2ed0-71cd-11ec-2fd7-89e556b46d44
@@ -22,7 +22,7 @@ Hang in there!_
 
 # ╔═╡ 29d092ad-1698-44df-be33-98fbcb2ea8fd
 md"""
-**Rice Students:** the video recording accompanying this lecture is available [on Canvas](https://canvas.rice.edu/courses/48366/external_tools/3891) (click the link to the left or open Canvas, click on Media Gallery, and then `01_mosquitos`.
+**Rice Students:** the video recording accompanying this lecture is available [on Canvas](https://canvas.rice.edu/courses/48366/external_tools/3891) (or open Canvas and click on Media Gallery) and is called **`01_mosquitos`**.
 """
 
 # ╔═╡ 2588a9fd-dd34-44d5-aaa9-5045b1b4ae49
@@ -94,9 +94,31 @@ First, let's enter the raw data.
 
 # ╔═╡ d4d40510-f1d2-4c82-8dfb-7e22289f42c3
 beer = [
-	27, 20, 21, 26, 27, 31, 24, 21, 20,
-	19, 23, 24, 28, 19, 24, 29, 18,
-	20, 17, 31, 20, 25, 28, 21, 27,
+    27,
+    20,
+    21,
+    26,
+    27,
+    31,
+    24,
+    21,
+    20,
+    19,
+    23,
+    24,
+    28,
+    19,
+    24,
+    29,
+    18,
+    20,
+    17,
+    31,
+    20,
+    25,
+    28,
+    21,
+    27,
 ]
 
 # ╔═╡ f8e51391-7f3c-4804-aac0-8272c31e455c
@@ -119,11 +141,7 @@ Similarly:
 """
 
 # ╔═╡ ab2a7607-5558-449e-9b54-7ff3a2bef5f9
-water = [
-	21, 22, 15, 12, 21, 16,
-	19, 15, 22, 24, 19, 23,
-	13, 22, 20, 24, 18, 20,
-];
+water = [21, 22, 15, 12, 21, 16, 19, 15, 22, 24, 19, 23, 13, 22, 20, 24, 18, 20];
 
 # ╔═╡ 663875ef-f7f4-44d1-b205-d16c4610cb6b
 md"""
@@ -154,18 +172,18 @@ This is always a good practice when we're going to do something more than once.
 # ╔═╡ 424a9ded-61b7-46d8-aba5-8cab020091bd
 function get_shuffled_difference(y1, y2)
 
-	# concatenate the data into one vector, then shuffle it
-	y_all = vcat(y1, y2)
-	y_shuffled = shuffle(y_all)
+    # concatenate the data into one vector, then shuffle it
+    y_all = vcat(y1, y2)
+    y_shuffled = shuffle(y_all)
 
-	# create groups consistent w/ skeptic's argument
-	N1 = length(y1) # how many obs in the first vector?
-	ynew1 = y_shuffled[1:N1]
-	ynew2 = y_shuffled[N1+1:end]
+    # create groups consistent w/ skeptic's argument
+    N1 = length(y1) # how many obs in the first vector?
+    ynew1 = y_shuffled[1:N1]
+    ynew2 = y_shuffled[(N1 + 1):end]
 
-	# get the difference
-	difference = mean(ynew1) - mean(ynew2)
-	return difference
+    # get the difference
+    difference = mean(ynew1) - mean(ynew2)
+    return difference
 end;
 
 # ╔═╡ e732579a-c20c-4ba9-93d3-fa80950dd1ff
@@ -189,10 +207,10 @@ This is just a much nicer (and faster) way of writing the following:
 
 # ╔═╡ a4353753-156b-4c15-8538-299b67ed3fcf
 begin
-	simulated_diffs_2 = zeros(50_000)
-	for i in 1:length(simulated_diffs_2)
-		simulated_diffs_2[i] = get_shuffled_difference(beer, water)
-	end
+    simulated_diffs_2 = zeros(50_000)
+    for i in 1:length(simulated_diffs_2)
+        simulated_diffs_2[i] = get_shuffled_difference(beer, water)
+    end
 end
 
 # ╔═╡ c4d2cc4e-33d5-496e-baea-205fe44d5492
@@ -214,17 +232,17 @@ Don't worry about this for now!
 
 # ╔═╡ c74cbd0a-4679-4d22-b233-2753fa3b41df
 function plot_diffs(diffs, obs)
-	p = histogram(
-		diffs,
-		xlabel="Difference",
-		ylabel="Proportion of samples",
-		label="If Skeptic is Right",
-		bins=-6:0.5:6,
-		legend=:topleft,
-		normalize=true,
-	)
-	vline!(p, [obs], label="Observed", linewidth=2)
-	return p
+    p = histogram(
+        diffs;
+        xlabel="Difference",
+        ylabel="Proportion of samples",
+        label="If Skeptic is Right",
+        bins=-6:0.5:6,
+        legend=:topleft,
+        normalize=true,
+    )
+    vline!(p, [obs]; label="Observed", linewidth=2)
+    return p
 end;
 
 # ╔═╡ 5b64d62c-1d60-4411-bde5-4370189a0ffc
