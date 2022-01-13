@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.3
+# v0.17.5
 
 using Markdown
 using InteractiveUtils
@@ -34,10 +34,20 @@ In this problem set, you'll get your feet under you with Julia while reviewing s
 * Chapter 1 sections 1.1-1.3, 1.5, and 1.8 of Bayesian Data Analysis by Gelman et al (available on the book's [website](http://www.stat.columbia.edu/~gelman/book/) for free download).
 * Watch the lectures for this week and go through the accompanying notebooks. (Play with the notebooks!)
 
-### Optional Reading
+### Optional references
 
-* Chapter 3 of [Data Science in Julia for Hackers](https://datasciencejuliahackers.com/probability-introduction.html) gives introduction to probability, probability distributions and Bayes' interpretation, with lots of Julia. It might be useful if you just want to see someone else's code, or if you want to review some of the very basics of probability.
-* If you're really craving a more mathematical and theoretical development of probability, read Chapter 1 of *Probability theory: the logic of science.* by E.T. Jaynes.
+This module is pretty self-paced.
+
+* If you're finding things easy, I'd encourage you to play around more with the Julia code and understand the details of the code. In particular, go through the "function library" in the CLT notebook and try to develop a deep understanding of those functions.
+Check out other examples of code and data analysis in Julia.
+* If you're finding this challenging, focus on understanding the ideas -- the coding will get easier!
+
+Here are some references I recommend for this section:
+
+* If you want a much simpler review of probability, check out Chapter 3 of [Data Science in Julia for Hackers](https://datasciencejuliahackers.com/probability-introduction.html). There is also lots of Julia!
+* If you're really craving a more mathematical and theoretical development of probability, read Chapter 1 of *Probability theory: the logic of science.* by E.T. Jaynes. Be warned that this is a very technical book and a bit of a rabbit hole!
+* For a fairly accessible review of key points in probability theory, have a look at [Biltzstein and Hwang](https://projects.iq.harvard.edu/stat110/home), which is the text for an undergraduate class at Harvard.
+* If you really like videos, Richard McElreath has [video lectures](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN) available for his course on Bayesian statistics.
 """
 
 # ╔═╡ d877ee5c-b2ac-43fa-839d-0e8740bd3c00
