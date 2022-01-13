@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.3
+# v0.17.5
 
 using Markdown
 using InteractiveUtils
@@ -224,27 +224,25 @@ md"""
 TableOfContents() # uses PlutoUI
 
 # ╔═╡ 43361603-cb6a-44d9-ae83-48222d9ed89c
-function plot_dist(dist; name="")
+function plot_dist(dist; name="", xlims=missing)
     ub = quantile(dist, 0.998)
     lb = quantile(dist, 0.002)
-    return plot(x -> pdf(dist, x); ylabel="Probability Density", label=name, xlims=(lb, ub))
+    p =  plot(x -> pdf(dist, x); ylabel="Probability Density", label=name, xlims=(lb, ub))
+	!ismissing(xlims) && xlims!(p, xlims)
+	return p
 end;
 
 # ╔═╡ 3002a66d-f939-4a81-be78-1d1a2c4ca354
-plot_dist(dist_normal; name="Normal Distribution");
-xlims!(-35, 35);
+plot_dist(dist_normal; name="Normal Distribution", xlims=(-40, 40))
 
 # ╔═╡ 8d33e836-d824-46af-ae1b-983445ed2385
-plot_dist(dist_gamma_mix; name="Gamma Mixture");
-xlims!(0, 25);
+plot_dist(dist_gamma_mix; name="Gamma Mixture", xlims=(0, 25))
 
 # ╔═╡ 4542f3eb-ecf9-4930-9d1e-9c462dd987ea
-plot_dist(dist_extreme; name="GEV Distribution");
-xlims!(0, 25);
+plot_dist(dist_extreme; name="GEV Distribution", xlims=(0, 25))
 
 # ╔═╡ 6cbf0404-faab-4eb2-87a9-02e28e3dce7a
-plot_dist(dist_fat_tailed; name="Cauchy Distribution");
-xlims!(-15, 15);
+plot_dist(dist_fat_tailed; name="Cauchy Distribution", xlims=(-15, 15))
 
 # ╔═╡ f9ad3a94-2dc8-4e9e-bebe-ad37cee0d765
 function sample_mean(dist, N)
@@ -338,7 +336,7 @@ plot_running_means(dist_gamma_mix, 1000, 6)
 plot_running_means(dist_extreme, 2_500, 10)
 
 # ╔═╡ 1c6547f1-9945-4332-8131-7bd715176508
-plot_running_means(dist_fat_tailed, 100_000, 6)
+plot_running_means(dist_fat_tailed, 1_000_000, 6)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
