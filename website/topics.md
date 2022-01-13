@@ -6,8 +6,8 @@ The following syllabus will be adjusted as needed.
 |:----:|:-----:|:---------:|:----------:|
 | 0 | Self-assessment | | [HW0](/00_hw0/)[^1] |
 | | **Module 1: fundamentals** | 
-| 1 | Introduction to the course and tools | [`basic_syntax`](/01_basic_syntax/) [`mosquitos`](/01_mosquitos/) | [HW 1](/01_hw1/) |
-| 2 | Probability fundamentals | | |
+| 1 | Introduction to the course and tools | [Basic Syntax](/01_basic_syntax/); [Mosquitos](/01_mosquitos/) | [HW 1](/01_hw1/) |
+| 2 | Probability fundamentals | [Central Limit Theorem](/02_clt/) | [HW 2](/02_hw2/) |
 | 3 | Inference | | |
 | | **Module 2: regression and modeling**| |
 | 4 | Dynamical systems, Taylor series, and regression | | |
@@ -30,4 +30,3 @@ The following syllabus will be adjusted as needed.
 
 > Some material on this website (and the website template itself) is based on: _**Computational Thinking**, a live online Julia/Pluto textbook_
 > ([computationalthinking.mit.edu](https://computationalthinking.mit.edu)).
-

@@ -4,263 +4,359 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ a0b53953-eb58-4076-a29b-86138d9d532a
+# ╔═╡ 4c094c52-c5c4-4106-a25c-5bcc3a5fab1a
 begin
+    using Distributions
+    using LaTeXStrings
     using Plots
     using PlutoUI
-    using Random: shuffle
-    using StatsBase: mean
+    using StatsBase
+    using StatsPlots
 end
 
-# ╔═╡ 753b2ed0-71cd-11ec-2fd7-89e556b46d44
-md"""
-##### Intializing packages
+# ╔═╡ 4260e54e-8749-4e4a-8b01-ba7c6c96ac79
+md"*This notebook may take a few minutes to install required packages the first time you run it -- be patient!*"
 
-_When running this notebook for the first time, this could take a couple minutes. 
-Hang in there!_
+# ╔═╡ 167a38a8-7466-11ec-321f-bbeb803b438f
+md"""
+**Rice Students:** there is a video to accompany this notebook.
+
+# The Central Limit Theorem
+
+An important idea in statistics is the [Central Limit Theorem](https://en.wikipedia.org/wiki/Central_limit_theorem), which states (much more elegantly and precisely) that the sum of many **independent** random variables is approximately normally distributed, even if the underlying process is not randomly distributed (as long as it's moderately well-behaved).
+This is often used to justify approximating the average of many data points, and the uncertainty in this average, as a normal distribution.
+If you've ever used a $t$-test, you've applied the CLT -- look at you!
+
+## Normal distribution
+
+To build some intuition, let's create a Normal distribution with a very large standard deviation relative to its mean:
 """
 
-# ╔═╡ 6f4ce363-d1b8-4955-9e92-92fe084c09fd
-md"**Rice Students:** there is a video accompanying this notebook"
+# ╔═╡ 7e164a27-3d8f-487e-8e1a-20a44684649b
+dist_normal = Normal(2.5, 10);
 
-# ╔═╡ 2588a9fd-dd34-44d5-aaa9-5045b1b4ae49
+# ╔═╡ 926a8455-0afb-4ab3-9836-1205e6cbee35
+mean(dist_normal), std(dist_normal)
+
+# ╔═╡ a4595fe4-c9d5-4171-b42d-67d5a9fa6686
 md"""
-# Getting started with Julia
-
-Welcome to CEVE 543: Environmental Data Science!
-In this class we will use the Julia programming language to develop fundamental insights into statistical methods and how you can use them to extract useful insights from environmental data.
-
-## Objective
-
-In this notebook, you'll get up and running with Julia.
-You'll also learn some tools that will help you with HW1, and you'll get a better understanding of why computation is so useful for understanding (and doing!) data science.
-
-## Before we start
-
-1. Get Julia and Pluto up and running (click "Software Installation" on the course website)
-1. Watch [Statistics Without the Agonizing Pain](https://www.youtube.com/watch?v=5Dnw46eC-0o) by John Rauser (~10 minutes)
+We can use the `pdf` function to calculate and plot its probability density function!
+The `plot()` function allows us to plot functions even without specifying `x` values, which is cool
 """
 
-# ╔═╡ 2622d7ed-80db-4276-9690-7bcebf67c82c
+# ╔═╡ 9ed033cf-c3c4-4e42-89a6-e4691b829ac7
 md"""
-## Why Julia?
-
-You may already have experience programming in a language like Matlab, R, or Python.
-These are all great languages with great libraries and we could use them for this course.
-However, Julia is a particularly exciting language to use for this course.
-
-Julia is a relatively new language, but it's being used for exciting applications in [climate science](https://clima.caltech.edu/2020/06/08/clima-0-1-a-first-milestone-in-the-next-generation-of-climate-models/), [machine learning](https://sciml.ai/), [astronomy](https://juliacomputing.com/case-studies/celeste/), and [lots of other important applications](https://juliacomputing.com/case-studies/). 
-All the cool kids are learning Julia, and there are lots of great features that support advanced use cases.
-
-That said, the two pieces that will be most relevant for this course are that it is intuitive and fast.
-That means that if you understand a mathematical or statistical _idea_, you can probably code it well.
-(_This is not the case in other languages -- if you've ever had to learn about vectorization or compilation to get simple things to run at scale, you know what I mean_).
-In this course, you should spend more time understanding data science, and less time trying to contort your code.
+We can see that even though this distribution has a large standard deviation, it still has that classical "bell" shape.
 """
 
-# ╔═╡ 111b90f5-fe9e-4e8d-a0db-e7af274b1c1d
+# ╔═╡ ac7355db-f855-4c1f-9028-8051a4325ed5
 md"""
-## How to Julia
-
-In this course you will mostly "learn by doing" in a self-driven paradigm, rather than having me tell you exactly what you need to learn in a top-down paradigm.
-Code examples given in lectures (like this notebook!) should teach you what you need to know.
-
-If you've ever programmed before, Julia will be pretty intuitive (although there's always a bit of new syntax to figure out).
-If you haven't, Julia should be relatively intuitive (relative to other languages) but you may find it slow going.
-That's normal -- ask for help instead of beating yourself up!
-
-That said, you may find some external resources are helpful.
-
-* For a quick whirl, check out [https://julialang.org/learning/tryjulia/](https://julialang.org/learning/tryjulia/)
-* If you're a nervous beginner, you might want to work through the first few lessons of [Julia Programming for Nervous Beginners](https://juliaacademy.com/p/julia-programming-for-nervous-beginners)
-* If you think of yourself as a programmer, you might want to check out [Julia for Programmers](https://juliaacademy.com/p/intro-to-julia)
+We can also sample from its probability density function and plot a histogram of those samples.
+That output should look like the probability density function shown above!
+(We use the `histogram` function from `StatsPlots`)
 """
 
-# ╔═╡ 90e6a264-507f-4f56-bcc6-acb4cac79a34
-md"""
-## Stats with Julia
+# ╔═╡ 114499d3-739e-48b8-9863-c56b5d67ed8a
+samples_normal = rand(dist_normal, 100_000);
 
-In this class we will use computation and simulation to build fundamental insight into statistical processes without dwelling on "agonizing" details.
-Julia is an example of a language that we could use to do the sort of analysis that Rauser describes!
-Here we'll repeat his analysis of the influence of beer on mosquito bites.
+# ╔═╡ a77b3ed4-ccd2-42ba-a5ca-dacbe24b3522
+histogram(
+    samples_normal;
+    normalize=true, # what happens if we change this?
+    label=false, # or this?
+    ylabel="Probability Density",
+)
+
+# ╔═╡ f0660517-0b53-4396-b962-15dbc741a764
+md"""
+The CLT is used to justify our using things like a sample mean ($\frac{1}{N}\sum_{i=1}^N x_i$) for estimation.
+If the sum of $N$ random variables is Normally distributed, then so is the average of them.
+But how well does this work *in practice*?
+
+To answer this question, let's run an experiment:
+First, we will draw `N_samples` samples from our distribution and take the mean of them.
+That is, if we get a limited dataset from the true (known) distribution, what is its mean?
+Then, we will repeat this experiment `N_draws` times to look at how purely random variation from random sampling gives us uncertainty in the estimate of this sample mean.
+According to the CLT, our estimate of the sample mean should be approximately Normally distributed!
 """
 
-# ╔═╡ 1c7e3b61-3b6c-4c1e-9853-1c66ff096c8c
+# ╔═╡ 50f1c6d7-1065-4d85-897c-edb33cdf3720
+N_samples = 100; # WHAT HAPPENS if you play around with this number?
+
+# ╔═╡ 3c5d4a5c-7033-42f9-aba4-a7b75555a9bf
+N_draws = 100_000; # leave this large
+
+# ╔═╡ 0f4faedb-3056-4efe-a665-c67c4e12ba98
 md"""
-First, let's enter the raw data.
+This is telling us that when we draw $(N_samples) data points from our distribution, even though it's a Normal distribution -- extremely well behaved -- there is significant uncertainty in our estimate of the mean of the distribution. Sommetimes we will collect 50 data points and think the sample mean is greater than 5 or less than 0 (think about how many papers you've read that use 50 data points...)
+
+We didn't necessarily need to go to all the trouble of running this simulation -- there is a well known formula (derived using the CLT!) for the *standard error* (uncertainty in the sample mean):
+
+``
+SE = \frac{\sigma}{\sqrt{N}}
+``
 """
 
-# ╔═╡ d4d40510-f1d2-4c82-8dfb-7e22289f42c3
-beer = [
-    27,
-    20,
-    21,
-    26,
-    27,
-    31,
-    24,
-    21,
-    20,
-    19,
-    23,
-    24,
-    28,
-    19,
-    24,
-    29,
-    18,
-    20,
-    17,
-    31,
-    20,
-    25,
-    28,
-    21,
-    27,
-]
-
-# ╔═╡ f8e51391-7f3c-4804-aac0-8272c31e455c
+# ╔═╡ 8ae2b16b-9311-49f0-b028-e445bf56516d
 md"""
-What have we done here?
-We've created a *variable* called `beer`.
-We can learn a bit more about it:
+Another way to understand the CLT is to plot the running mean.
+Here our experiment will be simmilar:
+We will draw `N` samples from our distribution, then plot the running mean (if we have $x_1, x_2, x_3, \ldots$, then our running mean will be $x_1$, $\frac{x1+x2}{2}$,  $\frac{x1+x2+x3}{3},\ldots$).
+We then repeat this several times, giving us different lines:
 """
 
-# ╔═╡ f659caa3-6865-4c19-becc-01d20503ea4d
-typeof(beer)
-
-# ╔═╡ c402d573-e48c-4785-820e-cea4e08d3f96
+# ╔═╡ 7fef2706-e71b-47c4-a3ac-29a0f0d674c3
 md"""
-In Julia (and other languages), all *variables* have a *type*.
-We see that the type of `beer` is `Vector{Int64}`.
-That's telling us that we've created a `Vector` (a 1D array) where all elements are `Int64`, which is one way that integers can be represented in a computer.
-When we create this `Vector`, it's important to keep the comma between entries but line breaks don't matter.
-Similarly:
+We can see that all of our estimates converge to approximately the true value (although they never get *exactly* there!)
+This is a very nice illustration of the CLT: although our estimates diverge a lot initially (random variation in the first few samples), they stabilize nicely.
+This is why the CLT is sometimes referred to as the "law of large numbers".
 """
 
-# ╔═╡ ab2a7607-5558-449e-9b54-7ff3a2bef5f9
-water = [21, 22, 15, 12, 21, 16, 19, 15, 22, 24, 19, 23, 13, 22, 20, 24, 18, 20];
-
-# ╔═╡ 663875ef-f7f4-44d1-b205-d16c4610cb6b
+# ╔═╡ 81bab0a5-0f48-405c-9ead-667b51a10efb
 md"""
-By putting the `;` at the end of our statement, we keep the notebook from showing the output.
+## A messier distribution
+
+Although we used a Normal distribution with a large σ (large "noise to signal" ratio), Normal distributions are really well behaved.
+Do these results hold for less well behaved distributions?
+
+To put this to the test, let's repeat the above experiments for a *Mixture Model*.
+A mixture model is, as its name suggests, a combination of two or more regular probability distributions.
+Here we'l create a mixture of two `Gamma` distributions:
 """
 
-# ╔═╡ 38d7e243-cd9e-407a-9901-7d084d69dce4
+# ╔═╡ cb8beed0-fcfa-4d30-8287-7c8113f83e43
+dist_gamma_mix = MixtureModel(
+    [
+        Gamma(10.0, 0.25), # the first distribution
+        Gamma(7.5, 1.5), # the second distribution
+    ],
+    [0.5, 0.5], # the weights given to each
+);
+
+# ╔═╡ b36963fb-c8a5-4b12-90a6-83bc1ceb47de
+mean(dist_gamma_mix), std(dist_gamma_mix)
+
+# ╔═╡ 6beed98d-fb32-4bf5-9c34-1431a9a32bf4
 md"""
-Now that we've entered the data, let's calculate the difference between the average number of bites in each group.
-We're using the `mean` function from the `StatsBase` package (it's loaded above).
+Definitely not a bell shape! We can see that this distribution is multimodal, has a lower bound at zero, and is skewed.
+Do our findings still hold?|
 """
 
-# ╔═╡ f566d196-db6f-456b-90d6-9d6d609d189a
-observed_diff = mean(beer) - mean(water)
-
-# ╔═╡ 161bf38c-628c-4e09-b9fa-8fb02b65aa12
+# ╔═╡ c828c601-4cb2-4df5-84bb-816e942e994e
 md"""
-This seems large: the participants who drank beer were bitten $(observed_diff) more than the participants who drank water, on average!
-But the skeptic asks whether this might be random chance.
+Generally yes!
+The Central Limit Theorem doesn't require that the process that generates the data be Normally distributed; it shows that when you add lots of randomness up, the sum (or average) is Normally distributed.
+This is a cool and perhaps surprising result!
 
-To answer this question, John Rauser develops a simulation approach: suppose the skeptic is right and all the data points are equivalent.
-We can shuffle the data (randomly divide into two groups by assuming that there is no difference between the two groups), and calculate the difference between each group.
-
-To do that, we'll define a *function*.
-This is always a good practice when we're going to do something more than once.
+That said, the more strangely behaved your distribution is, the longer it may take for the CLT to kick in.
+Try playing around with `N_samples` to see what happens
 """
 
-# ╔═╡ 424a9ded-61b7-46d8-aba5-8cab020091bd
-function get_shuffled_difference(y1, y2)
+# ╔═╡ ec9e3dff-7458-49a1-a183-0c776db9bbfd
+md"""
+## Stressing the CLT
 
-    # concatenate the data into one vector, then shuffle it
-    y_all = vcat(y1, y2)
-    y_shuffled = shuffle(y_all)
+Let's try pushing our experiments a bit farther.
+The Generalized Extreme Value (GEV) distribution is an example of a "fat tailed" distribution, meaning that there's lots of probability mass in the tails of the distribution (there are lots of more specific definitions for fat tailedness, but they're all saying this more precisely).
+The GEV is the theoretical distribution for the maximum of different samples -- we will revisit the GEV later in the semester.
+Here's a GEV distribution:
+"""
 
-    # create groups consistent w/ skeptic's argument
-    N1 = length(y1) # how many obs in the first vector?
-    ynew1 = y_shuffled[1:N1]
-    ynew2 = y_shuffled[(N1 + 1):end]
+# ╔═╡ 86be396c-1baf-4e17-b14a-4808898a680d
+dist_extreme = GeneralizedExtremeValue(2.5, 1.5, 0.4);
 
-    # get the difference
-    difference = mean(ynew1) - mean(ynew2)
-    return difference
+# ╔═╡ 0ee1bc2b-27a8-49b3-b439-e928255ae535
+mean(dist_extreme), std(dist_extreme)
+
+# ╔═╡ 46a20b7d-1a6d-44ff-86b8-afa33c15ea19
+md"""
+Definitely non-Gaussian!
+"""
+
+# ╔═╡ b104d217-7d3e-4b8e-954a-c49598e9ce41
+md"""
+We can see that this is stil converging (increase the sample size to see this!) but it converges much  more slowly.
+For moderate sample sizes, the running mean (i.e., the mean you would estimate using the sample average) may be pretty different from the true value (even at 1000 samples!)
+Heuristically, if you've observed a "really big" value then your estimate will probably be positively biased, and if you haven't then it will be negatively biased -- because the GEV is so fat tailed, the average is dominated by a small number of extreme values.
+"""
+
+# ╔═╡ f4cc5b5b-ce9d-486a-8b9b-3d9bc4225c9e
+md"""
+## Breaking the CLT
+
+Although the CLT works when your randomness is non-Gaussian (e.g., a funky mixture of Gamma distributions or even an extreme value distribution), that doesn't mean we can apply it blindly.
+There are, in fact, some restrictions.
+
+To get into the details of these restrictions, take a class on stochastic processes.
+Here we'll give an example of breaking the CLT using the `Cauchy` distribution.
+
+The Cauchy is so fat-tailed that its mean and variance are undefined!
+That said, it's really easy to derive the Cauchy distribution: it's the ratio of two independent Normal distributions with mean zero.
+"""
+
+# ╔═╡ 0eba055e-8363-4d66-bc0d-281279766ff5
+dist_fat_tailed = Cauchy(1, 0.25);
+
+# ╔═╡ 84499481-b68c-41a2-819b-275f80cb7ff0
+mean(dist_fat_tailed), std(dist_fat_tailed)
+
+# ╔═╡ 6ae07280-92b0-4bac-a3f7-11a69c7b2bfe
+md"""
+We can see that our running mean never converges!
+(Try playing around with the sample size).
+"""
+
+# ╔═╡ 2ebb82f9-8573-4bce-8228-16bba8718748
+md"""
+## So what?
+
+1. The CLT is a powerful tool that allows for helpful approximations in  many cases
+1. Even in cases when the CLT is theoretically valid, some data generating processes may need a lot of samples before they converge
+1. The CLT can be broken
+"""
+
+# ╔═╡ a28add9c-d1f0-483f-81b0-3d1fedda6b70
+md"""
+## Function library
+"""
+
+# ╔═╡ 4cb0fa42-9eb7-4e04-b88f-1b0a0fe0fc8a
+TableOfContents() # uses PlutoUI
+
+# ╔═╡ 43361603-cb6a-44d9-ae83-48222d9ed89c
+function plot_dist(dist; name="")
+    ub = quantile(dist, 0.998)
+    lb = quantile(dist, 0.002)
+    return plot(x -> pdf(dist, x); ylabel="Probability Density", label=name, xlims=(lb, ub))
 end;
 
-# ╔═╡ e732579a-c20c-4ba9-93d3-fa80950dd1ff
-get_shuffled_difference(beer, water)
+# ╔═╡ 3002a66d-f939-4a81-be78-1d1a2c4ca354
+plot_dist(dist_normal; name="Normal Distribution");
+xlims!(-35, 35);
 
-# ╔═╡ 5620a623-bb73-4c9c-90a9-f601e6363e36
-md"""
-As we saw in the talk, we can learn about the *sampling distribution* by repeating this experiment many times over and plotting the results (using the `Plots` package -- we'll learn more about this later.)
+# ╔═╡ 8d33e836-d824-46af-ae1b-983445ed2385
+plot_dist(dist_gamma_mix; name="Gamma Mixture");
+xlims!(0, 25);
 
-To simulate the difference many times, we use a *list comprehension*.
-The general syntax for these is something like `[some_function(input) for input in some_range]`, and the output is a vector of the outputs.
-"""
+# ╔═╡ 4542f3eb-ecf9-4930-9d1e-9c462dd987ea
+plot_dist(dist_extreme; name="GEV Distribution");
+xlims!(0, 25);
 
-# ╔═╡ 7d0c7739-16db-4a0f-882e-d4b95ac488aa
-simulated_diffs = [get_shuffled_difference(beer, water) for i in 1:50_000]
+# ╔═╡ 6cbf0404-faab-4eb2-87a9-02e28e3dce7a
+plot_dist(dist_fat_tailed; name="Cauchy Distribution");
+xlims!(-15, 15);
 
-# ╔═╡ cb480362-68fb-4dc9-a28d-eaf3b9b86c4a
-md"""
-This is just a much nicer (and faster) way of writing the following:
-"""
+# ╔═╡ f9ad3a94-2dc8-4e9e-bebe-ad37cee0d765
+function sample_mean(dist, N)
+    return mean(rand(dist, N))
+end;
 
-# ╔═╡ a4353753-156b-4c15-8538-299b67ed3fcf
-begin
-    simulated_diffs_2 = zeros(50_000)
-    for i in 1:length(simulated_diffs_2)
-        simulated_diffs_2[i] = get_shuffled_difference(beer, water)
-    end
-end
-
-# ╔═╡ c4d2cc4e-33d5-496e-baea-205fe44d5492
-md"""
-Let's make our plot!
-"""
-
-# ╔═╡ b7d3578f-11cc-4429-9339-03049b5223e6
-md"""
-Cool! Our conclusions match the video
-"""
-
-# ╔═╡ 0bf62b5b-4b51-41a3-9f38-dcba182a7706
-md"""
-## Appendix
-
-Don't worry about this for now!
-"""
-
-# ╔═╡ c74cbd0a-4679-4d22-b233-2753fa3b41df
-function plot_diffs(diffs, obs)
+# ╔═╡ cdf83ad7-4484-43d7-8b88-c1842c541e2b
+function plot_sample_means(dist, nsamples, ndraws)
+    sample_means = [sample_mean(dist, nsamples) for _ in 1:ndraws]
     p = histogram(
-        diffs;
-        xlabel="Difference",
-        ylabel="Proportion of samples",
-        label="If Skeptic is Right",
-        bins=-6:0.5:6,
-        legend=:topleft,
+        sample_means;
         normalize=true,
+        label="Sampling",
+        ylabel="Probability Density",
+        xlabel="Sample Mean, N=$nsamples",
     )
-    vline!(p, [obs]; label="Observed", linewidth=2)
+    try
+        σ = std(dist) # Distributions.jl calculates this analytically
+        μ = mean(dist) # Distributions.jl calculates this analytically
+        SE = σ / sqrt(nsamples) # standard error
+        theoretical = Normal(μ, SE)
+        plot!(p, x -> pdf(theoretical, x); label="Theoretical", linewidth=3)
+    catch
+    end
     return p
 end;
 
-# ╔═╡ 5b64d62c-1d60-4411-bde5-4370189a0ffc
-plot_diffs(simulated_diffs, observed_diff)
+# ╔═╡ 30d5d904-99f1-410f-9f7a-330e0c03a654
+plot_sample_means(dist_normal, N_samples, N_draws)
 
-# ╔═╡ 7f9662ac-9889-40f7-a986-74937c0f9231
-TableOfContents()
+# ╔═╡ 226c6a95-e935-4a39-8301-66954f96cf1f
+plot_sample_means(dist_gamma_mix, 500, N_draws)
+
+# ╔═╡ 4b0fec1a-2fe3-4ddb-b013-8619789e7c6e
+naive_runmean(x) = vcat(x, [mean(x[1:i]) for i in 2:length(x)]);
+
+# ╔═╡ b61094d4-20f1-4349-bd3b-ed650c141ccf
+function runmean(x)
+    N = length(x)
+    sum_x = zeros(N)
+    sum_x[1] = x[1]
+    for i in 2:N
+        sum_x[i] = sum_x[i - 1] + x[i]
+    end
+    return sum_x ./ (1:N)
+end;
+
+# ╔═╡ 43f6966d-35f5-425e-9d4e-3e2c77bb6e36
+function sample_running_mean(dist, N)
+    return runmean(rand(dist, N))
+end;
+
+# ╔═╡ 65fcd131-f074-44a5-b759-2ef53e67e189
+function plot_running_means(dist, nsamples, ndraws)
+    p = plot()
+    xmin = 5
+    if isfinite(std(dist))
+        true_val = mean(dist)
+        SE = std(dist) ./ sqrt.(xmin:nsamples)
+        plot!(
+            p,
+            xmin:nsamples,
+            true_val .- SE;
+            fillrange=true_val .+ SE,
+            alpha=0.3,
+            label=L"\mu \pm \sigma / \sqrt{N}",
+            color=:blue,
+        )
+    end
+    for _ in 1:ndraws
+        estimate = sample_running_mean(dist, nsamples)[xmin:nsamples]
+        plot!(
+            p,
+            estimate;
+            color=:black,
+            label=false,
+            xlabel="Sample size",
+            ylabel="Running mean",
+        )
+    end
+    return p
+end;
+
+# ╔═╡ 7ab30b2f-0dd4-40f3-92c5-da2164d6dbc9
+plot_running_means(dist_normal, 2_500, 5)
+
+# ╔═╡ de18db0d-2a14-42e8-97c7-b9a4eef0bbc2
+plot_running_means(dist_gamma_mix, 1000, 6)
+
+# ╔═╡ 2f41394e-5d3d-417d-be1d-bc20c1dfcab4
+plot_running_means(dist_extreme, 2_500, 10)
+
+# ╔═╡ 1c6547f1-9945-4332-8131-7bd715176508
+plot_running_means(dist_fat_tailed, 100_000, 6)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 
 [compat]
-Plots = "~1.25.4"
+Distributions = "~0.25.37"
+LaTeXStrings = "~1.3.0"
+Plots = "~1.25.5"
 PlutoUI = "~0.7.29"
 StatsBase = "~0.33.14"
+StatsPlots = "~0.14.30"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -269,6 +365,12 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.7.1"
 manifest_format = "2.0"
+
+[[deps.AbstractFFTs]]
+deps = ["ChainRulesCore", "LinearAlgebra"]
+git-tree-sha1 = "6f1d9bc1c08f9f4a8fa92e3ea3cb50153a1b40d4"
+uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+version = "1.1.0"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -285,8 +387,26 @@ version = "3.3.3"
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
+[[deps.Arpack]]
+deps = ["Arpack_jll", "Libdl", "LinearAlgebra"]
+git-tree-sha1 = "2ff92b71ba1747c5fdd541f8fc87736d82f40ec9"
+uuid = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
+version = "0.4.0"
+
+[[deps.Arpack_jll]]
+deps = ["Libdl", "OpenBLAS_jll", "Pkg"]
+git-tree-sha1 = "e214a9b9bd1b4e1b4f15b22c0994862b66af7ff7"
+uuid = "68821587-b530-5797-8361-c406ea357684"
+version = "3.5.0+3"
+
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[deps.AxisAlgorithms]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "WoodburyMatrices"]
+git-tree-sha1 = "66771c8d21c8ff5e3a93379480a2307ac36863f7"
+uuid = "13072b0f-2c55-5437-9ae7-d433b7a33950"
+version = "1.0.1"
 
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -315,11 +435,17 @@ git-tree-sha1 = "bf98fa45a0a4cee295de98d4c1462be26345b9a1"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.2"
 
+[[deps.Clustering]]
+deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "Printf", "SparseArrays", "Statistics", "StatsBase"]
+git-tree-sha1 = "75479b7df4167267d75294d14b58244695beb2ac"
+uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
+version = "0.14.2"
+
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
-git-tree-sha1 = "a851fec56cb73cfdf43762999ec72eff5b86882a"
+git-tree-sha1 = "6b6f04f93710c71550ec7e16b650c1b9a612d0b6"
 uuid = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
-version = "3.15.0"
+version = "3.16.0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
@@ -365,6 +491,12 @@ git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
 uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
 version = "1.0.0"
 
+[[deps.DataValues]]
+deps = ["DataValueInterfaces", "Dates"]
+git-tree-sha1 = "d88a19299eba280a6d062e135a43f00323ae70bf"
+uuid = "e7dc6d0d-1eca-5fa6-8ad6-5aecde8b7ea5"
+version = "0.4.13"
+
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -373,9 +505,27 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 
+[[deps.DensityInterface]]
+deps = ["InverseFunctions", "Test"]
+git-tree-sha1 = "80c3e8639e3353e5d2912fb3a1916b8455e2494b"
+uuid = "b429d917-457f-4dbc-8f4c-0cc954292b1d"
+version = "0.4.0"
+
+[[deps.Distances]]
+deps = ["LinearAlgebra", "SparseArrays", "Statistics", "StatsAPI"]
+git-tree-sha1 = "3258d0659f812acde79e8a74b11f17ac06d0ca04"
+uuid = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+version = "0.10.7"
+
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[deps.Distributions]]
+deps = ["ChainRulesCore", "DensityInterface", "FillArrays", "LinearAlgebra", "PDMats", "Printf", "QuadGK", "Random", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "Test"]
+git-tree-sha1 = "6a8dc9f82e5ce28279b6e3e2cea9421154f5bd0d"
+uuid = "31c24e10-a181-5473-b8eb-7969acd0382f"
+version = "0.25.37"
 
 [[deps.DocStringExtensions]]
 deps = ["LibGit2"]
@@ -410,6 +560,24 @@ deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers",
 git-tree-sha1 = "d8a578692e3077ac998b50c0217dfd67f21d1e5f"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.4.0+0"
+
+[[deps.FFTW]]
+deps = ["AbstractFFTs", "FFTW_jll", "LinearAlgebra", "MKL_jll", "Preferences", "Reexport"]
+git-tree-sha1 = "463cb335fa22c4ebacfd1faba5fde14edb80d96c"
+uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+version = "1.4.5"
+
+[[deps.FFTW_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
+uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
+version = "3.3.10+0"
+
+[[deps.FillArrays]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
+git-tree-sha1 = "8756f9935b7ccc9064c6eef0bff0ad643df733a3"
+uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
+version = "0.12.7"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
@@ -448,16 +616,16 @@ uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
 version = "3.3.5+1"
 
 [[deps.GR]]
-deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
-git-tree-sha1 = "b9a93bcdf34618031891ee56aad94cfff0843753"
+deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "RelocatableFolders", "Serialization", "Sockets", "Test", "UUIDs"]
+git-tree-sha1 = "4a740db447aae0fbeb3ee730de1afbb14ac798a1"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.63.0"
+version = "0.63.1"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "f97acd98255568c3c9b416c5a3cf246c1315771b"
+git-tree-sha1 = "aa22e1ee9e722f1da183eb33370df4c1aeb6c2cd"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.63.0+0"
+version = "0.63.1+0"
 
 [[deps.GeometryBasics]]
 deps = ["EarCut_jll", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -523,9 +691,21 @@ git-tree-sha1 = "098e4d2c533924c921f9f9847274f2ad89e018b8"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
 version = "0.5.0"
 
+[[deps.IntelOpenMP_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "d979e54b71da82f3a65b62553da4fc3d18c9004c"
+uuid = "1d5cc7b8-4909-519e-a0f8-d0f5ad9712d0"
+version = "2018.0.3+2"
+
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[deps.Interpolations]]
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "b15fc0a95c564ca2e0a7ae12c1f095ca848ceb31"
+uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+version = "0.13.5"
 
 [[deps.InverseFunctions]]
 deps = ["Test"]
@@ -550,9 +730,9 @@ version = "1.0.0"
 
 [[deps.JLLWrappers]]
 deps = ["Preferences"]
-git-tree-sha1 = "642a199af8b68253517b80bd3bfd17eb4e84df6e"
+git-tree-sha1 = "22df5b96feef82434b07327e2d3c770a9b21e023"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
-version = "1.3.0"
+version = "1.4.0"
 
 [[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
@@ -565,6 +745,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "d735490ac75c5cb9f1b00d8b5509c11984dc6943"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "2.1.0+0"
+
+[[deps.KernelDensity]]
+deps = ["Distributions", "DocStringExtensions", "FFTW", "Interpolations", "StatsBase"]
+git-tree-sha1 = "591e8dc09ad18386189610acafb970032c519707"
+uuid = "5ab0869b-81aa-558d-bb23-cbf5423bbe9b"
+version = "0.6.3"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -588,6 +774,10 @@ deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdow
 git-tree-sha1 = "a8f4f279b6fa3c3c4f1adadd78a621b13a506bce"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 version = "0.15.9"
+
+[[deps.LazyArtifacts]]
+deps = ["Artifacts", "Pkg"]
+uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
@@ -669,6 +859,12 @@ version = "0.3.6"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[deps.MKL_jll]]
+deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
+git-tree-sha1 = "5455aef09b40e5020e1520f551fa3135040d4ed0"
+uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
+version = "2021.1.1+2"
+
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
 git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
@@ -706,13 +902,36 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
+[[deps.MultivariateStats]]
+deps = ["Arpack", "LinearAlgebra", "SparseArrays", "Statistics", "StatsBase"]
+git-tree-sha1 = "8d958ff1854b166003238fe191ec34b9d592860a"
+uuid = "6f286f6a-111f-5878-ab1e-185364afe411"
+version = "0.8.0"
+
 [[deps.NaNMath]]
 git-tree-sha1 = "f755f36b19a5116bb580de457cda0c140153f283"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 version = "0.3.6"
 
+[[deps.NearestNeighbors]]
+deps = ["Distances", "StaticArrays"]
+git-tree-sha1 = "16baacfdc8758bc374882566c9187e785e85c2f0"
+uuid = "b8a86587-4115-5ab1-83bc-aa920d37bbce"
+version = "0.4.9"
+
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.Observables]]
+git-tree-sha1 = "fe29afdef3d0c4a8286128d4e45cc50621b1e43d"
+uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
+version = "0.4.0"
+
+[[deps.OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "043017e0bdeff61cfbb7afeb558ab29536bbb5ed"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.10.8"
 
 [[deps.Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -724,11 +943,21 @@ version = "1.3.5+1"
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 
+[[deps.OpenLibm_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
+
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "15003dcb7d8db3c6c857fda14891a539a8f2705a"
+git-tree-sha1 = "648107615c15d4e09f7eca16307bc821c1f718d8"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "1.1.10+0"
+version = "1.1.13+0"
+
+[[deps.OpenSpecFun_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
+uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
+version = "0.5.5+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -746,6 +975,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "b2a7af664e098055a7529ad1a900ded962bca488"
 uuid = "2f80f16e-611a-54ab-bc61-aa92de5b98fc"
 version = "8.44.0+0"
+
+[[deps.PDMats]]
+deps = ["LinearAlgebra", "SparseArrays", "SuiteSparse"]
+git-tree-sha1 = "ee26b350276c51697c9c2d88a072b339f9f03d73"
+uuid = "90014a1f-27ba-587c-ab20-58faa44d9150"
+version = "0.11.5"
 
 [[deps.Parsers]]
 deps = ["Dates"]
@@ -777,9 +1012,9 @@ version = "1.1.2"
 
 [[deps.Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
-git-tree-sha1 = "71d65e9242935132e71c4fbf084451579491166a"
+git-tree-sha1 = "68e602f447344154f3b80f7d14bfb459a0f4dadf"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.25.4"
+version = "1.25.5"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
@@ -803,6 +1038,12 @@ git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
 uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
 version = "5.15.3+0"
 
+[[deps.QuadGK]]
+deps = ["DataStructures", "LinearAlgebra"]
+git-tree-sha1 = "78aadffb3efd2155af139781b8a8df1ef279ea39"
+uuid = "1fd47b50-473d-5c70-9696-f719f8f3bcdc"
+version = "2.4.2"
+
 [[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
@@ -810,6 +1051,12 @@ uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 [[deps.Random]]
 deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[deps.Ratios]]
+deps = ["Requires"]
+git-tree-sha1 = "01d341f502250e81f6fec0afe662aa861392a3aa"
+uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
+version = "0.4.2"
 
 [[deps.RecipesBase]]
 git-tree-sha1 = "6bf3f380ff52ce0832ddd3a2a7b9538ed1bcca7d"
@@ -827,11 +1074,29 @@ git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
 
+[[deps.RelocatableFolders]]
+deps = ["SHA", "Scratch"]
+git-tree-sha1 = "cdbd3b1338c72ce29d9584fdbe9e9b70eeb5adca"
+uuid = "05181044-ff0b-4ac5-8273-598c1e38db00"
+version = "0.1.3"
+
 [[deps.Requires]]
 deps = ["UUIDs"]
-git-tree-sha1 = "8f82019e525f4d5c669692772a6f4b0a58b06a6a"
+git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
-version = "1.2.0"
+version = "1.3.0"
+
+[[deps.Rmath]]
+deps = ["Random", "Rmath_jll"]
+git-tree-sha1 = "bf3188feca147ce108c76ad82c2792c57abe7b1f"
+uuid = "79098fc4-a85e-5d69-aa6a-4863f24498fa"
+version = "0.7.0"
+
+[[deps.Rmath_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "68db32dff12bb6127bac73c209881191bf0efbb7"
+uuid = "f50d1b31-88e8-58de-be2c-1cc44531875f"
+version = "0.3.0+0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
@@ -841,6 +1106,12 @@ deps = ["Dates"]
 git-tree-sha1 = "0b4b7f1393cff97c33891da2a0bf69c6ed241fda"
 uuid = "6c6a2e73-6563-6170-7368-637461726353"
 version = "1.1.0"
+
+[[deps.SentinelArrays]]
+deps = ["Dates", "Random"]
+git-tree-sha1 = "244586bc07462d22aed0113af9c731f2a518c93e"
+uuid = "91c51154-3ec4-41a3-a24f-3f23e20d615c"
+version = "1.3.10"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
@@ -868,11 +1139,17 @@ version = "1.0.1"
 deps = ["LinearAlgebra", "Random"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
+[[deps.SpecialFunctions]]
+deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
+git-tree-sha1 = "e08890d19787ec25029113e88c34ec20cac1c91e"
+uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
+version = "2.0.0"
+
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "88a559da57529581472320892576a486fa2377b9"
+git-tree-sha1 = "2ae4fe21e97cd13efd857462c1869b73c9f61be3"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.3.1"
+version = "1.3.2"
 
 [[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -889,15 +1166,37 @@ git-tree-sha1 = "51383f2d367eb3b444c961d485c565e4c0cf4ba0"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.14"
 
+[[deps.StatsFuns]]
+deps = ["ChainRulesCore", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
+git-tree-sha1 = "bedb3e17cc1d94ce0e6e66d3afa47157978ba404"
+uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
+version = "0.9.14"
+
+[[deps.StatsPlots]]
+deps = ["Clustering", "DataStructures", "DataValues", "Distributions", "Interpolations", "KernelDensity", "LinearAlgebra", "MultivariateStats", "Observables", "Plots", "RecipesBase", "RecipesPipeline", "Reexport", "StatsBase", "TableOperations", "Tables", "Widgets"]
+git-tree-sha1 = "e1e5ed9669d5521d4bbdd4fab9f0945a0ffceba2"
+uuid = "f3b207a7-027a-5e70-b257-86293d7955fd"
+version = "0.14.30"
+
 [[deps.StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
 git-tree-sha1 = "2ce41e0d042c60ecd131e9fb7154a3bfadbf50d3"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 version = "0.6.3"
 
+[[deps.SuiteSparse]]
+deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
+uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
+
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[[deps.TableOperations]]
+deps = ["SentinelArrays", "Tables", "Test"]
+git-tree-sha1 = "e383c87cf2a1dc41fa30c093b2a19877c83e1bc1"
+uuid = "ab02a1b2-a7df-11e8-156e-fb1833f50b87"
+version = "1.2.0"
 
 [[deps.TableTraits]]
 deps = ["IteratorInterfaceExtensions"]
@@ -953,6 +1252,18 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "66d72dc6fcc86352f01676e8f0f698562e60510f"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.23.0+0"
+
+[[deps.Widgets]]
+deps = ["Colors", "Dates", "Observables", "OrderedCollections"]
+git-tree-sha1 = "80661f59d28714632132c73779f8becc19a113f2"
+uuid = "cc8bc4a8-27d6-5769-a93b-9d913e69aa62"
+version = "0.6.4"
+
+[[deps.WoodburyMatrices]]
+deps = ["LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "de67fa59e33ad156a590055375a30b23c40299d3"
+uuid = "efce3f68-66dc-5838-9240-27a6d6f5f9b6"
+version = "0.5.5"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
@@ -1158,34 +1469,55 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─753b2ed0-71cd-11ec-2fd7-89e556b46d44
-# ╠═a0b53953-eb58-4076-a29b-86138d9d532a
-# ╟─6f4ce363-d1b8-4955-9e92-92fe084c09fd
-# ╟─2588a9fd-dd34-44d5-aaa9-5045b1b4ae49
-# ╟─2622d7ed-80db-4276-9690-7bcebf67c82c
-# ╟─111b90f5-fe9e-4e8d-a0db-e7af274b1c1d
-# ╟─90e6a264-507f-4f56-bcc6-acb4cac79a34
-# ╟─1c7e3b61-3b6c-4c1e-9853-1c66ff096c8c
-# ╠═d4d40510-f1d2-4c82-8dfb-7e22289f42c3
-# ╟─f8e51391-7f3c-4804-aac0-8272c31e455c
-# ╠═f659caa3-6865-4c19-becc-01d20503ea4d
-# ╟─c402d573-e48c-4785-820e-cea4e08d3f96
-# ╠═ab2a7607-5558-449e-9b54-7ff3a2bef5f9
-# ╟─663875ef-f7f4-44d1-b205-d16c4610cb6b
-# ╟─38d7e243-cd9e-407a-9901-7d084d69dce4
-# ╠═f566d196-db6f-456b-90d6-9d6d609d189a
-# ╟─161bf38c-628c-4e09-b9fa-8fb02b65aa12
-# ╠═424a9ded-61b7-46d8-aba5-8cab020091bd
-# ╠═e732579a-c20c-4ba9-93d3-fa80950dd1ff
-# ╟─5620a623-bb73-4c9c-90a9-f601e6363e36
-# ╠═7d0c7739-16db-4a0f-882e-d4b95ac488aa
-# ╟─cb480362-68fb-4dc9-a28d-eaf3b9b86c4a
-# ╠═a4353753-156b-4c15-8538-299b67ed3fcf
-# ╟─c4d2cc4e-33d5-496e-baea-205fe44d5492
-# ╠═5b64d62c-1d60-4411-bde5-4370189a0ffc
-# ╟─b7d3578f-11cc-4429-9339-03049b5223e6
-# ╟─0bf62b5b-4b51-41a3-9f38-dcba182a7706
-# ╠═c74cbd0a-4679-4d22-b233-2753fa3b41df
-# ╟─7f9662ac-9889-40f7-a986-74937c0f9231
+# ╟─4260e54e-8749-4e4a-8b01-ba7c6c96ac79
+# ╠═4c094c52-c5c4-4106-a25c-5bcc3a5fab1a
+# ╟─167a38a8-7466-11ec-321f-bbeb803b438f
+# ╠═7e164a27-3d8f-487e-8e1a-20a44684649b
+# ╠═926a8455-0afb-4ab3-9836-1205e6cbee35
+# ╟─a4595fe4-c9d5-4171-b42d-67d5a9fa6686
+# ╠═3002a66d-f939-4a81-be78-1d1a2c4ca354
+# ╟─9ed033cf-c3c4-4e42-89a6-e4691b829ac7
+# ╟─ac7355db-f855-4c1f-9028-8051a4325ed5
+# ╠═114499d3-739e-48b8-9863-c56b5d67ed8a
+# ╠═a77b3ed4-ccd2-42ba-a5ca-dacbe24b3522
+# ╟─f0660517-0b53-4396-b962-15dbc741a764
+# ╠═50f1c6d7-1065-4d85-897c-edb33cdf3720
+# ╠═3c5d4a5c-7033-42f9-aba4-a7b75555a9bf
+# ╠═30d5d904-99f1-410f-9f7a-330e0c03a654
+# ╟─0f4faedb-3056-4efe-a665-c67c4e12ba98
+# ╟─8ae2b16b-9311-49f0-b028-e445bf56516d
+# ╠═7ab30b2f-0dd4-40f3-92c5-da2164d6dbc9
+# ╟─7fef2706-e71b-47c4-a3ac-29a0f0d674c3
+# ╟─81bab0a5-0f48-405c-9ead-667b51a10efb
+# ╠═cb8beed0-fcfa-4d30-8287-7c8113f83e43
+# ╠═b36963fb-c8a5-4b12-90a6-83bc1ceb47de
+# ╠═8d33e836-d824-46af-ae1b-983445ed2385
+# ╟─6beed98d-fb32-4bf5-9c34-1431a9a32bf4
+# ╠═226c6a95-e935-4a39-8301-66954f96cf1f
+# ╠═de18db0d-2a14-42e8-97c7-b9a4eef0bbc2
+# ╟─c828c601-4cb2-4df5-84bb-816e942e994e
+# ╟─ec9e3dff-7458-49a1-a183-0c776db9bbfd
+# ╠═86be396c-1baf-4e17-b14a-4808898a680d
+# ╠═0ee1bc2b-27a8-49b3-b439-e928255ae535
+# ╠═4542f3eb-ecf9-4930-9d1e-9c462dd987ea
+# ╟─46a20b7d-1a6d-44ff-86b8-afa33c15ea19
+# ╠═2f41394e-5d3d-417d-be1d-bc20c1dfcab4
+# ╟─b104d217-7d3e-4b8e-954a-c49598e9ce41
+# ╟─f4cc5b5b-ce9d-486a-8b9b-3d9bc4225c9e
+# ╠═0eba055e-8363-4d66-bc0d-281279766ff5
+# ╠═84499481-b68c-41a2-819b-275f80cb7ff0
+# ╠═6cbf0404-faab-4eb2-87a9-02e28e3dce7a
+# ╠═1c6547f1-9945-4332-8131-7bd715176508
+# ╟─6ae07280-92b0-4bac-a3f7-11a69c7b2bfe
+# ╟─2ebb82f9-8573-4bce-8228-16bba8718748
+# ╟─a28add9c-d1f0-483f-81b0-3d1fedda6b70
+# ╠═4cb0fa42-9eb7-4e04-b88f-1b0a0fe0fc8a
+# ╠═43361603-cb6a-44d9-ae83-48222d9ed89c
+# ╠═f9ad3a94-2dc8-4e9e-bebe-ad37cee0d765
+# ╠═cdf83ad7-4484-43d7-8b88-c1842c541e2b
+# ╠═4b0fec1a-2fe3-4ddb-b013-8619789e7c6e
+# ╠═b61094d4-20f1-4349-bd3b-ed650c141ccf
+# ╠═43f6966d-35f5-425e-9d4e-3e2c77bb6e36
+# ╠═65fcd131-f074-44a5-b759-2ef53e67e189
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
