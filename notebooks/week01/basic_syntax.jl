@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.3
+# v0.17.2
 
 using Markdown
 using InteractiveUtils
@@ -204,21 +204,6 @@ md"A nice alternative syntax to create matrices following a certain pattern is a
 # ╔═╡ 6348edce-edef-11ea-1ab4-019514eb414f
 [i + j for i in 1:5, j in 1:6]
 
-# ╔═╡ 00000000-0000-0000-0000-000000000001
-PLUTO_PROJECT_TOML_CONTENTS = """
-[deps]
-"""
-
-# ╔═╡ 00000000-0000-0000-0000-000000000002
-PLUTO_MANIFEST_TOML_CONTENTS = """
-# This file is machine-generated - editing it directly is not advised
-
-julia_version = "1.7.1"
-manifest_format = "2.0"
-
-[deps]
-"""
-
 # ╔═╡ Cell order:
 # ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
 # ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
@@ -274,5 +259,3 @@ manifest_format = "2.0"
 # ╟─4cb33c04-edef-11ea-2b35-1139c246c331
 # ╟─54e47e9e-edef-11ea-2d75-b5f550902528
 # ╠═6348edce-edef-11ea-1ab4-019514eb414f
-# ╟─00000000-0000-0000-0000-000000000001
-# ╟─00000000-0000-0000-0000-000000000002
