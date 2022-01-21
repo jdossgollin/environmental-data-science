@@ -34,3 +34,5 @@ There is no assigned textbook for this course, but the following texts may be he
 1. Helsel, Dennis R., and Robert M. Hirsch. 2002. Statistical Methods in Water Resources. Techniques of Water-Resources Investigations. Reston, VA: U.S. Geological Survey. [https://doi.org/10.313 3/twri04A3](https://doi.org/10.313 3/twri04A3).
 1. James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2013. An Introduction to Statistical Learning. Vol. 103. Springer Texts in Statistics. New York, NY: Springer New York.
 1. McElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Second edition. Texts in Statistical Science Series. Boca Raton ; CRC Press, Taylor & Francis Group.
+
+In addition, [https://betanalpha.github.io/writing/](https://betanalpha.github.io/writing/) has a number of detailed and advanced essays that you may find illuminating.
