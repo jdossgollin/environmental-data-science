@@ -6,9 +6,9 @@ The following syllabus will be adjusted as needed.
 |:----:|:-----:|:---------:|:----------:|:---:|
 | 0 | Self-assessment | | | [HW0](/00_hw0/)[^1] |
 | | **Module 1: fundamentals** | 
-| 1 | Introduction to the course and tools | [Basic Syntax](/01_basic_syntax/); [Mosquitos 📺](/01_mosquitos/) | | [HW 1](/01_hw1/) |
-| 2 | Probability fundamentals | [Central Limit Theorem 📺](/02_clt/) [Probability Distributions](/02_probability/) | BDA[^2] 1.1-1.3, 1.5, and 1.8 | [HW 2](/02_hw2/) |
-| 3 | Inference | [Inference](/03_inference/) | | |
+| 1 | Introduction to the course and tools | (1) [Basic Syntax](/01_basic_syntax/), (2) [Mosquitos 📺](/01_mosquitos/) | | [HW 1](/01_hw1/) |
+| 2 | Probability fundamentals | (1) [Central Limit Theorem 📺](/02_clt/), (2) [Probability Distributions](/02_probability/) | BDA[^2] 1.1-1.3, 1.5, and 1.8 | [HW 2](/02_hw2/) |
+| 3 | Inference | (1) [Inference](/03_inference/), (2) [Maximum Likelihood](/03_mle/), (3) [Posterior Sampling](/03/mcmc/) | | |
 | | **Module 2: regression and modeling**| | |
 | 4 | Dynamical systems, Taylor series, and regression | | | |
 | 5 | Exam 1 (Feb 8); Spring Recess (Feb 10) | | | |
