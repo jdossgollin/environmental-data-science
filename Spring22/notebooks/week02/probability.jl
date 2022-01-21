@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.5
+# v0.17.2
 
 using Markdown
 using InteractiveUtils
@@ -365,7 +365,7 @@ StatsPlots = "~0.14.30"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.1"
+julia_version = "1.6.5"
 manifest_format = "2.0"
 
 [[deps.AbstractFFTs]]
@@ -912,7 +912,7 @@ uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
 version = "2.36.0+0"
 
 [[deps.LinearAlgebra]]
-deps = ["Libdl", "libblastrampoline_jll"]
+deps = ["Libdl"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[deps.LogExpFunctions]]
@@ -1173,7 +1173,7 @@ deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [[deps.Random]]
-deps = ["SHA", "Serialization"]
+deps = ["Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[deps.Ratios]]
@@ -1567,10 +1567,6 @@ git-tree-sha1 = "5982a94fcba20f02f42ace44b9894ee2b140fe47"
 uuid = "0ac62f75-1d6f-5e53-bd7c-93b484bb37c0"
 version = "0.15.1+0"
 
-[[deps.libblastrampoline_jll]]
-deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
-uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-
 [[deps.libfdk_aac_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "daacc84a041563f965be61859a36e17c4e4fcd55"
@@ -1623,6 +1619,7 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═c2827f83-fac6-41c8-a266-fd3093d76bf6
 # ╟─1d7e82e6-786c-11ec-01d7-61e0f6a83728
 # ╟─17790b79-4d8d-4ee1-884e-6f562fe51958
 # ╠═b16db60f-a3fd-4e81-9436-77c09d2e50ce
@@ -1669,7 +1666,6 @@ version = "0.9.1+5"
 # ╟─1ea94ed3-6e03-40e4-86d0-9f1a6934b51f
 # ╟─1306f4f8-14ad-4bf4-bfab-e5004260c741
 # ╠═f729a246-da23-491a-b81f-d7a23dce0899
-# ╠═c2827f83-fac6-41c8-a266-fd3093d76bf6
 # ╠═e1ca6f06-7b12-4026-8c1b-96f7b07c3b09
 # ╠═c2dda0dc-ec0e-4883-a379-ff661962dd28
 # ╟─00000000-0000-0000-0000-000000000001
