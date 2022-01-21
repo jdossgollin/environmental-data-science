@@ -44,6 +44,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>03_mle/index.html</loc>
+    <lastmod>2022-01-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>homework/index.html</loc>
     <lastmod>2022-01-21</lastmod>
     <changefreq>monthly</changefreq>
@@ -69,6 +75,12 @@
 </url>
 <url>
     <loc>02_probability/index.html</loc>
+    <lastmod>2022-01-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>03_mcmc/index.html</loc>
     <lastmod>2022-01-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
