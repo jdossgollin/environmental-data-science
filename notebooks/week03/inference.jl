@@ -78,22 +78,22 @@ plot(0:9, pdf.(Binomial(9, 0.5), 0:9), st=:sticks, shape=:o, label="Binomial PMF
 # ╔═╡ e5e21377-3f82-483d-90a0-2ddb2f5251d7
 md"""
 This tells us that 8 is unlikely, though not altogether impossible.
-But in our case $p$ is unknown --- we want to find it!
+But in our case $\theta$ is unknown --- we want to find it!
 
-To do that, we want to flip our story around: we want to calculate the likelihood of the data $(y=8)$ given $p$, for all possible values of $p$.
+To do that, we want to flip our story around: we want to calculate the likelihood of the data $(y=8)$ given $\theta$, for all possible values of $\theta$.
 For complex models, this is a hard problem.
 For us, we can approximate this very nicely by *discretizing* p and looking at specific values:
 """
 
 # ╔═╡ 05c13e8a-c340-4888-a9d0-f77c74996c8f
 let
-	p_grid = 0:0.005:1
+	θ_grid = 0:0.005:1
 	lik(θ) = pdf(Binomial(9, θ), 8)
 	plot(
-		p_grid,
+		θ_grid,
 		lik,
 		xlabel = L"$\theta$",
-		ylabel = L"$\mathrm{Likelihood}~~p(y | \theta)$",
+		ylabel = L"$\mathrm{Likelihood}~~p(y | \theta)$ for many $\theta$",
 		label = "y=8, N=9",
 		legend = :topleft,
 	)
@@ -172,7 +172,7 @@ let
 	μ_try = range(2, 8, length=N)
 	σ_try = range(0.1, 1.5, length=N)
 
-	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
+	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height_i) for height_i in heights])
 	lik(μ, σ) = exp(log_lik(μ, σ))
 
 	heatmap(μ_try, σ_try, lik, title=L"$p(y | \mu, \sigma)$", xlabel=L"$\mu$", ylabel=L"$\sigma$")
@@ -186,8 +186,8 @@ When using these methods, it's often helpful to narrow in a bit.
 # ╔═╡ 2d72dd8e-86da-4a28-b8a9-6c0d28defb70
 let
 	N = 100
-	μ_try = range(4.5, 6, length=N)
-	σ_try = range(0.1, 0.6, length=N)
+	μ_try = range(4.8, 5.8, length=N)
+	σ_try = range(0.1, 0.5, length=N)
 
 	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
 	lik(μ, σ) = exp(log_lik(μ, σ))
@@ -348,8 +348,8 @@ Here's what these priors give us
 # ╔═╡ cac3169d-90d0-4e89-b4ad-2c64323b29ba
 let
 	N = 100
-	μ_try = range(4.5, 6, length=N)
-	σ_try = range(0.1, 0.6, length=N)
+	μ_try = range(4.8, 5.8, length=N)
+	σ_try = range(0.1, 0.5, length=N)
 
 	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
 	lik(μ, σ) = exp(log_lik(μ, σ))
@@ -1618,8 +1618,8 @@ version = "0.9.1+5"
 # ╟─824838a4-43c9-437a-b85c-a5c63797bf26
 # ╟─d55d3cad-cb11-4da4-99c7-bc4f281911ac
 # ╠═4e5929d0-99e6-4617-b607-8bf9bbe90f93
-# ╠═5837db0e-eb5f-43c3-b262-c62f6f8ffcf0
-# ╠═e0115031-e4a2-4cf9-b172-dc75e15479fa
+# ╟─5837db0e-eb5f-43c3-b262-c62f6f8ffcf0
+# ╟─e0115031-e4a2-4cf9-b172-dc75e15479fa
 # ╠═76f96c91-8ec0-4e84-9e27-162c7c1f005b
 # ╟─c69bd847-f088-4b1d-a61e-a1488e7a4b83
 # ╠═ec7b19ef-c4b3-4184-a516-35c8a547cba2
