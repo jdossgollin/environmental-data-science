@@ -37,7 +37,7 @@ Maximum Likelihood: the data is best explained by the distribution in $\mathcal{
 Let's revisit some assumptions from the lecture "Inference on a grid".
 The **IID** assumption is:
 ```math
-p(y_1,\ldots,y_n) = \prod_{i=1}^n p(x_i|\theta)
+p(y_1,\ldots,y_n | \theta) = \prod_{i=1}^n p(y_i|\theta)
 ```
 As we saw in the previous section, we're motivated by computational stability and by avoiding having to multiply lots of things together ($n$ might be really big!)
 We can take logs because it is a "monotonic transformation":
@@ -103,7 +103,7 @@ One way is to take the maximum over a grid:
 
 # ╔═╡ c5d6b3df-f42a-4122-9faf-a4acbc69ab38
 let
-	θ = 0:0.001:1
+	θ = range(0, 1, length=1001)
 	llik = log_likelihood.(θ)
 	θ[argmax(llik)]
 end
@@ -169,12 +169,12 @@ This is an example of a language that requires us to write down *generative mode
 	# we need to define p inside the model using this syntax so Turing knows it's a parameter
 	# it doesn't matter what prior we give -- it's the Max Likelihood Estimate!
     #p ~ Uniform(0, 1)
-	p ~ Beta(5, 5)
+	θ ~ Beta(5, 5)
 
     # The number of observations.
     N = length(x)
     for n in 1:N
-        x[n] ~ Bernoulli(p)
+        x[n] ~ Bernoulli(θ)
     end
 end
 
@@ -221,10 +221,10 @@ p2 = plot(true_dist, label = "True Distribution")
 md"However, let's assume that we observe this data only with noise. Let's say that noise is normally distributed:"
 
 # ╔═╡ 641d978c-1db1-4229-913f-b2efabb997f4
-noise_dist = Normal(0, 1)
+noise_dist = truncated(Normal(0, 1), 0, Inf)
 
 # ╔═╡ 3a4b2ed6-f91c-405e-b5d0-76a15b0baacb
-gamma_N = 50;
+gamma_N = 2500;
 
 # ╔═╡ 3dae6429-94bf-4dd7-a742-fd0fc952138d
 md"Let's say we observe $gamma_N data points"
@@ -243,11 +243,10 @@ md"Now, we define our model in Turing"
 
 # ╔═╡ 79eac78e-14aa-4012-ae7e-356ce07a84a6
 @model function naive_gamma(x)
-    
 	α ~ Turing.FlatPos(0.0) # flat but ≥ 0
 	θ ~ Turing.FlatPos(0.0)
 	x .~ Gamma(α, θ)
-end
+end;
 
 # ╔═╡ 592ef35a-d163-4c4a-a822-ac3b4f5745c2
 md"We can do the optimization and data passing all in one step if we want:"
@@ -1822,10 +1821,10 @@ version = "0.9.1+5"
 # ╠═f6c539b8-a290-49d9-97ee-8065891d92dd
 # ╟─a8687db6-cf8c-4d9f-abaf-589c04c4ef6a
 # ╠═c5d6b3df-f42a-4122-9faf-a4acbc69ab38
-# ╠═916a2e88-18b5-4cbf-9a4a-f82eab04cbc8
+# ╟─916a2e88-18b5-4cbf-9a4a-f82eab04cbc8
 # ╠═bfc5c06b-4094-4453-9519-d6583d3c2493
 # ╟─ad57d57e-02b6-4e7d-994b-ba17944b1b8d
-# ╟─7785ebc6-6c15-4686-a161-4a8be1b8cfa8
+# ╠═7785ebc6-6c15-4686-a161-4a8be1b8cfa8
 # ╟─21965ac7-56fc-4940-a6d5-20467661fb22
 # ╠═b2842ea2-bf1e-48c5-8478-82f5c36716c1
 # ╟─c1701969-0fd6-4e9e-bd92-f31dfb960ec1
