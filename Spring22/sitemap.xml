@@ -44,13 +44,13 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>03_mle/index.html</loc>
+    <loc>01_installation/index.html</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>homework/index.html</loc>
+    <loc>03_mle/index.html</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -87,12 +87,6 @@
 </url>
 <url>
     <loc>03_mcmc/index.html</loc>
-    <lastmod>2022-01-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>installation/index.html</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
