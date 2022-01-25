@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.2
+# v0.17.7
 
 using Markdown
 using InteractiveUtils
@@ -36,6 +36,8 @@ You are not told how many heads were seen, only that the number is less than 3.
 Calculate your exact posterior density (up to a proportionality constant) for θ and sketch it.
 
 (BDA3 Exercise 2.1vc)
+
+> **Hint:** if $y \sim \mathrm{Binomial}(\theta, N)$ and $\theta \sim \mathrm{Beta}(\alpha, \beta)$, then after counting $y$ successes from $N$ trials, then $\theta | y \sim \mathrm{Beta}(\alpha + y, \beta + N - y)$
 """
 
 # ╔═╡ 0ad1aa6f-13ed-49e4-9b72-ecf4cd1722d0
@@ -47,15 +49,7 @@ Specifically, the model is $y \sim \textrm{Poisson}(\theta)$.
 
 Your function should take as inputs the two parameters describing the prior (the LogNormal distribution has two parameters) and data, and calculate the posterior density $p(\theta|y)$ for some $\theta$.
 
-Use this function to produce
-
-1. a plot of the posterior density,
-1. the posterior mean
-1. the posterior variance,
-1. the posterior median, and
-1. the 95% central posterior interval
-
-for the data and prior given below
+Use this function to produce a plot of the posterior density for the data and prior given below
 """
 
 # ╔═╡ 0f7fca4e-6e74-423c-b4b4-164eea988a8f
@@ -87,7 +81,7 @@ The data is sampled hourly for the year 2015 and is available [here](https://tid
 
 To make your life easier, the following function will load the data
 
-> *NOTE: you will need to download the data, then change `fname` so that it points to the correct location on your computer. You can download the data [here](https://github.com/jdossgollin/environmental-data-science/tree/Spring22/assets/data).*
+> *NOTE: you will need to download the data, then change `fname` so that it points to the correct location on your computer. You can download the data [here](https://github.com/jdossgollin/environmental-data-science/tree/Spring22/assets/data).* Be sure to click on the file, then "Raw", then "save page as".
 """
 
 # ╔═╡ 1547bd89-0b5e-4145-ac72-dfc205466b02
@@ -1774,9 +1768,9 @@ version = "1.6.38+0"
 
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll", "Pkg"]
-git-tree-sha1 = "c45f4e40e7aafe9d086379e5578947ec8b95a8fb"
+git-tree-sha1 = "b910cb81ef3fe6e78bf6acee440bda86fd6ae00c"
 uuid = "f27f6e37-5d2b-51aa-960f-b287f2bc3b7a"
-version = "1.3.7+0"
+version = "1.3.7+1"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1809,7 +1803,7 @@ version = "0.9.1+5"
 # ╟─73f58c68-7a20-11ec-221e-19b02b2ab517
 # ╠═ffc70e7c-f831-46cd-b87e-fb58ec91ea46
 # ╟─3c4c3b64-7277-4db4-ab3c-4b2413accdcf
-# ╠═0ad1aa6f-13ed-49e4-9b72-ecf4cd1722d0
+# ╟─0ad1aa6f-13ed-49e4-9b72-ecf4cd1722d0
 # ╠═0f7fca4e-6e74-423c-b4b4-164eea988a8f
 # ╠═983c3f74-0df1-4517-a9fd-5ce25cc7806c
 # ╠═bf81c48a-cb94-4894-bed5-7bfb7fa1e039
