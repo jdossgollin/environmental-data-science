@@ -52,25 +52,39 @@ Your function should take as inputs the two parameters describing the prior (the
 Use this function to produce a plot of the posterior density for the data and prior given below
 """
 
-# ╔═╡ 0f7fca4e-6e74-423c-b4b4-164eea988a8f
-LogNormal()
-
-# ╔═╡ 983c3f74-0df1-4517-a9fd-5ce25cc7806c
-Poisson()
-
 # ╔═╡ bf81c48a-cb94-4894-bed5-7bfb7fa1e039
 function poisson_posterior(μ, σ, y, θ)
-	# fill in here -- this should be generic
+	prior = 0 # FILL IN
+	log_likelihood = 0 # FILL IN
+	likelihood = exp.(log_likelihood)
+	posterior = prior .* likelihood
+	return posterior
 end;
 
 # ╔═╡ 8f733fa2-438c-4bfb-999a-4be52e1b8d8d
 count_data = [8, 6, 2, 2, 9, 4, 7, 4, 7, 4, 7, 6, 3, 7, 7, 6, 1];
 
+# ╔═╡ 9879cc24-9568-4d26-9721-63423ddd602c
+μ_prior = 2;
+
+# ╔═╡ 36653b2b-f113-4d86-8239-807bfd4d7c32
+σ_prior = 2;
+
 # ╔═╡ 11be6bdb-e3d1-4cec-9f8c-04b083c67cd4
-ln_prior = LogNormal(2, 2)
+ln_prior = LogNormal(μ_prior, σ_prior)
 
 # ╔═╡ ee80faab-5eff-4b8a-899a-db597a29ca9c
 plot(ln_prior, 0, 25, label="Prior", xlabel=L"$\theta$", ylabel=L"$p(\theta)$")
+
+# ╔═╡ 7a9d1463-b8f0-4b0c-99f2-ce1eabfcd5e9
+md"This plot is giving an error now because our `poisson_posterior` function always returns zero, but it will work once you fill it in!"
+
+# ╔═╡ 4003a632-7b99-44f8-9ff3-3f6aa722f95d
+let
+	θ_grid = range(1, 7, length=100)
+	posterior = [poisson_posterior(μ_prior, σ_prior, count_data, θi) for θi in θ_grid]
+	plot(θ_grid, posterior, yaxis=:log, label=false)
+end
 
 # ╔═╡ ebe5cd7e-cb28-4fd6-bae0-9d27045fbe2e
 md"""
@@ -82,11 +96,13 @@ The data is sampled hourly for the year 2015 and is available [here](https://tid
 To make your life easier, the following function will load the data
 
 > *NOTE: you will need to download the data, then change `fname` so that it points to the correct location on your computer. You can download the data [here](https://github.com/jdossgollin/environmental-data-science/tree/Spring22/assets/data).* Be sure to click on the file, then "Raw", then "save page as".
+
+> **Windows users:** If your file name is something like `"C:\folder\other\", replace the `\` with `\\`: `"C:\\folder\\other\\"`. You can also use the `joinpath` function!
 """
 
 # ╔═╡ 1547bd89-0b5e-4145-ac72-dfc205466b02
 function load_data()
-	fname = "../../assets/data/norfolk-hourly-surge-2015.csv" # ⬅️⬅️⬅️
+	fname = "/Users/jamesdoss-gollin/Downloads/norfolk-hourly-surge-2015.csv" # ⬅️⬅️⬅️
 	date_format = "yyyy-mm-dd HH:MM"
 	# this uses the DataFramesMeta package -- it's pretty cool
 	return @chain fname begin
@@ -147,17 +163,20 @@ md"""
 
 # ╔═╡ 809264f0-b262-4208-a987-dea91270adf4
 MLE_sample = let
+	μ = mean(data.weather)
+	σ = 1.4
 	# this is a let block, so you can create variables here
 	# they will only be defined inside this let block
 	# the MLE_sample will be defined as the last line of this block
-	Normal() # FILL IN
+	Normal(μ, σ) # FILL IN
  end
 
 # ╔═╡ 288963f8-24f0-46f4-b420-6f2ac3601f17
-log_lik(μ, σ) = 0 # FILL IN
+log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), x) for x in your_data])
 
 # ╔═╡ 621e1fce-b7d2-4dc8-acc7-1ff43ec570a7
 MLE_grid = let
+	μ = -2:0.01:5
 	Normal() # FILL IN
  end
 
@@ -1804,12 +1823,14 @@ version = "0.9.1+5"
 # ╠═ffc70e7c-f831-46cd-b87e-fb58ec91ea46
 # ╟─3c4c3b64-7277-4db4-ab3c-4b2413accdcf
 # ╟─0ad1aa6f-13ed-49e4-9b72-ecf4cd1722d0
-# ╠═0f7fca4e-6e74-423c-b4b4-164eea988a8f
-# ╠═983c3f74-0df1-4517-a9fd-5ce25cc7806c
 # ╠═bf81c48a-cb94-4894-bed5-7bfb7fa1e039
 # ╠═8f733fa2-438c-4bfb-999a-4be52e1b8d8d
+# ╠═9879cc24-9568-4d26-9721-63423ddd602c
+# ╠═36653b2b-f113-4d86-8239-807bfd4d7c32
 # ╠═11be6bdb-e3d1-4cec-9f8c-04b083c67cd4
 # ╠═ee80faab-5eff-4b8a-899a-db597a29ca9c
+# ╟─7a9d1463-b8f0-4b0c-99f2-ce1eabfcd5e9
+# ╠═4003a632-7b99-44f8-9ff3-3f6aa722f95d
 # ╟─ebe5cd7e-cb28-4fd6-bae0-9d27045fbe2e
 # ╠═1547bd89-0b5e-4145-ac72-dfc205466b02
 # ╟─36d53c1d-c987-4262-9562-5511a723e98c
