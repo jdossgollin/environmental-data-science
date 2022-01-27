@@ -102,7 +102,7 @@ To make your life easier, the following function will load the data
 
 # ╔═╡ 1547bd89-0b5e-4145-ac72-dfc205466b02
 function load_data()
-	fname = "/Users/jamesdoss-gollin/Downloads/norfolk-hourly-surge-2015.csv" # ⬅️⬅️⬅️
+	fname = "../../assets/data/norfolk-hourly-surge-2015.csv" # CHANGE
 	date_format = "yyyy-mm-dd HH:MM"
 	# this uses the DataFramesMeta package -- it's pretty cool
 	return @chain fname begin
