@@ -10,7 +10,7 @@ The following syllabus will be adjusted as needed.
 | 2 | Probability fundamentals | (1) [Central Limit Theorem 📺](/02_clt/), (2) [Probability Distributions](/02_probability/) | BDA[^2] 1.1-1.3, 1.5, and 1.8 | [HW 2](/02_hw2/) |
 | 3 | Inference | (1) [Inference 📺](/03_inference/), (2) [Maximum Likelihood 📺](/03_mle/), (3) [Posterior Sampling 📺](/03_mcmc/) | | [HW 3](/03_hw3/) |
 | | **Module 2: regression and modeling**| | |
-| 4 | Dynamical systems, Taylor series, and regression | | | |
+| 4 | Linear regression | [Regression](/04_regression/) | ROS[^3] Ch. 10-11 | [HW 4](/04_hw4/) |
 | 5 | Exam 1 (Feb 8); Spring Recess (Feb 10) | | | |
 | 6 | Model building | | | |
 | 7 | Modeling binary outcomes, counts, and proportions | | | |
@@ -26,6 +26,7 @@ The following syllabus will be adjusted as needed.
 
 [^1] -- _HW0 is ungraded_
 [^2] Bayesian Data Analysis by Gelman et al (free PDF available on the book's [website](http://www.stat.columbia.edu/~gelman/book/)).
+[^3] Regression and Other Stories by Gelman, Hill, and Vehtari (free PDF available on the book's [website](https://avehtari.github.io/ROS-Examples/index.html))
 
 ## Credits
 
