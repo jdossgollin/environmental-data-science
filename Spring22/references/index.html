@@ -77,16 +77,14 @@
 <div class="content container">
 
 <!-- Content appended here -->
-<div class="franklin-content"><h1 id="useful_links"><a href="#useful_links">Useful Links</a></h1>
-<h2 id="cheat_sheet_notebooks"><a href="#cheat_sheet_notebooks">Cheat sheet notebooks</a></h2>
-<ul>
+<div class="franklin-content"><h1 id="references"><a href="#references">References</a></h1>
+<p>There are lots of great resources beyond this website. Here are some particularly good ones.</p>
+<h2 id="julia_cheat_sheets"><a href="#julia_cheat_sheets">Julia cheat sheets</a></h2>
+<ol>
 <li><p><a href="/environmental-data-science/Spring22/plots_tutorial/">Plots and visualizations</a></p>
 </li>
 <li><p><a href="https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf">Plotting cheatsheet</a></p>
 </li>
-</ul>
-<h2 id="cheat_sheets_on_the_web"><a href="#cheat_sheets_on_the_web">Cheat sheets on the web</a></h2>
-<ol>
 <li><p>JuliaDocs: <a href="https://juliadocs.github.io/Julia-Cheat-Sheet/">Fastrack to Julia</a> cheatsheet</p>
 </li>
 <li><p><a href="https://quantecon.org">QuantEcon group</a>: <a href="https://cheatsheets.quantecon.org/">MATLAB-Julia-Python comparative cheatsheet</a></p>
@@ -104,6 +102,8 @@
 </li>
 <li><p>Austin Rochford has a series of <a href="https://austinrochford.com/posts/intro-prob-prog-pymc.html">blog posts</a> that use the PyMC language &#40;in Python&#41; to teach some introductory probabilistic computing concepts. It&#39;s worth a look if you want to dig into the &#40;very good&#33;&#41; probabilistic computing ecosystem in Python.</p>
 </li>
+<li><p>There is a cool website called <a href="https://www.earthdatascience.org/about/">Earth Lab</a> with some helpful tutorials of various things, mostly in R and Python</p>
+</li>
 </ol>
 <h2 id="julia_tips_and_tricks"><a href="#julia_tips_and_tricks">Julia tips and tricks</a></h2>
 <ul>
@@ -114,37 +114,55 @@
 </ul>
 <h2 id="textbooks"><a href="#textbooks">Textbooks</a></h2>
 <p>There is no assigned textbook for this course, but the following texts may be helpful as you explore specific concepts.</p>
-<ol>
-<li><p>Cressie, Noel A. C., and Christopher K. Wikle. 2011. Statistics for Spatio-Temporal Data. Hoboken, N.J.: Wiley.</p>
-</li>
-<li><p>England Jr., John F., Timothy A Cohn, Beth A. Faber, Jery R. Stedinger, Wilbert O. Thomas Jr., Andrea G. Veilleux, Julie E. Kiang, and Robert R. Mason Jr. 2019. “Guidelines for Determining Flood Flow Frequency Bulletin 17c.” In Techniques and Methods, Version 1.1, 4-B5:148. U.S.Geological Survey. <a href="https://doi.org/10.3133/tm4B5">https://doi.org/10.3133/tm4B5</a>.</p>
-</li>
-<li><p>Gelman, Andrew, John B Carlin, Hal S Stern, and Donald B Rubin. 2014. Bayesian Data Analysis. 3rd ed. Chapman &amp; Hall/CRC Boca Raton, FL, USA.</p>
-</li>
-<li><p>Gelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C. Margossian, Bob Carpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian 1. Bürkner, and Martin Modrák. 2020. “Bayesian Workflow.” November 3, 2020. <a href="http://arxiv.org/abs/2011.01808">http://arxiv.org/abs/2011.01808</a>.</p>
-</li>
-<li><p>Ghil, M, P Yiou, S Hallegatte, B D Malamud, P Naveau, A Soloviev, P Friederichs, et al. 2011. “Extreme Events: Dynamics, Statistics and Prediction.” Nonlinear Processes in Geophysics 18 &#40;3&#41;: 295–350. <a href="https://doi.org/10.5194/npg-18-295-2011">https://doi.org/10.5194/npg-18-295-2011</a>.</p>
-</li>
-<li><p>Helsel, Dennis R., and Robert M. Hirsch. 2002. Statistical Methods in Water Resources. Techniques of Water-Resources Investigations. Reston, VA: U.S. Geological Survey. <a href="https://doi.org/10.313 3/twri04A3">https://doi.org/10.313 3/twri04A3</a>.</p>
-</li>
-<li><p>James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2013. An Introduction to Statistical Learning. Vol. 103. Springer Texts in Statistics. New York, NY: Springer New York.</p>
-</li>
-<li><p>McElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Second edition. Texts in Statistical Science Series. Boca Raton ; CRC Press, Taylor &amp; Francis Group.</p>
-</li>
-</ol>
+<p>For a fairly detailed exploration of hierarchical space-time models, see Cressie and Wikle &#40;2011&#41;. There have been some computational advances since then that are worth keeping in mind before you apply these models directly, but it&#39;s a clearly written overview.</p>
+<blockquote>
+<p>Cressie, Noel A. C., and Christopher K. Wikle. 2011. Statistics for Spatio-Temporal Data. Hoboken, N.J.: Wiley.</p>
+</blockquote>
+<p>The USGS uses the following manual. As you can see, there is a tremendous gap between modern statistical theory and methodology, and what federal agencies <em>require</em> analysis to look like.</p>
+<blockquote>
+<p>England Jr., John F., Timothy A Cohn, Beth A. Faber, Jery R. Stedinger, Wilbert O. Thomas Jr., Andrea G. Veilleux, Julie E. Kiang, and Robert R. Mason Jr. 2019. “Guidelines for Determining Flood Flow Frequency Bulletin 17c.” In Techniques and Methods, Version 1.1, 4-B5:148. U.S.Geological Survey. <a href="https://doi.org/10.3133/tm4B5">https://doi.org/10.3133/tm4B5</a>.</p>
+</blockquote>
+<p>In parallel is the USGS textbook Statistical Methods in Water Resources &#40;there has been a recent update but it&#39;s mostly a cosmetic one&#41;.</p>
+<blockquote>
+<p>Helsel, Dennis R., and Robert M. Hirsch. 2002. Statistical Methods in Water Resources. Techniques of Water-Resources Investigations. Reston, VA: U.S. Geological Survey. <a href="https://doi.org/10.313 3/twri04A3">https://doi.org/10.313 3/twri04A3</a>.</p>
+</blockquote>
+<p>A classic textbook for Bayesian analysis is Gelman et al &#40;2014&#41;</p>
+<blockquote>
+<p>Gelman, Andrew, John B Carlin, Hal S Stern, and Donald B Rubin. 2014. Bayesian Data Analysis. 3rd ed. Chapman &amp; Hall/CRC Boca Raton, FL, USA.</p>
+</blockquote>
+<p>A simliar &#40;slightly broader&#41; set of authors has written a manual on &#39;Bayesian workflow&#39;, which everyone should look at</p>
+<blockquote>
+<p>Gelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C. Margossian, Bob Carpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian 1. Bürkner, and Martin Modrák. 2020. “Bayesian Workflow.” November 3, 2020. <a href="http://arxiv.org/abs/2011.01808">http://arxiv.org/abs/2011.01808</a>.</p>
+</blockquote>
+<p>An alternative to the Gelman et al textbook is McElreath&#39;s Statistical Rethinking textbook. An advantage of this text is that there are lectures online that directly follow the book. If you&#39;ve learned statistical approaches that look like long &quot;flow charts&quot; devoid of any meaningful statistical theory &#40;see: USGS references above&#41; this book spends a lot of time explaining what&#39;s wrong with that approach.</p>
+<blockquote>
+<p>McElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Second edition. Texts in Statistical Science Series. Boca Raton ; CRC Press, Taylor &amp; Francis Group.</p>
+</blockquote>
+<p>A slightly less technical textbook, but with really clear and well-worked examples, is</p>
+<blockquote>
+<p>Gelman, A. &#40;2021&#41;. Regression and other stories. Cambridge, United Kingdom; Cambridge University Press. &#40;free PDF available on the book&#39;s <a href="https://avehtari.github.io/ROS-Examples/index.html">website</a>&#41;</p>
+</blockquote>
+<p>To take another tack, if you want to think about links between nonlinear dynamics and statistics, this long review article by Ghil et al is worth a read</p>
+<blockquote>
+<p>Ghil, M, P Yiou, S Hallegatte, B D Malamud, P Naveau, A Soloviev, P Friederichs, et al. 2011. “Extreme Events: Dynamics, Statistics and Prediction.” Nonlinear Processes in Geophysics 18 &#40;3&#41;: 295–350. <a href="https://doi.org/10.5194/npg-18-295-2011">https://doi.org/10.5194/npg-18-295-2011</a>.</p>
+</blockquote>
+<p>For a more classic take on machine learning, Introduction to Statistical Learning is a classic</p>
+<blockquote>
+<p>James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2013. An Introduction to Statistical Learning. Vol. 103. Springer Texts in Statistics. New York, NY: Springer New York.</p>
+</blockquote>
 <h2 id="other_sources"><a href="#other_sources">Other sources</a></h2>
 <ol>
-<li><p><a href="https://betanalpha.github.io/writing/">Micahel Betancourt</a> has a number of highly detailed essays on probabilistic computing &#40;using R&#41; that I highly recommend. They are quite technical, so be warned.</p>
+<li><p>Michael Betancourt has a number of highly detailed <a href="https://betanalpha.github.io/writing/">essays</a> on probabilistic computing &#40;often using R&#41; that I highly recommend. They are quite technical, so be warned.</p>
 </li>
 <li><p>The wiki for the stan probabilistic programming language &#40;a gold standard although sometimes tricky to work with&#41; has a set of <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">prior choice recommendations</a> that is a go-to reference.</p>
 </li>
 <li><p>More generally, the <a href="https://mc-stan.org/users/documentation/">documentation</a> for the stan language has a number of detailed and well-worked examples. It&#39;s a fantastic reference for building any kind of probabilistic model, even if you&#39;re going to use a different language &#40;with a few exceptions, these models should be fairly straightforward to translate from one language to another&#41;</p>
 </li>
-<li><p>Similarly, the Turing language has some good <a href="https://turing.ml/dev/tutorials/">tutorials</a> that are worth looking at</p>
+<li><p>Similarly, the Turing language has some good <a href="https://turing.ml/dev/tutorials/">tutorials</a> that are worth looking at, and the <a href="https://docs.pymc.io/en/v3/nb_examples/index.html">PyMC docs</a> are also excellent.</p>
+</li>
+<li><p>There are lots of ethical and social issues pertaining to the use and application of environmental data science. We will barely scratch the surface of these issues in this class; for a reading list, have a look at <a href="https://beth-tellman.github.io/hum-envseminar.docx.pdf">this course</a> by Beth Tellman at the University of Arizona</p>
 </li>
 </ol>
-<h2 id="note"><a href="#note">Note</a></h2>
-<p>This is <strong>not</strong> a diverse set of readings. This reflects both my own narrow knowledge of the field, and also broader problems of inclusion &#40;not to mention justice, equity, etc.&#41; in the fields of statistics, data science, etc.</p>
 <div class="page-foot">
   <div class="copyright">
     <a href="https://github.com/jdossgollin/environmental-data-science/"><b>Edit this page on <img class="github-logo" src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></img></b></a></br>
