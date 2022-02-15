@@ -11,8 +11,8 @@ The following syllabus will be adjusted as needed.
 | 3 | Inference | (1) [Inference 📺](/03_inference/), (2) [Maximum Likelihood 📺](/03_mle/), (3) [Posterior Sampling 📺](/03_mcmc/) | | [HW 3](/03_hw3/) |
 | | **Module 2: regression and modeling**| | |
 | 4 | Linear regression | (1) [Linear Regression](/04_regression/) | ROS[^3] Ch. 10-11 | [HW 4](/04_hw4/) |
-| 5 | Model selection; Spring Recess (Feb 10) | (1) Variable selection | | None |
-| 6 | Modeling binary outcomes, counts, and proportions | | | HW5  |
+| 5 | Model selection; Spring Recess (Feb 10) | (1) [Variable selection](/05_model_selection) | | None |
+| 6 | Modeling binary outcomes, counts, and proportions | [Generalized Linear Models](/06_glm/) | | [HW5](/05_hw5/)  |
 | 7 | Hierarchical models | |  | |
 | | **Module 3: space-time data**| | |
 | 8 | Time series | | | |
