@@ -4,220 +4,290 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 6e93c333-95df-47af-9104-590f96adec4d
+# ╔═╡ 092d3842-faed-4653-a86d-71f3e85e1f92
 begin
-	using CSV
+	using ColorSchemes
 	using DataFrames
-	using Distributions
 	using DynamicHMC
-	using HTTP
+	using Distributions
 	using LaTeXStrings
-	using MCMCChains
-	using StatsBase
 	using StatsPlots
 	using Turing
-	using StatsFuns: logistic
 end
 
-# ╔═╡ f95f9354-8ea9-11ec-2f41-db4100dbc0d5
-md"""
-# HW 5
+# ╔═╡ a90d358f-cea0-465c-877f-f8321a3db2f3
+begin
+	using PlutoUI
+	#TableOfContents()
+end
 
-See [Canvas](https://canvas.rice.edu/courses/48366/assignments/249533) for details.
+# ╔═╡ 7ad470b3-71c5-475d-a9ac-43ec0a0601bf
+colors = ColorSchemes.okabe_ito;
+
+# ╔═╡ e6ede780-940e-11ec-28ac-39efd3e7b3d0
+md"""
+# Intro to hierarchical models
+
+**Optional Reading**: Gelman BDA3 Chapter 5
 """
 
-# ╔═╡ 0a298cea-6656-427e-92a1-52adf7ba3b82
-harvey_df = let
-	fname = "../../assets/data/harvey_input_data.csv"
-	df = CSV.read(fname, DataFrame, missingstring="NA")
-	df_names = Dict(
-		:wd => :water_depth,
-		:dur => :flood_duration,
-		:con => :contamination_present,
-		:pre1 => :previous_knowledge,
-		Symbol("Average.household.size.Total") => :hh_size,
-		Symbol("Average.household.size.Owner.occupied") => :owner_occupied,
+# ╔═╡ b4e776fa-8b20-408b-b05a-70d7982a092c
+md"""
+## 8 Schools Intro
+
+The textbook starts with some theory.
+You should take a look!
+Let's start with a motivating (canonical) example.
+From BDA3 Section 5.5:
+
+> A study was performed for the Educational Testing Service to analyze the effects of special coaching programs on test scores. Separate randomized experiments were performed to estimate the effects of coaching programs for the SAT-V (Scholastic Aptitude TestVerbal) in each of eight high schools. The outcome variable in each study was the score on a special administration of the SAT-V, a standardized multiple choice test administered by the Educational Testing Service and used to help colleges make admissions decisions; the scores can vary between 200 and 800, with mean about 500 and standard deviation about 100. The SAT examinations are designed to be resistant to short-term efforts directed specifically toward improving performance on the test; instead they are designed to reflect knowledge acquired and abilities developed over many years of education. Nevertheless, each of the eight schools in this study considered its short-term coaching program to be successful at increasing SAT scores. Also, there was no prior reason to believe that any of the eight programs was more effective than any other or that some were more similar in effect to each other than to any other.
+
+> The results of the experiments are summarized in [the `DataFrame below`]. All students in the experiments had already taken the PSAT (Preliminary SAT), and allowance was made for differences in the PSAT-M (Mathematics) and PSAT-V test scores between coached and uncoached students. In particular, in each school the estimated coaching effect and its standard error were obtained by an analysis of covariance adjustment (that is, a linear regression was performed of SAT-V on treatment group, using PSAT-M and PSAT-V as control variables) appropriate for a completely randomized experiment. A separate regression was estimated for each school. Although not simple sample means (because of the covariance adjustments), the estimated coaching effects, which we label $y_j$, and their sampling variances, $\sigma^2_j$[...] are obtained by independent experiments and have approximately normal sampling distributions with sampling variances that are known, for all practical purposes, because the sample sizes in all of the eight experiments were relatively large, over thirty students in each school (recall the discussion of data reduction in Section 4.1). Incidentally, an increase of eight points on the SAT-V corresponds to about one more test item correct.
+
+For simplicity, let's denote the treatment effects as $y_j$ and the treatment standard deviations as $\sigma_j$.
+
+**Note**: there are lots of great implementations of this problem on the internet.
+For example, this [TensorFlow Probability](https://www.tensorflow.org/probability/examples/Eight_Schools) example and, as always, the [stan docs](https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html)
+"""
+
+# ╔═╡ bda717cf-aad4-406c-b00c-0f1c92e22cb4
+data = DataFrame(
+	yj = [28, 8, -3, 7, -1, 1, 18, 12],
+	σj = [15, 10, 16, 11, 9, 11, 10, 18],
+)
+
+# ╔═╡ b13a4f5b-e641-43a6-b83f-040f49b92060
+md"When we plot this, we see the following estimates:"
+
+# ╔═╡ af5cc6f6-c6f8-444d-a6eb-7fb0a2308041
+md"""
+There are a few ways that we could think about analyzing this data
+
+## Separate Estimates
+
+We could treat the values from each school as truly separate.
+We can plot them:
+"""
+
+# ╔═╡ a9315c31-cebb-4ffc-acdb-f88c38083533
+p_base = let
+	p = plot(
+		xlabel="Estimated Treatment Effect",
+		ylabel="Probability Density",
 	)
-	rename!(df, df_names...)
-	#df = select(df, values(df_names)...)
-	df
-end
-
-# ╔═╡ c3b31aaa-190f-485d-85cd-aa2ddb8bd16b
-first(harvey_df, 5)
-
-# ╔═╡ 87590a26-860f-4f05-8439-2480cae26047
-scatter(harvey_df.wd, harvey_df.con)
-
-# ╔═╡ 5f3f398a-264c-4a93-a67c-cb74d6fba905
-describe(harvey_df)
-
-# ╔═╡ 809fbe11-f8a7-427d-a620-7044ec877e3b
-md"""
-## Part I: zero-inflated Beta regression
-
-In class we discussed the zero-inflated Beta regression model of Rözer et al (2019).
-
-> Rözer, V., Kreibich, H., Schröter, K., Müller, M., Sairam, N., Doss-Gollin, J., et al. (2019). Probabilistic models significantly reduce uncertainty in Hurricane Harvey pluvial flood loss estimates. Earth’s Future, 7(4). [https://doi.org/10.1029/2018ef001074](https://doi.org/10.1029/2018ef001074)
-
-This model defines a variable $z_i$ to be 1 if a house experienced flooding and 0 if it did not.
-This variable is estimated using logistic regression:
-```math
-\begin{align}
-z_i &\sim \mathrm{Bernoulli}(\theta_i) \\
-\mathrm{logistic}(\theta_i) &= \gamma X_i
-\end{align}
-```
-where $X_i$ is assumed to include a column of ones (so $\gamma_1$ is the intercept).
-**Do you spot the mistake in the paper?**
-That was 100% my fault... 🤦‍♂️
-
-Given $x_i$, the fraction of damages that a particular house experienced, $y_i$, follows a zero-inflated Beta regression model:
-```math
-y_i \sim \begin{cases} \mathrm{Beta}(\alpha_i, \beta_i) & z_i = 1 \\ 0 & z_i = 0 \end{cases}
-```
-where $\alpha_i$ and $\beta_i$ are parameters of the [Beta distribution](https://juliastats.org/Distributions.jl/stable/univariate/#Distributions.Beta).
-The Beta distribution is a tricky creature; both parameters could depend on the data
-"""
-
-# ╔═╡ 341d21b1-1ce0-47ed-9cf8-0683877a2f95
-let
-	p = plot(title="Beta Distributions", legend=:topleft)
-	for α in (2, 10)
-		for β in (3, 7)
-			label = L"$\mathrm{Beta}(%$α, %$β)$"
-			plot!(p, Beta(α, β), label=label)
-		end
+	for (j, row) in enumerate(eachrow(data))
+		dist = Normal(row.yj, row.σj)
+		plot!(p, dist, label=j, linewidth=2, color=colors[j], alpha=0.6)
 	end
 	p
 end
 
-# ╔═╡ 0835bd75-5550-4868-b0a4-1bb12591ef36
+# ╔═╡ e0812f83-0760-4c66-a80f-b7b94a5f2e6e
 md"""
-In theory, we could write down a model like
+Two important insights are
+
+* treating each experiment separately yields confidence intervals that overlap substantially
+* credibility questions: do we truly believe that the intervention was *that* much more effective in some schols than others or is this random noise?
+
+## Fully pooled estimate
+
+We can alternatively assume that there is **a single true effect size** and each school is a noisy estimate of that true effect size.
+We might call this a "fully pooled" estimate.
+
+The pooled estimate for this true effect size $\overline{y}$ is
+```math
+\overline{y} = \frac{\sum_{j=1}^J \frac{y_j}{\sigma_j^2}}{\sum_{j=1}^J \frac{1}{\sigma_j^2}}
+```
+and the pooled estimate for the variance is
+```math
+\sigma^2 = \left[\sum_{j=1}^J \frac{1}{\sigma_j^2 y_j}\right]^{-1}
+```
+plugging in we get
+"""
+
+# ╔═╡ 8109714f-1c07-493e-9f7b-1f01bcf143bf
+pooled_est = let
+	variance = 1 / sum([1 ./ σj^2 for σj in data.σj])
+	ymean = (
+		sum([yj ./ σj^2 for (yj, σj) in zip(data.yj, data.σj)]) / 
+		(1 / variance)
+	)
+	Normal(ymean, sqrt(variance))
+end
+
+# ╔═╡ 31965ae4-0d88-40c3-b491-300c6797cd40
+md"Here's that pooled estimate in context:"
+
+# ╔═╡ 35f87dbc-c66a-40c0-9fbd-2208b23fef97
+let
+	p = deepcopy(p_base)
+	plot!(p, pooled_est, color=:black, linewidth=3, label="Pooled")
+end
+
+# ╔═╡ 10ca8f36-fdd7-49fa-8fa0-01de7fba3f23
+md"""
+Because we have pooled many estimates, our uncertainty (let's be clear: this is uncertainty in our estimate of $\overline{y}$) is much smaller than the estimate at any individual school.
+That makes sense!
+
+One question that this analysis motivates is whether it's be possible to have an estimated effect of $y_j = 28$ just by chance if the coaching effects in all eight schools were really the same?
+
+> To get a feeling for the natural variation that we would expect across eight studies if this assumption were true, suppose the estimated treatment effects are eight independent draws from a normal distribution with mean 8 points and standard deviation 13 points (the square root of the mean of the eight variances $\sigma_j^2$)... These expected effect sizes are consistent with the set of observed effect sizes in Table 5.2. Thus, it would appear imprudent to believe that school 1 really has an effect as large as 28 points.
+"""
+
+# ╔═╡ c4499423-cdab-4055-8eec-d2451c6fc78b
+md"""
+## Limitations
+
+Both of these approaches seem unsatisfactory
+
+* If we believe the separate estimates, we think there's a 50% chance that the effect that school 1 has an effect *bigger than 28!*
+* If we believe the fully pooled model, we believe that 'the probability is $\frac{1}{2}$ that the true effect in school 1 is less than 7.7'
+
+🤔🤔🤔
+"""
+
+# ╔═╡ ea125538-8aa2-47da-bca7-306e31efaadb
+md"""
+## Hierarchical Model
+
+This borrows heavily of section 5.4 of BDA3 -- see the text for details (note that the notation here is dramatically simplified)!
+
+What if we didn't have to choose between these two extremes?
+We could have a blended estimate:
+```math
+\theta_j = \lambda_j y_j + (1 − \lambda_j)\overline{y}
+```
+for some $\lambda_j \in [0, 1]$.
+"""
+
+# ╔═╡ 2eb0e370-bccb-437a-9892-5d66da07b381
+
+
+# ╔═╡ 35dcc98e-4fd0-4ffb-b2a8-1731d4a4ffa0
+md"""
+If we call our effects at each school $\theta_j$, we could model this as
 ```math
 \begin{align}
-f(\alpha_i) &= b_\alpha X_i \\
-f(\beta_i) &= b_\beta X_i
+p(\theta_1, \ldots, \theta_J | \mu, \tau) &= \prod_{j=1}^J N(\theta_j | \mu, \tau^2) \\
+p(\theta_1, \ldots, \theta_J) &= \int \left[\prod_{j=1}^J N(\theta_j | \mu, \tau^2) \right] p(\mu, \tau) d(\mu, \tau)
 \end{align}
 ```
-where $f$ is a *link function* mapping from $(-\infty, \infty) \rightarrow (0, \infty)$ (a good choice is $\log$!) but this turns out not to be very practical.
-Instead, a reparameterization is often used:
+what is this saying?
+
+1. There is some true average effect $\mu$
+1. There is some inter-school variance parameter $\tau$
+1. The $\theta_j$ are conditionally independent given $(\mu,  \tau)$.
+
+As we write down a full model, it turns out there are advantages to this "non-centered parameterization"; see [Stan Docs](https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html).
+In a non-centered parameterization we do not try to fit the group-level parameters directly, rather we fit a latent Gaussian variable from which we can recover the group-level parameters with a scaling and a translation,
 ```math
 \begin{align}
-\mu_i &= \gamma X_i \\
-f(\alpha_i) &= \mu_i \phi \\
-f(\beta_i) &- (1 - \mu_i) \phi 
+\mu &\sim \mathrm{Normal}(0, 10) \\
+\tau &\sim \mathrm{Cauchy}^+(0, 5) \\
+\tilde\theta_j &\sim \mathrm{Normal}(0, 1) \\
+\theta_j &= \mu + \tau \tilde \theta_j \\
+y_j &\sim \mathrm{Normal}(\theta_j, \sigma_j)
 \end{align}
 ```
-so the parameters to estimate are just $\beta$ and $\phi$.
+where $\sigma_j$ is the known uncertainty estimate for that shcool.
 
-(*yup, the paper makes the same mistake here... I take full responsibility*)
+> Take a second and make sure you understand what's going on here! Hierarchical modeling is computationally tricky and deserves its own course; for now just make sure you understand what this model is doing
 """
 
-# ╔═╡ 1f5dd9ec-18bd-4a1e-8dce-614a8b650307
-md"""
-### Task 1: build a simulator
+# ╔═╡ 9b7c27fd-b030-45c9-949e-6c5fdcd179a7
+τ_dist = truncated(Cauchy(0, 5), 0, Inf);
 
-Your first task is to build a tool to generate synthetic data.
-First, you'll need a way to make your vector of predictors, $X$.
-You can have as many columns in it as you want, and you can structure this predictor however you want.
-Make sure it has `N` rows, and that the first column is a column of ones though!
-"""
+# ╔═╡ 593a6955-b602-494a-b357-174eb422d03c
+@model function eight_schools(y, σ)
+	J = length(y)
+    
+	μ ~ Normal(0, 10)
+    τ ~ τ_dist # just plugs in above
+    θ̃ = tzeros(J) # trick: initialize blank
 
-# ╔═╡ e7e3fc31-ea8f-4783-85f0-79f3bd08cff8
-function make_X(N)
-	X = rand(N, 3) # FILL IN!
-	X = hcat(ones(N), X) # this will add the intercept column
-	return X
+	# this for loop syntax is easier to read
+	for j in 1:J
+		θ̃[j] ~ Normal(0, 1)
+		θj = μ + τ * θ̃[j]
+    	y[j] ~ Normal(θj, σ[j]) # data model
+	end
 end;
 
-# ╔═╡ d1c0a94a-ec03-4d27-adf8-749e1b4e7554
-md"""
-Next, write a function to simulate $y$ from $p(y | x)$ for known parameters
-"""
-
-# ╔═╡ c21c23d4-016f-45e6-ad2e-1cf771448838
-function simulate_zero_inflated_beta(; γ, ϕ, N)
-	X = make_X(N)
-	y = 1 # change this
-	return X, y
+# ╔═╡ d01bf69f-150b-4a72-bd65-bd31cbe68080
+chains = let
+	model = eight_schools(data.yj, data.σj)
+	sampler = DynamicNUTS()
+	n_per_chain = 5000
+	nchains = 4
+	sample(model, sampler, MCMCThreads(), n_per_chain, nchains, drop_warmup=true)
 end;
 
-# ╔═╡ d774747c-11a7-4c67-aa6a-a855622890fb
-md"""
-### Task 2: fit a model
+# ╔═╡ 26b171a4-b276-4fc4-b9e7-f5cbf748149c
+md"We can see with this model that we get reasonable inferences"
 
-Next, write a model in Turing to do inference on this zero-inflated Beta model.
-Be sure to explain your choice of priors (and perhaps simulate from the prior distribution as we did in class for the Golf Putting case study).
-"""
+# ╔═╡ 4b2d37eb-c2f6-4440-a681-4793e49726ba
+summarystats(chains)
 
-# ╔═╡ eaa9d109-e5c9-4299-a8d2-65340e865ea2
-md"""
-### Task 3: Experiment
+# ╔═╡ b4948812-6d6a-4768-a685-3dc59fb116ee
+plot(chains, :τ)
 
-Finally, define the true values of some parameters and see whether you can recover them with your inferencee model!
-You may wish to repeat this once or twice with different values of `N`.
-
-In general, this is good practice when you are trying out a new model (especially with a realistic N).
-If you can't recover known parameter values *when the data is really generated by the model you have assumed*, then it's going to be unlikely that you can get good inferences when the data is generated by a more complex model (that your model is approximating).
-"""
-
-# ╔═╡ ed8864b8-4cc5-4288-a052-46015f48ffaa
-begin
-	γ = [1, 1] # FILL IN -- MAKE SURE IT'S RIGHT DIMENSIONS
-	ϕ = 1 # FILL IN
-	N = 100
-	y = simulate_zero_inflated_beta(γ=γ, ϕ=ϕ, N=N)
+# ╔═╡ 1b27a419-9b45-45b9-98fa-b6eec868b3be
+θ = let
+	θ̃ = Array(group(chains, :θ̃))
+	μ = Array(group(chains, :μ))
+	τ = Array(group(chains, :τ))
+	@. μ + θ̃  * τ
 end;
 
-# ╔═╡ 4a4e23c8-53e1-4e52-b2f7-6c8255b38e3a
+# ╔═╡ dbf986a5-79cd-4159-ab74-d7cbd104039a
+let
+	J = nrow(data)
+	p = plot(
+		xticks=(1:J, string.(1:J)),
+		xlabel="School Index",
+		ylabel="Posterior Estimate",
+	)
+	hline!(p, [pooled_est.μ], label="Pooled", linewidth=2, color=:black,)
+	boxplot!(θ, label=false, outliers=false, alpha=0.9)
+	scatter!(p, 1:J, data.yj, markersize=7, label="Unpooled")
+	p
+end
+
+# ╔═╡ 2b5fece7-3b3f-4f11-9c1c-00f28a9a511e
+md"We can see that there's a comprosmise between the unpooled estimate (green dots) and the fully pooled estimate (black line)"
+
+# ╔═╡ 0626e8ad-3f1f-48ce-ac4f-49af3bbbcf26
+md"The [TensorFlow Probability notebook](https://www.tensorflow.org/probability/examples/Eight_Schools) uses a `LogNormal(5, 1)` distribution. Try plugging that into `τ_dist` instead!"
+
+# ╔═╡ 81885ab3-9357-4811-9226-a7d7a70104de
+plot(τ_dist, 0, 100, title=L"Prior over Variance $p(\tau)$", label=false)
+
+# ╔═╡ 42c77b49-3152-412d-ae76-a28b24702734
 md"""
-## Part II: Golf Putting
+## Appendix
 """
-
-# ╔═╡ 21a8d22e-f0c4-4290-98c2-a2656f16c6b7
-md"""
-From the Gelman golf putting example:
-
-1. Fit the angle-based model to the "old data" and plot your results.
-1. Fit the angle-based model to the "new data" and plot your results. If you run into computational issues, you can *disable the cell where you sample from the model with the new data*. Message Slack if you don't know how to disable a cell.
-1. **Optional:** try implementing the model with angle and distance using the Normal approximation shown on the stan website
-
-You are welcome to copy and paste anything from the course notebook or Dr. Gelman's original case study without attribution (it's implied).
-You may use other sources as long as you cite them clearly.
-"""
-
-# ╔═╡ be0e859a-84ed-4280-ae67-dd9fb75eb216
-md"Optional: try implementing the model with angle and distance using the Normal approximation shown on the stan website"
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DynamicHMC = "bbc10e6e-7c05-544b-b16e-64fede858acb"
-HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
-MCMCChains = "c7f686f2-ff18-58e9-bc7b-31028e88f75d"
-StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-StatsFuns = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [compat]
-CSV = "~0.10.2"
+ColorSchemes = "~3.17.1"
 DataFrames = "~1.3.2"
 Distributions = "~0.25.49"
 DynamicHMC = "~3.1.1"
-HTTP = "~0.9.17"
 LaTeXStrings = "~1.3.0"
-MCMCChains = "~5.0.3"
-StatsBase = "~0.33.16"
-StatsFuns = "~0.9.15"
+PlutoUI = "~0.7.34"
 StatsPlots = "~0.14.33"
-Turing = "~0.20.1"
+Turing = "~0.20.4"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -232,15 +302,21 @@ version = "1.1.0"
 
 [[AbstractMCMC]]
 deps = ["BangBang", "ConsoleProgressMonitor", "Distributed", "Logging", "LoggingExtras", "ProgressLogging", "Random", "StatsBase", "TerminalLoggers", "Transducers"]
-git-tree-sha1 = "db0a7ff3fbd987055c43b4e12d2fa30aaae8749c"
+git-tree-sha1 = "0d48d774929f3267a1514cd85caee8b20af59d74"
 uuid = "80f14c24-f653-4e6a-9b94-39d6b0f70001"
-version = "3.2.1"
+version = "3.3.0"
 
 [[AbstractPPL]]
 deps = ["AbstractMCMC", "DensityInterface", "Setfield"]
 git-tree-sha1 = "ca54027a17ca3133b36166191b5faa8a404e92d3"
 uuid = "7a57a42e-76ec-4ea3-a279-07e840d6d9cf"
 version = "0.4.0"
+
+[[AbstractPlutoDingetjes]]
+deps = ["Pkg"]
+git-tree-sha1 = "8eaf9f1b4921132a4cff3f36a1d9ba923b14a481"
+uuid = "6e696c72-6542-2067-7265-42206c756150"
+version = "1.1.4"
 
 [[AbstractTrees]]
 git-tree-sha1 = "03e0550477d86222521d254b741d470ba17ea0b5"
@@ -267,9 +343,9 @@ version = "0.6.6"
 
 [[AdvancedPS]]
 deps = ["AbstractMCMC", "Distributions", "Libtask", "Random", "StatsFuns"]
-git-tree-sha1 = "59c47e9525d5a807a950d8b79b5d6e60b2f6de82"
+git-tree-sha1 = "8d91d71ded7cf0188efc0c692b93fd3369ffd77b"
 uuid = "576499cb-2369-40b2-a588-c64705576edc"
-version = "0.3.3"
+version = "0.3.5"
 
 [[AdvancedVI]]
 deps = ["Bijectors", "Distributions", "DistributionsAD", "DocStringExtensions", "ForwardDiff", "LinearAlgebra", "ProgressMeter", "Random", "Requires", "StatsBase", "StatsFuns", "Tracker"]
@@ -344,29 +420,29 @@ git-tree-sha1 = "19a35467a82e236ff51bc17a3a44b69ef35185a2"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.8+0"
 
-[[CSV]]
-deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings"]
-git-tree-sha1 = "9519274b50500b8029973d241d32cfbf0b127d97"
-uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-version = "0.10.2"
-
 [[Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
 git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.16.1+1"
 
+[[Calculus]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
+uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
+version = "0.5.1"
+
 [[ChainRules]]
 deps = ["ChainRulesCore", "Compat", "IrrationalConstants", "LinearAlgebra", "Random", "RealDot", "SparseArrays", "Statistics"]
-git-tree-sha1 = "af66b25d30651591758ed540c203481f8003f4e9"
+git-tree-sha1 = "098b5eeb1170f569a45f363066b0e405868fc210"
 uuid = "082447d4-558c-5d27-93f4-14fc19e9eca2"
-version = "1.26.1"
+version = "1.27.0"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "f9982ef575e19b0e5c7a98c6e75ee496c0f73a93"
+git-tree-sha1 = "7dd38532a1115a215de51775f9891f0f3e1bac6a"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.12.0"
+version = "1.12.1"
 
 [[ChangesOfVariables]]
 deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
@@ -379,12 +455,6 @@ deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "Printf", "SparseArray
 git-tree-sha1 = "75479b7df4167267d75294d14b58244695beb2ac"
 uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 version = "0.14.2"
-
-[[CodecZlib]]
-deps = ["TranscodingStreams", "Zlib_jll"]
-git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
-uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.7.0"
 
 [[ColorSchemes]]
 deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
@@ -549,6 +619,12 @@ version = "0.8.6"
 deps = ["ArgTools", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
+[[DualNumbers]]
+deps = ["Calculus", "NaNMath", "SpecialFunctions"]
+git-tree-sha1 = "84f04fe68a3176a583b864e492578b9466d87f1e"
+uuid = "fa6b7ba4-c1ee-5f82-b5fc-ecf0adba8f74"
+version = "0.6.6"
+
 [[DynamicHMC]]
 deps = ["ArgCheck", "DocStringExtensions", "LinearAlgebra", "LogDensityProblems", "Parameters", "ProgressMeter", "Random", "Statistics"]
 git-tree-sha1 = "2222e7aa89dcc6d5df239417da1e65bfa6d5a638"
@@ -608,12 +684,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
 uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
 version = "3.3.10+0"
-
-[[FilePathsBase]]
-deps = ["Compat", "Dates", "Mmap", "Printf", "Test", "UUIDs"]
-git-tree-sha1 = "04d13bfa8ef11720c24e4d840c0033d145537df7"
-uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
-version = "0.9.17"
 
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
@@ -725,6 +795,29 @@ git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
 version = "2.8.1+1"
 
+[[HypergeometricFunctions]]
+deps = ["DualNumbers", "LinearAlgebra", "SpecialFunctions", "Test"]
+git-tree-sha1 = "65e4589030ef3c44d3b90bdc5aac462b4bb05567"
+uuid = "34004b35-14d8-5ef3-9330-4cdb6864b03a"
+version = "0.3.8"
+
+[[Hyperscript]]
+deps = ["Test"]
+git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
+uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
+version = "0.0.4"
+
+[[HypertextLiteral]]
+git-tree-sha1 = "2b078b5a615c6c0396c77810d92ee8c6f470d238"
+uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+version = "0.9.3"
+
+[[IOCapture]]
+deps = ["Logging", "Random"]
+git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
+uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
+version = "0.2.2"
+
 [[IRTools]]
 deps = ["InteractiveUtils", "MacroTools", "Test"]
 git-tree-sha1 = "7f43342f8d5fd30ead0ba1b49ab1a3af3b787d24"
@@ -746,12 +839,6 @@ version = "0.5.0"
 git-tree-sha1 = "4da0f88e9a39111c2fa3add390ab15f3a44f3ca3"
 uuid = "22cec73e-a1b8-11e9-2c92-598750a2cf9c"
 version = "0.3.1"
-
-[[InlineStrings]]
-deps = ["Parsers"]
-git-tree-sha1 = "61feba885fac3a407465726d0c330b3055df897f"
-uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
-version = "1.1.2"
 
 [[InplaceOps]]
 deps = ["LinearAlgebra", "Test"]
@@ -855,9 +942,9 @@ version = "1.3.0"
 
 [[Latexify]]
 deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "Printf", "Requires"]
-git-tree-sha1 = "25d90d444b608666143d7e276c17be6f5f3e9bb9"
+git-tree-sha1 = "a6552bfeab40de157a297d84e03ade4b8177677f"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
-version = "0.15.10"
+version = "0.15.12"
 
 [[LazyArtifacts]]
 deps = ["Artifacts", "Pkg"]
@@ -926,9 +1013,9 @@ version = "2.35.0+0"
 
 [[Libtask]]
 deps = ["IRTools", "LRUCache", "LinearAlgebra", "MacroTools", "Statistics"]
-git-tree-sha1 = "0688ada7ad4ea13c6088e3597931bab2e3e6fcd5"
+git-tree-sha1 = "973337198b57f8f359f89988b9518204008927c1"
 uuid = "6f1fad26-d15e-5dc8-ae53-837a1d7b8c9f"
-version = "0.6.8"
+version = "0.6.10"
 
 [[Libtiff_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
@@ -1172,9 +1259,15 @@ version = "1.1.3"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
-git-tree-sha1 = "d9c49967b9948635152edaa6a91ca4f43be8d24c"
+git-tree-sha1 = "5c907bdee5966a9adb8a106807b7c387e51e4d6c"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.25.10"
+version = "1.25.11"
+
+[[PlutoUI]]
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
+git-tree-sha1 = "8979e9802b4ac3d58c503a20f2824ad67f9074dd"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.34"
 
 [[PooledArrays]]
 deps = ["DataAPI", "Future"]
@@ -1304,9 +1397,9 @@ uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
 [[SciMLBase]]
 deps = ["ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "RecipesBase", "RecursiveArrayTools", "StaticArrays", "Statistics", "Tables", "TreeViews"]
-git-tree-sha1 = "f4862c0cb4e34ed182718221028ba1bf50742108"
+git-tree-sha1 = "8ff1bf96965b3878ca5d235752ff1daf519e7a26"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "1.26.1"
+version = "1.26.3"
 
 [[ScientificTypesBase]]
 git-tree-sha1 = "a8e18eb383b5ecf1b5e6fc237eb39255044fd92b"
@@ -1330,9 +1423,9 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
 [[Setfield]]
 deps = ["ConstructionBase", "Future", "MacroTools", "Requires"]
-git-tree-sha1 = "0afd9e6c623e379f593da01f20590bacc26d1d14"
+git-tree-sha1 = "38d88503f695eb0301479bc9b0d4320b378bafe5"
 uuid = "efcf1570-3423-57d1-acb7-fd33fddbac46"
-version = "0.8.1"
+version = "0.8.2"
 
 [[SharedArrays]]
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
@@ -1359,9 +1452,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[SpecialFunctions]]
 deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "8d0c8e3d0ff211d9ff4a0c2307d876c99d10bdf1"
+git-tree-sha1 = "85e5b185ed647b8ee89aa25a7788a2b43aa8a74f"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.1.2"
+version = "2.1.3"
 
 [[SplittablesBase]]
 deps = ["Setfield", "Test"]
@@ -1377,9 +1470,9 @@ version = "0.5.5"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "95c6a5d0e8c69555842fc4a927fc485040ccc31c"
+git-tree-sha1 = "6354dfaf95d398a1a70e0b28238321d5d17b2530"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.3.5"
+version = "1.4.0"
 
 [[StatisticalTraits]]
 deps = ["ScientificTypesBase"]
@@ -1404,10 +1497,10 @@ uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.16"
 
 [[StatsFuns]]
-deps = ["ChainRulesCore", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
-git-tree-sha1 = "f35e1879a71cca95f4826a14cdbf0b9e253ed918"
+deps = ["ChainRulesCore", "HypergeometricFunctions", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
+git-tree-sha1 = "25405d7016a47cf2bd6cd91e66f4de437fd54a07"
 uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
-version = "0.9.15"
+version = "0.9.16"
 
 [[StatsPlots]]
 deps = ["AbstractFFTs", "Clustering", "DataStructures", "DataValues", "Distributions", "Interpolations", "KernelDensity", "LinearAlgebra", "MultivariateStats", "Observables", "Plots", "RecipesBase", "RecipesPipeline", "Reexport", "StatsBase", "TableOperations", "Tables", "Widgets"]
@@ -1417,9 +1510,9 @@ version = "0.14.33"
 
 [[StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "d21f2c564b21a202f4677c0fba5b5ee431058544"
+git-tree-sha1 = "57617b34fa34f91d536eb265df67c2d4519b8b98"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.4"
+version = "0.6.5"
 
 [[SuiteSparse]]
 deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
@@ -1467,12 +1560,6 @@ git-tree-sha1 = "434a953e6ad7abf6a07a1e0b99baaa704753cec0"
 uuid = "9f7883ad-71c0-57eb-9f7f-b5c9e6d3789c"
 version = "0.2.19"
 
-[[TranscodingStreams]]
-deps = ["Random", "Test"]
-git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
-uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.9.6"
-
 [[Transducers]]
 deps = ["Adapt", "ArgCheck", "BangBang", "Baselet", "CompositionsBase", "DefineSingletons", "Distributed", "InitialValues", "Logging", "Markdown", "MicroCollections", "Requires", "Setfield", "SplittablesBase", "Tables"]
 git-tree-sha1 = "1cda71cc967e3ef78aa2593319f6c7379376f752"
@@ -1493,9 +1580,9 @@ version = "0.3.0"
 
 [[Turing]]
 deps = ["AbstractMCMC", "AdvancedHMC", "AdvancedMH", "AdvancedPS", "AdvancedVI", "BangBang", "Bijectors", "DataStructures", "Distributions", "DistributionsAD", "DocStringExtensions", "DynamicPPL", "EllipticalSliceSampling", "ForwardDiff", "Libtask", "LinearAlgebra", "MCMCChains", "NamedArrays", "Printf", "Random", "Reexport", "Requires", "SciMLBase", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "Tracker", "ZygoteRules"]
-git-tree-sha1 = "ce8198b3ac6bfa709f7c066ee0db13be52b2cbf8"
+git-tree-sha1 = "988fc86f07211794cc2aa9cf727b655fdb155e47"
 uuid = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
-version = "0.20.1"
+version = "0.20.4"
 
 [[URIs]]
 git-tree-sha1 = "97bbe755a53fe859669cd907f2d96aee8d2c1355"
@@ -1536,12 +1623,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "66d72dc6fcc86352f01676e8f0f698562e60510f"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.23.0+0"
-
-[[WeakRefStrings]]
-deps = ["DataAPI", "InlineStrings", "Parsers"]
-git-tree-sha1 = "c69f9da3ff2f4f02e811c3323c22e5dfcb584cfa"
-uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
-version = "1.4.1"
 
 [[Widgets]]
 deps = ["Colors", "Dates", "Observables", "OrderedCollections"]
@@ -1761,24 +1842,35 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═6e93c333-95df-47af-9104-590f96adec4d
-# ╟─f95f9354-8ea9-11ec-2f41-db4100dbc0d5
-# ╠═0a298cea-6656-427e-92a1-52adf7ba3b82
-# ╠═c3b31aaa-190f-485d-85cd-aa2ddb8bd16b
-# ╠═87590a26-860f-4f05-8439-2480cae26047
-# ╠═5f3f398a-264c-4a93-a67c-cb74d6fba905
-# ╟─809fbe11-f8a7-427d-a620-7044ec877e3b
-# ╠═341d21b1-1ce0-47ed-9cf8-0683877a2f95
-# ╟─0835bd75-5550-4868-b0a4-1bb12591ef36
-# ╟─1f5dd9ec-18bd-4a1e-8dce-614a8b650307
-# ╠═e7e3fc31-ea8f-4783-85f0-79f3bd08cff8
-# ╟─d1c0a94a-ec03-4d27-adf8-749e1b4e7554
-# ╠═c21c23d4-016f-45e6-ad2e-1cf771448838
-# ╟─d774747c-11a7-4c67-aa6a-a855622890fb
-# ╟─eaa9d109-e5c9-4299-a8d2-65340e865ea2
-# ╠═ed8864b8-4cc5-4288-a052-46015f48ffaa
-# ╟─4a4e23c8-53e1-4e52-b2f7-6c8255b38e3a
-# ╟─21a8d22e-f0c4-4290-98c2-a2656f16c6b7
-# ╟─be0e859a-84ed-4280-ae67-dd9fb75eb216
+# ╠═092d3842-faed-4653-a86d-71f3e85e1f92
+# ╠═7ad470b3-71c5-475d-a9ac-43ec0a0601bf
+# ╟─e6ede780-940e-11ec-28ac-39efd3e7b3d0
+# ╟─b4e776fa-8b20-408b-b05a-70d7982a092c
+# ╠═bda717cf-aad4-406c-b00c-0f1c92e22cb4
+# ╟─b13a4f5b-e641-43a6-b83f-040f49b92060
+# ╟─af5cc6f6-c6f8-444d-a6eb-7fb0a2308041
+# ╠═a9315c31-cebb-4ffc-acdb-f88c38083533
+# ╟─e0812f83-0760-4c66-a80f-b7b94a5f2e6e
+# ╠═8109714f-1c07-493e-9f7b-1f01bcf143bf
+# ╟─31965ae4-0d88-40c3-b491-300c6797cd40
+# ╠═35f87dbc-c66a-40c0-9fbd-2208b23fef97
+# ╟─10ca8f36-fdd7-49fa-8fa0-01de7fba3f23
+# ╟─c4499423-cdab-4055-8eec-d2451c6fc78b
+# ╟─ea125538-8aa2-47da-bca7-306e31efaadb
+# ╠═2eb0e370-bccb-437a-9892-5d66da07b381
+# ╟─35dcc98e-4fd0-4ffb-b2a8-1731d4a4ffa0
+# ╠═9b7c27fd-b030-45c9-949e-6c5fdcd179a7
+# ╠═593a6955-b602-494a-b357-174eb422d03c
+# ╠═d01bf69f-150b-4a72-bd65-bd31cbe68080
+# ╟─26b171a4-b276-4fc4-b9e7-f5cbf748149c
+# ╠═4b2d37eb-c2f6-4440-a681-4793e49726ba
+# ╠═b4948812-6d6a-4768-a685-3dc59fb116ee
+# ╠═1b27a419-9b45-45b9-98fa-b6eec868b3be
+# ╠═dbf986a5-79cd-4159-ab74-d7cbd104039a
+# ╟─2b5fece7-3b3f-4f11-9c1c-00f28a9a511e
+# ╠═81885ab3-9357-4811-9226-a7d7a70104de
+# ╟─0626e8ad-3f1f-48ce-ac4f-49af3bbbcf26
+# ╟─42c77b49-3152-412d-ae76-a28b24702734
+# ╠═a90d358f-cea0-465c-877f-f8321a3db2f3
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
