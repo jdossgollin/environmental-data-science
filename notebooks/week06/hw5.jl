@@ -26,32 +26,6 @@ md"""
 See [Canvas](https://canvas.rice.edu/courses/48366/assignments/249533) for details.
 """
 
-# ╔═╡ 0a298cea-6656-427e-92a1-52adf7ba3b82
-harvey_df = let
-	fname = "../../assets/data/harvey_input_data.csv"
-	df = CSV.read(fname, DataFrame, missingstring="NA")
-	df_names = Dict(
-		:wd => :water_depth,
-		:dur => :flood_duration,
-		:con => :contamination_present,
-		:pre1 => :previous_knowledge,
-		Symbol("Average.household.size.Total") => :hh_size,
-		Symbol("Average.household.size.Owner.occupied") => :owner_occupied,
-	)
-	rename!(df, df_names...)
-	#df = select(df, values(df_names)...)
-	df
-end
-
-# ╔═╡ c3b31aaa-190f-485d-85cd-aa2ddb8bd16b
-first(harvey_df, 5)
-
-# ╔═╡ 87590a26-860f-4f05-8439-2480cae26047
-scatter(harvey_df.wd, harvey_df.con)
-
-# ╔═╡ 5f3f398a-264c-4a93-a67c-cb74d6fba905
-describe(harvey_df)
-
 # ╔═╡ 809fbe11-f8a7-427d-a620-7044ec877e3b
 md"""
 ## Part I: zero-inflated Beta regression
@@ -1763,10 +1737,6 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╠═6e93c333-95df-47af-9104-590f96adec4d
 # ╟─f95f9354-8ea9-11ec-2f41-db4100dbc0d5
-# ╠═0a298cea-6656-427e-92a1-52adf7ba3b82
-# ╠═c3b31aaa-190f-485d-85cd-aa2ddb8bd16b
-# ╠═87590a26-860f-4f05-8439-2480cae26047
-# ╠═5f3f398a-264c-4a93-a67c-cb74d6fba905
 # ╟─809fbe11-f8a7-427d-a620-7044ec877e3b
 # ╠═341d21b1-1ce0-47ed-9cf8-0683877a2f95
 # ╟─0835bd75-5550-4868-b0a4-1bb12591ef36
