@@ -15,7 +15,7 @@ The following syllabus will be adjusted as needed.
 | 6 | Modeling binary outcomes, counts, and proportions | [Generalized Linear Models](/06_glm/) [Golf Putting](/06_golf/) | | [HW5](/06_hw5/)  |
 | 7 | Hierarchical models | [Eight Schools](/07_8schools/) |  | |
 | | **Module 3: space-time data**| | |
-| 8 | Time series | | | |
+| 8 | Time series | (1) Fitting AR Models, (2) Forecast, (3) Periodograms | | [HW6](/08_hw6/) |
 | 9 | Differential equations | | | |
 | 10 | Latent variable models | | | |
 | 11 | Black-box machine learning | | | |
