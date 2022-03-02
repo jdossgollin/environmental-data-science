@@ -3,163 +3,175 @@
 
 <url>
     <loc>01_basic_syntax/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>references/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>00_hw0/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>03_inference/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>08_periodogram/index.html</loc>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>05_model_selection/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>policies/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>02_clt/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>06_glm/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>06_hw5/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>06_golf/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>02_hw2/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>01_installation/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>08_ar/index.html</loc>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>04_regression/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>03_mle/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>04_hw4/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>topics/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>01_mosquitos/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>01_hw1/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>02_probability/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>03_hw3/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>03_mcmc/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>07_8schools/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>instructor/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>plots_tutorial/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>08_hw6/index.html</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>homepage/index/</loc>
-    <lastmod>2022-03-01</lastmod>
+    <lastmod>2022-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
