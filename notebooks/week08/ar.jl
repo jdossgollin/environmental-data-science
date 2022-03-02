@@ -4,217 +4,116 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ db27e570-964f-11ec-182c-f524f469b3b5
+# ╔═╡ fdefc6ea-3fc7-48ed-b4b9-64a0c5ba59e8
 begin
-	using CSV
-	using DataFrames
-	using Dates
-	using DSP # for periodogram
+	using Distributions
 	using DynamicHMC
-	using HTTP
+	using GLM
 	using Optim
 	using Plots
-	using StatsBase: pacf, autocor
+	using StatsBase: autocor
 	using StatsPlots
 	using Turing
 end
 
-# ╔═╡ a5d978d0-c62d-43b6-9c52-d1cb916a76f2
-begin
-	using PlutoUI
-	TableOfContents()
-end
-
-# ╔═╡ 37b49eab-be70-4982-b511-dec2bad61cc1
+# ╔═╡ 28252c12-99c9-11ec-2d5a-8123ebb1b8e6
 md"""
-# HW 6
+# Fitting AR models in Julia
 
-* **Due:** Tuesday March 8 at 2:30 PM
-* **Read:** Brockwell 1.1-1.5. You may also find the time series analysis [chapter](https://julia.quantecon.org/time_series_models/arma.html) of the online QuantEcon textbook to be helpful, especially for working with Julia
+In the reading you've had a chance to learn about AR models.
+Here we'll see some simple ways to do inference on them.
+Ultimately, we'll recall that these are just linear regression in disguise!
+
+An AR model can be written as
+```math
+X_t = \phi_1 X_{t-1} + \phi_p X_{t-p} + \ldots + \epsilon_t
+```
+where $\{\epsilon_t\}$ is white noise (time series speak for $\epsilon_t \sim N(0, \sigma)$ for some $\sigma$).
+
+This is easy to write down in Turing!
 """
 
-# ╔═╡ 6944b4c3-6615-4de0-a242-751c0943d9e5
-md"## Part I: AR models"
-
-# ╔═╡ 20015d9d-c0b6-4142-8ff7-5d2979091fa5
-function read_huron(fname)
-	df = DataFrame(CSV.File(fname, header=["lake"]))
-	huron = df[!, :lake]
-	years = collect(1875:1972)
-	return huron, years
+# ╔═╡ 6e4613f3-981e-4394-a591-d9f4eb5ae6c3
+@model function ar_p(y, p)
+	α ~ Normal(0, 1)
+	σ ~ LogNormal(0, 1)
+	ϕ ~ filldist(Normal(0, 1), p)
+	for t in (p+1):length(y)
+		μ = α + sum(ϕ .* y[(t-p):(t-1)])
+		y[t] ~ Normal(μ, σ)
+	end
 end;
 
-# ╔═╡ 3abb5e74-e27b-4741-9e49-2021c4a74cf0
-huron, years = read_huron("../../assets/data/lake.tsm");
+# ╔═╡ 58c024ee-cdd4-4353-a465-ccc81a84e0c1
+md"Let's simulate some fake data. AR models should fit a sinusoid pretty well!"
 
-# ╔═╡ ac7782a3-d679-4671-a520-d29ac3c26179
-plot(years, huron, xlabel="Year", label=false, marker=:o)
-
-# ╔═╡ 0227dafe-e11a-43af-a7db-9217ab579506
-md"""
-### Task 1: Trend Model
-
-To model secular changes in the data, fit a linear trend model following Example Example 1.3.5.
-Get a point estimate of this trend line; explain your method and why you chose it!
-
-Create a single plot with two panels stacked vertically: (a) the data and trend line, as in Figure 1-9, and (b) the residuals, as in Figure 1-10.
-Be sure to label your axes and lines.
-You may want to make use of some helpful keyword arguments: `plot(..., size=(h, w), link=:x)`.
-"""
-
-# ╔═╡ 24d9c620-0cd6-4f2e-ba7f-6b312cdbcce0
-md"""
-### Task 2: Residual ACF/PACF
-
-Now that you have the residuals of the "detrended" data, plot the autocorrelation and partial autocorrelation functions.
-Make one plot with two sub-plots, linking the x axes.
-Compare the sample autocorrelation to Figure 1-16.
-What does this tell you?
-"""
-
-# ╔═╡ 23829d5d-3640-4d51-9c94-f58869626588
-md"""
-### Task 3: Residual AR(1)
-
-Fit a lag 1 autocorrelation model to the data.
-As before, you can use any method you want to get a point estimate.
-Calculate the residuals from this model and plot their ACF and PACF.
-"""
-
-# ╔═╡ 8a91d6b5-e8a0-41ab-8c25-e9ce088a2821
-md"""
-### Task 4: Residual AR(2)
-
-Now fit a lag 2 autocorrelation model to the data.
-As before, use any method you want to get a point estimate.
-Calculate the residuals from this model and plot their ACF and PACF.
-How does this compare to previous models?
-"""
-
-# ╔═╡ 83a1f973-c388-4169-a7a0-b7049d4ae5a5
-md"""
-### Task 5: Bayesian Trend-AR(2) Model
-
-This "two-stage" approach, in which we first estimate a deterministic trend, then model the autocorrelation of the residuals, is a bit unsatisfying.
-Now write a Turing model that fits a trend and AR(2) model simultaneously and draw some samples from it.
-Be sure to explain your modeling choices (eg, priors) and how you are checking your model's fit.
-
-> **HINT**: you will probably run into sampling problems if you plug in the years directly. Try adding a line to your Turing model: `tcenter - t .- mean(t)`; this will let you interpret your estimates of the trend correctly but will help the sampler out a bit. I also suggest a pretty tight prior on the trend -- y is of order 10 and $t - \mathbb{E}(t)$ is of order 100.
-"""
-
-# ╔═╡ 82a22e8f-a772-4db8-8b80-e5b5ec80159e
-md"""
-### Task 6: Forecasting
-
-It's great that we learned something about the parameters of the model, but often we want to make predictions!
-First modify the Turing model you created in the previous task to create a sample from the posterior predictive distribution and returns it (you can create a new model or just edit the previous one).
-To control how far into the future you simulate, create a keyword argument to the model.
-Then use the `generated_quantities` syntax we have seen to sample from this posterior predictive distribution.
-Finally create a plot with
-
-* the observed data as points (scatter plot)
-* 1000 samples of the next 20 time steps
-
-> **HINT**: when you are simulating the first few time steps into the future, you will need to plug observed values of `y` into the forecast. Think about how to do this.
-"""
-
-# ╔═╡ c6e2a90f-1938-4437-bd64-10ecea840c86
-N_forecast = 20;
-
-# ╔═╡ 4742359f-2ea3-4b75-bc46-060b4c7dcab9
-ynew = let
-	# this cell is disabled but included to remind you of the syntax
-	chains_params = Turing.MCMCChains.get_sections(chains, :parameters)
-	generated_quantities(ar_trend_model, chains_params) 
+# ╔═╡ 61e855f9-46f8-43d1-be71-7b88713d22a2
+y = let
+	t = 0:0.1:5
+	T = 2.5
+	σ = 0.5
+	sin.(2 * π * t ./ T) .+ rand(Normal(0, σ), length(t))
 end;
 
-# ╔═╡ b7e125c7-40cf-4084-bf18-2a224452b5be
-md"""
-Although getting better parameter estimates adds some value, the resulting estimates are perhaps excessively uncertain
-"""
+# ╔═╡ d6705a16-c34a-4389-add3-7a87fb25e82b
+md"
+We can plot its autocorrelation function.
+See Brockwell 1.4.1 for a discussion of the sample autocorrelation -- this is our estimate of how correlated $X_t$ and $X_{t+\Delta t}$ will be as a function of $t$
+"
 
-# ╔═╡ df80d7db-efbc-44a5-bf96-b48ae0bf9a62
-md"""
-## Part II: Quick Spectral Analysis Practice
+# ╔═╡ cb732866-ec2d-4330-8d31-5a3dcbd38517
+plot(autocor(y, 1:43), line=:stem, marker=:o, label=false, ylabel="ACF")
 
-Now we will quickly dive into spectral analysis
+# ╔═╡ 553f6f70-1ee6-4681-ba2e-9271656309cf
+md"Now we can do some inference!"
 
-### Task 7: Periodogram of a "clean" sine wave
+# ╔═╡ e63bdd1d-da31-4045-aa8f-591349c00a2c
+ar_model = ar_p(y, 5);
 
-Create a "signal" by adding together two harmonics, then calculate their periodogram.
-Be sure to think carefully about the sampling frequency `fs` and the data length!
-Create a plot with two panels side by side: (a) your time series and (b) its periodogram.
-Add a vertical line in (b) at the theoretical peaks.
-"""
+# ╔═╡ 5934aa8a-e75c-4791-9155-33e533c0d76b
+md"As always, we can do maximum likelihood methods"
 
-# ╔═╡ f73e43cf-2fd5-4634-9037-5c87faa85883
-md"""
-### Task 8: Periodogram of a "noisy" sine wave
+# ╔═╡ b2115c8e-0ed0-4aa8-ab2b-03be958082b3
+optimize(ar_model, MLE(), NelderMead())
 
-Repeat this analysis, but now add some white noise to the time series.
-How does your estimation change?
-"""
+# ╔═╡ 5057b7da-bfcc-4dd4-9cc5-0114f04bc9e0
+md"Or we could sample from the posterior"
 
-# ╔═╡ a2f2ffe2-d18e-4f85-8edc-d2eb053eb7dc
-md"""
-### Task 9: Periodogram of ENSO
-
-The following function will read in data on the El Niño Southern Oscillation (specifically the average monthly sea surface temperatures over the NINO3 region).
-Plot the autocorrelation and partial autocorrelation of the time series as above.
-Then plot its spectra.
-What do you notice?
-"""
-
-# ╔═╡ 92ef0e86-db92-40f8-a4ab-24397951260f
-function read_enso()
-	url = "https://psl.noaa.gov/data/correlation/nina3.data"
-	df  = CSV.File(
-		HTTP.get(url).body,
-		header=false,
-		footerskip=4,
-		missingstring="-99.99",
-		skipto=4,
-		delim=" ",
-		ignorerepeated=true,
-	) |> DataFrame
-	syear = df[1, 1]
-	y = Array(df[!, 2:13])
-	y = collect(vec(y'))
-	dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
-	DataFrame(:t => dates, :sst => y)
+# ╔═╡ 5bcad362-ce31-42bb-99bf-79f932439043
+chains = let
+	sampler = DynamicNUTS()
+	n_per_chain = 5000
+	nchains = 4
+	sample(
+		ar_model, sampler, MCMCThreads(),
+		n_per_chain, nchains, drop_warmup=true,
+	)
 end;
 
-# ╔═╡ bbb66382-5961-4463-8cc0-9a16d28ec398
-enso = read_enso(); first(enso, 5)
+# ╔═╡ dfa05697-9852-42fd-951f-40509ace0eb3
+plot(chains)
 
-# ╔═╡ f94ec611-1a89-44ac-89dd-68f7b8c2c793
-plot(enso.t, enso.sst, xlabel="Time", ylabel="NINO3 Mean SSTs", label=false)
+# ╔═╡ d26c62cc-40bd-4365-ab1f-45e3052ba1f2
+summarystats(chains)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
-DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DynamicHMC = "bbc10e6e-7c05-544b-b16e-64fede858acb"
-HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [compat]
-CSV = "~0.10.2"
-DSP = "~0.7.5"
-DataFrames = "~1.3.2"
+Distributions = "~0.25.49"
 DynamicHMC = "~3.1.1"
-HTTP = "~0.9.17"
+GLM = "~1.6.1"
 Optim = "~1.6.2"
-Plots = "~1.25.11"
-PlutoUI = "~0.7.35"
+Plots = "~1.25.12"
 StatsBase = "~0.33.16"
 StatsPlots = "~0.14.33"
 Turing = "~0.20.4"
@@ -241,12 +140,6 @@ deps = ["AbstractMCMC", "DensityInterface", "Setfield", "SparseArrays"]
 git-tree-sha1 = "13382c3a5716819ac36440877568f44f52704da5"
 uuid = "7a57a42e-76ec-4ea3-a279-07e840d6d9cf"
 version = "0.5.1"
-
-[[AbstractPlutoDingetjes]]
-deps = ["Pkg"]
-git-tree-sha1 = "8eaf9f1b4921132a4cff3f36a1d9ba923b14a481"
-uuid = "6e696c72-6542-2067-7265-42206c756150"
-version = "1.1.4"
 
 [[AbstractTrees]]
 git-tree-sha1 = "03e0550477d86222521d254b741d470ba17ea0b5"
@@ -350,12 +243,6 @@ git-tree-sha1 = "19a35467a82e236ff51bc17a3a44b69ef35185a2"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.8+0"
 
-[[CSV]]
-deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings"]
-git-tree-sha1 = "9519274b50500b8029973d241d32cfbf0b127d97"
-uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-version = "0.10.2"
-
 [[Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
 git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
@@ -391,12 +278,6 @@ deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "Printf", "SparseArray
 git-tree-sha1 = "75479b7df4167267d75294d14b58244695beb2ac"
 uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 version = "0.14.2"
-
-[[CodecZlib]]
-deps = ["TranscodingStreams", "Zlib_jll"]
-git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
-uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.7.0"
 
 [[ColorSchemes]]
 deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
@@ -470,22 +351,10 @@ git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
 uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
 version = "4.1.1"
 
-[[DSP]]
-deps = ["Compat", "FFTW", "IterTools", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions", "Statistics"]
-git-tree-sha1 = "3e03979d16275ed5d9078d50327332c546e24e68"
-uuid = "717857b8-e6f2-59f4-9121-6e50c889abd2"
-version = "0.7.5"
-
 [[DataAPI]]
 git-tree-sha1 = "cc70b17275652eb47bc9e5f81635981f13cea5c8"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
 version = "1.9.0"
-
-[[DataFrames]]
-deps = ["Compat", "DataAPI", "Future", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "Markdown", "Missings", "PooledArrays", "PrettyTables", "Printf", "REPL", "Reexport", "SortingAlgorithms", "Statistics", "TableTraits", "Tables", "Unicode"]
-git-tree-sha1 = "ae02104e835f219b8930c7664b8012c93475c340"
-uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-version = "1.3.2"
 
 [[DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
@@ -599,9 +468,9 @@ version = "1.3.0"
 
 [[EllipticalSliceSampling]]
 deps = ["AbstractMCMC", "ArrayInterface", "Distributions", "Random", "Statistics"]
-git-tree-sha1 = "c25a7254cf745720ddf9051cd0d2792b3baaca0e"
+git-tree-sha1 = "0fc0579126b6623857dda209746fe149883c00a7"
 uuid = "cad2338a-1db2-11e9-3401-43bc07c9ede2"
-version = "0.4.6"
+version = "0.4.7"
 
 [[Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -632,12 +501,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
 uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
 version = "3.3.10+0"
-
-[[FilePathsBase]]
-deps = ["Compat", "Dates", "Mmap", "Printf", "Test", "UUIDs"]
-git-tree-sha1 = "04d13bfa8ef11720c24e4d840c0033d145537df7"
-uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
-version = "0.9.17"
 
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
@@ -702,6 +565,12 @@ git-tree-sha1 = "51d2dfe8e590fbd74e7a842cf6d13d8a2f45dc01"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
 version = "3.3.6+0"
 
+[[GLM]]
+deps = ["Distributions", "LinearAlgebra", "Printf", "Reexport", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "StatsModels"]
+git-tree-sha1 = "fb764dacfa30f948d52a6a4269ae293a479bbc62"
+uuid = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+version = "1.6.1"
+
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "RelocatableFolders", "Serialization", "Sockets", "Test", "UUIDs"]
 git-tree-sha1 = "9f836fb62492f4b0f0d3b06f55983f2704ed0883"
@@ -761,23 +630,6 @@ git-tree-sha1 = "65e4589030ef3c44d3b90bdc5aac462b4bb05567"
 uuid = "34004b35-14d8-5ef3-9330-4cdb6864b03a"
 version = "0.3.8"
 
-[[Hyperscript]]
-deps = ["Test"]
-git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
-uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
-version = "0.0.4"
-
-[[HypertextLiteral]]
-git-tree-sha1 = "2b078b5a615c6c0396c77810d92ee8c6f470d238"
-uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
-version = "0.9.3"
-
-[[IOCapture]]
-deps = ["Logging", "Random"]
-git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
-uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
-version = "0.2.2"
-
 [[IRTools]]
 deps = ["InteractiveUtils", "MacroTools", "Test"]
 git-tree-sha1 = "7f43342f8d5fd30ead0ba1b49ab1a3af3b787d24"
@@ -798,12 +650,6 @@ version = "0.5.1"
 git-tree-sha1 = "4da0f88e9a39111c2fa3add390ab15f3a44f3ca3"
 uuid = "22cec73e-a1b8-11e9-2c92-598750a2cf9c"
 version = "0.3.1"
-
-[[InlineStrings]]
-deps = ["Parsers"]
-git-tree-sha1 = "61feba885fac3a407465726d0c330b3055df897f"
-uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
-version = "1.1.2"
 
 [[InplaceOps]]
 deps = ["LinearAlgebra", "Test"]
@@ -1103,12 +949,6 @@ git-tree-sha1 = "6d019f5a0465522bbfdd68ecfad7f86b535d6935"
 uuid = "6f286f6a-111f-5878-ab1e-185364afe411"
 version = "0.9.0"
 
-[[MutableArithmetics]]
-deps = ["LinearAlgebra", "SparseArrays", "Test"]
-git-tree-sha1 = "842b5ccd156e432f369b204bb704fd4020e383ac"
-uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
-version = "0.3.3"
-
 [[NLSolversBase]]
 deps = ["DiffResults", "Distributed", "FiniteDiff", "ForwardDiff"]
 git-tree-sha1 = "50310f934e55e5ca3912fb941dec199b49ca9b68"
@@ -1248,27 +1088,9 @@ version = "1.1.3"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
-git-tree-sha1 = "5c907bdee5966a9adb8a106807b7c387e51e4d6c"
+git-tree-sha1 = "d16070abde61120e01b4f30f6f398496582301d6"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.25.11"
-
-[[PlutoUI]]
-deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "85bf3e4bd279e405f91489ce518dedb1e32119cb"
-uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.35"
-
-[[Polynomials]]
-deps = ["LinearAlgebra", "MutableArithmetics", "RecipesBase"]
-git-tree-sha1 = "0107e2f7f90cc7f756fee8a304987c574bbd7583"
-uuid = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
-version = "3.0.0"
-
-[[PooledArrays]]
-deps = ["DataAPI", "Future"]
-git-tree-sha1 = "db3a23166af8aebf4db5ef87ac5b00d36eb771e2"
-uuid = "2dfb63ee-cc39-5dd5-95bd-886bf059d720"
-version = "1.4.0"
+version = "1.25.12"
 
 [[PositiveFactorizations]]
 deps = ["LinearAlgebra"]
@@ -1432,6 +1254,11 @@ version = "0.8.2"
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
 uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 
+[[ShiftedArrays]]
+git-tree-sha1 = "22395afdcf37d6709a5a0766cc4a5ca52cb85ea0"
+uuid = "1277b4bf-5013-50f5-be3d-901d8477a67a"
+version = "1.0.0"
+
 [[Showoff]]
 deps = ["Dates", "Grisu"]
 git-tree-sha1 = "91eddf657aca81df9ae6ceb20b959ae5653ad1de"
@@ -1453,9 +1280,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[SpecialFunctions]]
 deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "cbf21db885f478e4bd73b286af6e67d1beeebe4c"
+git-tree-sha1 = "5ba658aeecaaf96923dce0da9e703bd1fe7666f9"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "1.8.4"
+version = "2.1.4"
 
 [[SplittablesBase]]
 deps = ["Setfield", "Test"]
@@ -1502,6 +1329,12 @@ deps = ["ChainRulesCore", "HypergeometricFunctions", "InverseFunctions", "Irrati
 git-tree-sha1 = "25405d7016a47cf2bd6cd91e66f4de437fd54a07"
 uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
 version = "0.9.16"
+
+[[StatsModels]]
+deps = ["DataAPI", "DataStructures", "LinearAlgebra", "Printf", "REPL", "ShiftedArrays", "SparseArrays", "StatsBase", "StatsFuns", "Tables"]
+git-tree-sha1 = "03c99c7ef267c8526953cafe3c4239656693b8ab"
+uuid = "3eaba693-59b7-5ba5-a881-562e759f1c8d"
+version = "0.6.29"
 
 [[StatsPlots]]
 deps = ["AbstractFFTs", "Clustering", "DataStructures", "DataValues", "Distributions", "Interpolations", "KernelDensity", "LinearAlgebra", "MultivariateStats", "Observables", "Plots", "RecipesBase", "RecipesPipeline", "Reexport", "StatsBase", "TableOperations", "Tables", "Widgets"]
@@ -1560,12 +1393,6 @@ deps = ["Adapt", "DiffRules", "ForwardDiff", "LinearAlgebra", "LogExpFunctions",
 git-tree-sha1 = "0874c1b5de1b5529b776cfeca3ec0acfada97b1b"
 uuid = "9f7883ad-71c0-57eb-9f7f-b5c9e6d3789c"
 version = "0.2.20"
-
-[[TranscodingStreams]]
-deps = ["Random", "Test"]
-git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
-uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.9.6"
 
 [[Transducers]]
 deps = ["Adapt", "ArgCheck", "BangBang", "Baselet", "CompositionsBase", "DefineSingletons", "Distributed", "InitialValues", "Logging", "Markdown", "MicroCollections", "Requires", "Setfield", "SplittablesBase", "Tables"]
@@ -1630,12 +1457,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "4528479aa01ee1b3b4cd0e6faef0e04cf16466da"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.25.0+0"
-
-[[WeakRefStrings]]
-deps = ["DataAPI", "InlineStrings", "Parsers"]
-git-tree-sha1 = "c69f9da3ff2f4f02e811c3323c22e5dfcb584cfa"
-uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
-version = "1.4.1"
 
 [[Widgets]]
 deps = ["Colors", "Dates", "Observables", "OrderedCollections"]
@@ -1855,27 +1676,20 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═db27e570-964f-11ec-182c-f524f469b3b5
-# ╟─37b49eab-be70-4982-b511-dec2bad61cc1
-# ╟─6944b4c3-6615-4de0-a242-751c0943d9e5
-# ╠═20015d9d-c0b6-4142-8ff7-5d2979091fa5
-# ╠═3abb5e74-e27b-4741-9e49-2021c4a74cf0
-# ╠═ac7782a3-d679-4671-a520-d29ac3c26179
-# ╟─0227dafe-e11a-43af-a7db-9217ab579506
-# ╟─24d9c620-0cd6-4f2e-ba7f-6b312cdbcce0
-# ╟─23829d5d-3640-4d51-9c94-f58869626588
-# ╟─8a91d6b5-e8a0-41ab-8c25-e9ce088a2821
-# ╟─83a1f973-c388-4169-a7a0-b7049d4ae5a5
-# ╟─82a22e8f-a772-4db8-8b80-e5b5ec80159e
-# ╠═c6e2a90f-1938-4437-bd64-10ecea840c86
-# ╠═4742359f-2ea3-4b75-bc46-060b4c7dcab9
-# ╟─b7e125c7-40cf-4084-bf18-2a224452b5be
-# ╟─df80d7db-efbc-44a5-bf96-b48ae0bf9a62
-# ╟─f73e43cf-2fd5-4634-9037-5c87faa85883
-# ╟─a2f2ffe2-d18e-4f85-8edc-d2eb053eb7dc
-# ╠═92ef0e86-db92-40f8-a4ab-24397951260f
-# ╠═bbb66382-5961-4463-8cc0-9a16d28ec398
-# ╠═f94ec611-1a89-44ac-89dd-68f7b8c2c793
-# ╠═a5d978d0-c62d-43b6-9c52-d1cb916a76f2
+# ╠═fdefc6ea-3fc7-48ed-b4b9-64a0c5ba59e8
+# ╟─28252c12-99c9-11ec-2d5a-8123ebb1b8e6
+# ╠═6e4613f3-981e-4394-a591-d9f4eb5ae6c3
+# ╟─58c024ee-cdd4-4353-a465-ccc81a84e0c1
+# ╠═61e855f9-46f8-43d1-be71-7b88713d22a2
+# ╟─d6705a16-c34a-4389-add3-7a87fb25e82b
+# ╠═cb732866-ec2d-4330-8d31-5a3dcbd38517
+# ╟─553f6f70-1ee6-4681-ba2e-9271656309cf
+# ╠═e63bdd1d-da31-4045-aa8f-591349c00a2c
+# ╟─5934aa8a-e75c-4791-9155-33e533c0d76b
+# ╠═b2115c8e-0ed0-4aa8-ab2b-03be958082b3
+# ╟─5057b7da-bfcc-4dd4-9cc5-0114f04bc9e0
+# ╠═5bcad362-ce31-42bb-99bf-79f932439043
+# ╠═dfa05697-9852-42fd-951f-40509ace0eb3
+# ╠═d26c62cc-40bd-4365-ab1f-45e3052ba1f2
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
