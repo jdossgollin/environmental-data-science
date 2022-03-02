@@ -15,7 +15,7 @@ The following syllabus will be adjusted as needed.
 | 6 | Modeling binary outcomes, counts, and proportions | [Generalized Linear Models](/06_glm/) [Golf Putting](/06_golf/) | | [HW5](/06_hw5/)  |
 | 7 | Hierarchical models | [Eight Schools](/07_8schools/) |  | |
 | | **Module 3: space-time data**| | |
-| 8 | Time series | (1) Fitting AR Models, (2) Forecast, (3) Periodograms | | [HW6](/08_hw6/) |
+| 8 | Time series | (1) [Fitting AR Models](/08_ar/), (2) [Periodograms](/08_periodogram/) | ITSF[^4] 1.1-1.5, [QuantEcon](https://julia.quantecon.org/) 54-55 | [HW6](/08_hw6/) |
 | 9 | Differential equations | | | |
 | 10 | Latent variable models | | | |
 | 11 | Black-box machine learning | | | |
@@ -26,6 +26,7 @@ The following syllabus will be adjusted as needed.
 [^1] HW0 is ungraded.
 [^2] Bayesian Data Analysis by Gelman et al (free PDF available on the book's [website](http://www.stat.columbia.edu/~gelman/book/)).
 [^3] Regression and Other Stories by Gelman, Hill, and Vehtari (free PDF available on the book's [website](https://avehtari.github.io/ROS-Examples/index.html)).
+[^4] Brockwell, P. J. (2016). Introduction to time series and forecasting. Springer.
 
 ## Credits
 
