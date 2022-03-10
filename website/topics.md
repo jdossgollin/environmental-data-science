@@ -16,11 +16,11 @@ The following syllabus will be adjusted as needed.
 | 7 | Hierarchical models | [Eight Schools](/07_8schools/) |  | |
 | | **Module 3: space-time data**| | |
 | 8 | Time series | (1) [Fitting AR Models](/08_ar/), (2) [Periodograms](/08_periodogram/) | ITSF[^4] 1.1-1.5, [QuantEcon](https://julia.quantecon.org/) 54-55 | [HW6](/08_hw6/) |
-| 9 | Differential equations | | | |
-| 10 | Latent variable models | | | |
-| 11 | Black-box machine learning | | | |
-| 12 | Spatial models | | | |
-| 13 | Latent variable models | | | |
+| 9 | Latent variable models | (1) [Hidden Markov Models](/09_hmm/) (2) Missing Data | BDA3 Ch. 8 | |
+| 10 | Spatial models | (1) Gaussian processes (2) Kriging (3) Comparing spatial covariance functions | | |
+| 11 | Machine learning | (1) Random forests (2) Neural networks | | |
+| 12 | Differential equations | (1) ODEs in Julia (2) SciML | | |
+| 13 | Black-box models | (1) Global sensitivity analysis (2) Joint probability methods (3) approximate Bayesian computation | | |
 | 14 | Special topics | | | |
 
 [^1] HW0 is ungraded.
