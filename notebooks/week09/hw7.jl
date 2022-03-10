@@ -91,7 +91,7 @@ Define the model but *do not sample from it!*
 
 # ╔═╡ 3bfd8bfe-41ae-4f3c-bc08-708b26217a96
 @model function BayesHMM(y, K)
-	# your model here
+	y ~ Normal(0, 1) # this is a placeholder -- fill it in!
 end;
 
 # ╔═╡ 971cdb37-f1ef-4ced-89a6-368a31e01af6
@@ -158,13 +158,17 @@ Last, but not least, we need to assign some distribution to our variance paramet
 Let's try
 ```math
 \begin{align}
-\sigma &\sim \mathrm{LogNormal}(0, 1) \\
+\sigma &\sim \mathrm{LogNormal}(0, 2.5) \\
 \tau_r &\sim \mathrm{LogNormal}(0, 1) \\
 \tau_c &\sim \mathrm{LogNormal}(0, 1) \\
 \tau_t &\sim \mathrm{LogNormal}(0, 1) 
 \end{align}
 ```
-as a starting point.
+as a starting point and
+```math
+\alpha \sim \mathcal{N}(0, 50)
+```
+You are welcome (encouraged!) to define and justify alternative priors.
 """
 
 # ╔═╡ 474e1178-be9e-4e09-b0aa-d0e7e530a8b9
@@ -226,8 +230,8 @@ let
 	end
 	
 	p1 = plotfn(:row, "Row")
-	p2 = plotfn(:row, "Row")
-	p3 = plotfn(:row, "Row")
+	p2 = plotfn(:column, "Column")
+	p3 = plotfn(:treatment, "Treatment")
 	plot(
 		p1, p2, p3,
 		layout=(1, 3),
