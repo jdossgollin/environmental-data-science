@@ -17,6 +17,9 @@ begin
 	using Plots
 end
 
+# ╔═╡ c76a7aab-b613-40a8-8aa0-9a46cc0c560a
+using Interpolations
+
 # ╔═╡ a3dc9fcb-c13f-4a84-b453-5cc681461a91
 using BlackBoxOptim
 
@@ -27,28 +30,37 @@ using PlutoUI
 md"""
 # 1D Gaussian Process for Nonlinear Regression
 
+Thus far the regression approaches we've seen (least squares, Bayesian linear regression, sparse regression, generalized linear models, etc) all assume that there is a linear relationship between our $X$ and $y$.
+However, it is common in environmental data science to deal with data where the relationship between our $X$ and $y$ is nonlinear!
+In this notebook we'll explore some possible approaches, then learn about 1D Gaussian Processes.
+
+Gaussian Processes form the underlying theory for much of spatial statistics (ie, 2D) but it's helpful to first wrap our heads around the 1D case.
+
+I'd like to thank my colleague [Ben Seiyon Lee](https://statistics.gmu.edu/node/346) from George Mason for sharing some ideas and codes that informed this notebook.
+
 ## Reading List
 
-Our lecture notes for this module are short because lots of great materials have already been written.
+Lots of great materials have already been written about Gaussian Processes and there's no point being redundant.
+In this notebook we will breeze through theoretical ideas covered in other resources in order to focus on implementation.
+If you don't understand where results are coming from, however, you'll be confused.
 Please read the following articles:
 
-1. Start with this article about [Kriging temperature](https://towardsdatascience.com/kriging-the-french-temperatures-f0389ca908dd)
-1. Next read ["Gaussian Processes, Not Quite for Dummies"](https://yugeten.github.io/posts/2019/09/GP/)
-1. Finally, read through [Gaussian Processes from Scratch](https://peterroelants.github.io/posts/gaussian-process-tutorial/)
+1. Start with this article about [Kriging temperature](https://towardsdatascience.com/kriging-the-french-temperatures-f0389ca908dd). You don't need to read everything in detail; it provides a helpful framing.
+1. Next read ["Gaussian Processes, Not Quite for Dummies"](https://yugeten.github.io/posts/2019/09/GP/). This explains the theory (I think) quite clearly, so please read through it in some detail.
+1. Finally, have a look through [Gaussian Processes from Scratch](https://peterroelants.github.io/posts/gaussian-process-tutorial/). You don't need to worry about the python implementation, but you may enjoy seeing someone else's implementation.
 
 For a more complete reference, see [this textbook](www.GaussianProcess.org/gpml) by Rasmussen and Williams.
 It's a classic!
 
-In this notebook, we'll look at a bit of motivation for why Gaussian Processes / Kriging are a useful way to think about spatial variability, and then we'll get into some details of implementing them in Julia.
 
 ## Motivation
 
 When analyzing environmental data, we are frequently interested in using nearby observations to make predictions about points we haven't yet observed.
 For example:
 
-* Given air temperatures at some places, can we predict the air temperature somewhere else?
-* We drill some holes and measure minerals. Where should we mine to maximize our chances of finding the minerals we are looking for?
-* We measure some process at a few time steps. What happened in between?
+1. Given air temperatures at some places, can we predict the air temperature somewhere else?
+1. We drill some holes and measure minerals. Where should we mine to maximize our chances of finding the minerals we are looking for?
+1. We measure some process at a few time steps. What happened in between?
 
 Let's consider an example.
 Imagine that we have some true process $f(t)$ (let's pretend it's unknown), and that we observe it, with noise, at a few points $\mathbf{t}$.
@@ -61,19 +73,19 @@ f(t) = @. sin(2 * π * t / 7.2 + 0.9) + sin(2 * π * t / 2.5 + 1.3);
 begin
 	N = 15 # number of observations
 	σ_true = 0.25; # noise parameter
-	x0 = 0
-	x1 = 10
-	x = collect(range(x0, x1, length=N)) # observations
-	y = f(x) .+ rand(Normal(0, σ_true), N)
-	x_true = range(x0, x1, length=500)
-	y_true = f(x_true)
+	x0 = 0 # lower bound
+	x1 = 10 # upper bound
+	x = sort(rand(Uniform(x0, x1), N)) # points we observe at
+	xprime = collect(range(x0, x1, length=1_000)); # locations to estimate
+	y = f(x) .+ rand(Normal(0, σ_true), N) # values we observe
+	baseplot = plot(xlabel=L"$x$", ylabel=L"$y(t)", legend=:bottomright) # for plots
 end;
 
 # ╔═╡ 595e7e4f-60a5-4666-903b-c292a57e82af
 let
-	p = plot(xlabel=L"$x$", ylabel=L"$y(t)", legend=:bottomright)
-	plot!(p, x_true, y_true, label="True")
-	scatter!(p, x, y, label="Observed")
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
+	scatter!(p, x, y, label="Observed Points")
 end
 
 # ╔═╡ 1f636e3c-172e-4aa3-a50b-370aacf0a24e
@@ -82,7 +94,35 @@ Suppose we didn't have the blue line and only had measured the orange dots.
 How could we make predictions at a new location?
 There are lots of options available to us!
 
-## Inverse Distance Weighting Interpolation
+## Not Gaussian Processes
+
+Before we dive into Gaussian Processes, let's take a quick look at some other approaches.
+We will not be comprehensive!
+"""
+
+# ╔═╡ 17b605dc-fd6a-4bb5-90f7-d827cc1e407c
+md"""
+### Interpolation
+
+A simple thing we could try is a linear interpolation.
+This is essentially connect the dots.
+It works fine if we have a very high density of unbiased estimates (pretend, for example, say that $f(x)$ was computationally expensive to run and we needed to run it a lot of times -- we might compute it once for $x = 0, 0.001, 0.002, \ldots, 10$, train an interpolation, and then use the computationally cheap interpolated model).
+If we're trying to learn about $f$ from a small number of points sampled with noise, it struggles!
+"""
+
+# ╔═╡ 77164223-fc16-4af9-ba61-2832404d2ee2
+let
+	itp_linear = LinearInterpolation(x, y; extrapolation_bc = Line())
+	f_linear(x) = itp_linear(x)
+	p = deepcopy(baseplot)
+	scatter!(p, x, y, label="Observed")
+	plot!(p, f, x0, x1, label=L"$f(x)$")
+	plot!(f_linear, xprime, label="Linear interpolation")
+end
+
+# ╔═╡ fe323332-5c06-4bb2-8d71-953fbe8a18fb
+md"""
+### Inverse Distance Weighting Interpolation
 
 A simple (and commonly used) method to make predictions about new points is to come up with some sort of weighted average of other data points.
 Our prediction at new point $x'$ would then be
@@ -90,22 +130,18 @@ Our prediction at new point $x'$ would then be
 \mathbb{E}[y'] = \sum_{n=1}^N w_n y_n
 ```
 where $\sum_{w_n} = 1$.
-We're free to do what we like with the weights, but a common approach is to set
-```math
-w_n \propto \frac{1}{(x - x')^2}
-```
-which is the inverse distance.
-For now, let's think of distance as a Euclidean distance ($(x-x')^2$) -- we'll relax this assumption in a moment.
-Here's what that would look like:
-
-> **Note:** this function takes in one $x'$ at a time. There are more efficient ways to write this for many $x'$ using linear algebra, but I find this approach more intuitive.
+We're free to do what we like with the weights, but a common approach is to set the weights to 1 divided by the distance between $x$ and $x'$ (for now we will think of Euclidean distance but keep in the back of your mind that there are other ways to think about distance).
+Here's an implementation:
 """
+
+# ╔═╡ 7e6beced-8689-4eca-8bb3-236f6e9f5fe5
+dist(x1, x2) = (x1 - x2) ^2; # distance between two points
 
 # ╔═╡ a63e246b-5cac-431d-9fce-a550e9c0ce47
 function idw1D(x::Vector{T}, y::Vector{T}, xprime::T) where T <: Real
-	dist = (x .- xprime) .^ 2
-	w = 1 ./ dist # unnormalized weights
-	w = w ./ sum(w) # normalize
+	distances = dist.(x, xprime)
+	w = 1 ./ distances # unnormalized weights
+	w = w ./ sum(w) # normalized
 	return sum(y .* w)
 end;
 
@@ -120,21 +156,18 @@ We could also use `Distances.jl` to calculate pairwise distance between points m
 
 # ╔═╡ 99c4590c-38b8-45a2-ae4d-ccb6e15f94af
 function idw1D(x::Vector{T}, y::Vector{T}, xprime::Vector{T}) where T <: Real
-	w = hcat([(x .- xpi) .^ (-2) for xpi in xprime]...) # N(x) * N(xprime)
-	w = w ./ sum(w, dims=1)
-	return vec(y' * w)
+	# equivalent to
+	# [idw1D(x, y, xp) for xp in xprime]
+	return map(xp -> idw1D(x, y, xp), xprime)
 end;
-
-# ╔═╡ 873dbdf4-5c4b-44e7-9192-2e363a8cb152
-xprime = collect(range(minimum(x), maximum(x), length=1_000)); # locations to estimate
 
 # ╔═╡ 3645b651-b65a-4847-93a8-e81707e044af
 let
 	yprime = idw1D(x, y, xprime)
-	p = plot(xlabel=L"$x$", ylabel=L"$y(t)", legend=:bottomright, title="IDW")
-	plot!(p, x_true, y_true, label="True")
-	scatter!(p, x, y, label="Observed")
-	plot!(p, xprime, yprime, label="Predicted")
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
+	scatter!(p, x, y, label="Observed Points")
+	plot!(p, xprime, yprime, label="Predicted (IDW)")
 end
 
 # ╔═╡ 9f1aef00-4105-4e99-b433-ee1fcb00ad5c
@@ -143,7 +176,7 @@ Where we have good data, this works pretty well.
 Where we lack data, predictions are flat and not very accurate.
 We also see that there are some weird behaviors around data points -- the lack of "smoothness" (to be vague) raises some questions.
 
-## KNN
+### K Nearest Neighbors (KNN)
 
 A common addition to the inverse distance weighting considered here is to consider only the $K$ nearest neighbors.
 That is, we set all but the $K$ smallest weights to zero before normalizing.
@@ -166,10 +199,10 @@ end;
 let
 	K = 4
 	yprime = map(xi -> knn1D(x, y, xi, K), xprime)
-	p = plot(xlabel=L"$x$", ylabel=L"$y(t)", legend=:bottomright, title="KNN")
-	plot!(p, x_true, y_true, label="True")
-	scatter!(p, x, y, label="Observed")
-	plot!(p, xprime, yprime, label="Predicted")
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
+	scatter!(p, x, y, label="Observed Points")
+	plot!(p, xprime, yprime, label="Predicted (KNN)")
 end
 
 # ╔═╡ 6c67be2c-f23c-4da2-b8e0-5dd1b2951d10
@@ -181,29 +214,39 @@ md"""
 
 # ╔═╡ 6ed69ac4-f57b-4db4-95cd-04dfb527212c
 md"""
-## Other approaches
+### Other approaches
+
+We're not going to cover every possible tool!
 
 * We could fit a high-order polynomial, using least squares or similar (we've seen how to do this)
-* We could use methods like Loess, Local Polynomial Regression, or Splines -- these are theoretically similar to Gaussian Processes but less flexible
+* We could use methods like Loess, Local Polynomial Regression, or cubic splines -- these have theoretical links to Gaussian Processes but deserve their own presentation.
+
+Instead we'll look at 1D Gaussian Processes as a specific example of models for nonlinear regression.
 """
 
 # ╔═╡ 7a44bcdb-7604-4cd5-9bfd-fd041dd10760
 md"""
-## Building a 1D Gaussian Process
+## 1D Gaussian Processes
 
 If you have not yet done so, go read the suggested articles!
 
 In this section we build a Gaussian Process for our data from scratch.
 Then we'll see how to use the `GaussianProcesses.jl` package for easy and flexible inference.
 
-Before we start worrying about prediction, we need to start with the data we already have.
-Using the squared exponential kernel (sometimes called radial basis function)
+### Kernel
 
+We mentioned earlier that Euclidean distance is not the only way to think about the similarity between two points.
+There are lots of other distance metrics we could use (see `Distances.jl` for some examples).
+However, we can generalize further.
+
+We will use a **kernel** $K(x, x')$ to answer the question "given $x$ and $x'$, how similar do we expect $y(x)$ and $y(x')$ to be?
+A kernel maps two vectors to the real  space ($K: \mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$) and one way to think kernels is as a generalization of the dot product.
+
+We will start with the squared exponential kernel, because it's common and used in some of the tutorials we have seen.
+It has the form
 ```math
-K(x, x' | \sigma, \ell) = \sigma^2 \exp \left[ -\frac{1}{2\ell^2} (x-x')^2 \right]
+K(x, x' | \sigma, \ell) = \sigma^2 \exp \left[ -\frac{1}{2\ell^2} (x-x')^2 \right].
 ```
-as our kernel (if this looks strange to you, go read the articles!), we can apply this to our data.
-We will save this as our covariance matrix, so to be clear $\Sigma_{i,j} = K(x_i, x_j | \sigma, \ell)$.
 """
 
 # ╔═╡ ce8fe84f-e70b-4173-897d-e85389f5b6a6
@@ -219,7 +262,10 @@ function exp_cov(x1::Vector{T}, x2::Vector{T}, σ::T, ℓ::T) where T <: Real
 end;
 
 # ╔═╡ c3d41de5-38ff-466b-ace3-14a8c1973286
-md"For example, if we guess what the parameters of the GP are, then we can compute the covariance matrix"
+md"""
+Given some known values of $\sigma$ and $\ell$, we can use this function to calculate the kernel for each pair of points in our data (an $N \times N$ matrix).
+For reasons that will become apparent shortly, we'll call it $\Sigma{x,x}$.
+"""
 
 # ╔═╡ 81f4c689-810c-49e1-bedc-ad52a1eb3232
 begin
@@ -243,10 +289,12 @@ p(\mathbf{y} | \sigma, \ell) \sim \mathrm{N} \left(0, \Sigma_{x,x} \right)
 where $\Sigma_{x,x}$ depends on $\sigma$ and $\ell$ as shown above.
 (We could relax the assumption of mean zero, but let's leave it for now).
 
+### Kernel Parameters
+
 Of course, we don't know what $\sigma$ or $\ell$ is -- we guessed!
 We can use this formulation to optimize $\sigma$ and $\ell$ by finding values of $\sigma$ and $\ell$ that increase the (log) probability, just like we've been doing all along.
 
-*To implement the optimization, we will note that $\sigma > 0$ and $\ell > 0$ by definition. To make life easy, we'll create parameters for $\log \sigma$ and $\log \ell$*
+*Note that $\sigma > 0$ and $\ell > 0$ by definition. To make life easy, we'll optimize over $\log \sigma$ and $\log \ell$.*
 """
 
 # ╔═╡ 87f6f009-d1ab-48f4-acc4-c38089fdf5fb
@@ -259,7 +307,7 @@ function gp_logpdf(x, y, logσ, logℓ; ϵ=0.001)
 	μ = ones(N) .* mean(y)
 	Σ = exp_cov(x, x, ℓ, σ)
 
-	# add noise for stability
+	# this is a numerical hack that adds stability to the matrix
 	for i in 1:N
 		Σ[i, i] += ϵ
 	end
@@ -269,7 +317,7 @@ function gp_logpdf(x, y, logσ, logℓ; ϵ=0.001)
 end;
 
 # ╔═╡ 101161af-d850-49da-a8f1-95b66416e552
-md"We can already see that some parameters are better than others:"
+md"Some parameter guesses are more likely than others"
 
 # ╔═╡ 71abeada-179c-411c-999e-9514f12f671a
 gp_logpdf(x, y, 0.5, 0.5)
@@ -278,7 +326,11 @@ gp_logpdf(x, y, 0.5, 0.5)
 gp_logpdf(x, y, -0.5, 0.0)
 
 # ╔═╡ 7c846ff2-84cf-4f80-aaf5-5648128de166
-md"We can also optimize"
+md"""
+We can fully optimize! This optimization problem turns out to be a bit tricky.
+To get the best parameters we'll use the `BlackBoxOptim` package.
+You should use these tools with caution (optimization is hard!), but it should work well enough for our purposes.
+"""
 
 # ╔═╡ e7d611ac-3b9e-41e9-a466-c24fcd0ca9bf
 logℓ_best, logσ_best = let
@@ -292,6 +344,8 @@ md"""
 Quick recap: we used a multivariate Normal distribution constructed over the data we already had to optimize the parameters of the Gaussian Process ($\sigma$ and $\ell$).
 However, we're only halfway there!
 Our ultimate goal is to make prediction at all the `xprime`.
+
+### Predictions
 
 To do that we again write down a joint probability distribution using a multivariate Normal.
 Let's write this out using some slightly funky notation:
@@ -367,8 +421,8 @@ md"We can plot our solution:"
 
 # ╔═╡ ac0d3de0-433e-4f5e-b9d3-34a500cabd62
 let
-	p = plot(legend=:bottomright)
-	plot!(x_true, y_true, label="True")
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
 	scatter!(x, y, label="Obs")
 	plot!(xprime, μprime, label="Kriging")
 	xlims!(minimum(x), maximum(x))
@@ -382,7 +436,7 @@ In particular, it will run into trouble if our observational noise is higher.
 
 # ╔═╡ 6054ab6f-0e23-486d-bb3d-7f5aa4908475
 md"""
-## Adding noise
+### Observing with noise
 
 If the data we observe is noisy, we should account for that.
 We can modify our equation:
@@ -391,12 +445,12 @@ We can modify our equation:
 p(f(x) ∣\theta ) = \mathcal{GP}(0, K(x, x') + I \sigma_y^2)
 ```
 where $\sigma_y$ is the noise parameter and $I \sigma_y^2$ indicates that it is a diagonal matrix.
-This changes our solutions somewhat and adds a parameter that we need to perform inference over.
+This will change our solutions and adds a parameter that we need to perform inference over, so we won't go through the derivations
 """
 
 # ╔═╡ a450382a-4c03-4c69-b03f-b55233458a99
 md"""
-## A more stable implementation
+### `GaussianProcesses.jl`
 
 It's good to work through the linear algebra from scratch.
 However, we can use the `GaussianProcesses.jl` packages to use better, more stable implementations (they are more stable because they take advantage of numerical tricks, factorizations, etc) and that have good plotting capabilities.
@@ -425,7 +479,8 @@ let
 	kern = GaussianProcesses.SE(log(ℓ), log(σ)) # note: log σ, log ℓ
 	μ = GaussianProcesses.MeanZero()
 	gp = GP(x, y, μ, kern, log(σy))
-	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label=false, linewidth=3)
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
 	plot!(gp, label=false, title="Random Guess Parameters")
 end
 
@@ -438,7 +493,8 @@ let
 	kern = GaussianProcesses.SE(logℓ_best, logσ_best) # note: log σ, log ℓ
 	μ = GaussianProcesses.MeanZero()
 	gp2 = GP(x, y, μ, kern, log(σy))
-	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label=false, linewidth=3)
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
 	plot!(gp2, label=false, title="Fitted Parameters")
 end
 
@@ -460,20 +516,21 @@ end;
 
 # ╔═╡ 69e54f00-9e8e-4f04-be87-52e6485bb96c
 let
-	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label="True", linewidth=3, title="Samples from Optimized Fit")
-	plot!(gp3, label="GP Fit", legend=:bottomright)
-end
-
-# ╔═╡ 0b7f5103-6e6c-4773-b41e-cb69b38d4259
-let
-	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label="True", linewidth=3, title="Samples from Optimized Fit")
-	scatter!(x, y, label="Observed")
-	samples = rand(gp3, xprime, 50)
-	plot!(xprime, samples, label=false, color=:gray, alpha=0.5)
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values")
+	plot!(p, gp3, label="GP Fit", legend=:bottomright)
 end
 
 # ╔═╡ d58d5828-1f84-4801-9686-7c0d8ea81edf
-md"We can see that this model performs very well!"
+md"""
+## Recap
+
+As we discussed in class (and have been discussing all semester), often we want to know not only what is $\mathbb{E}[y' | x']$, but also what the uncertainty in that esitmate is.
+Gaussian Processes provide a flexible and principled way to address this question for 1D regression models.
+
+Next week we'll look at applying these to spatial data (which is 2D).
+This won't require a lot of theoretical innovations (everything is the same except that $x$ and $x'$ are now vectors) but will require a lot of practical considerations about choosing a kernel, comparing to data, and, as always, implementation.
+"""
 
 # ╔═╡ 2847aaee-3f38-4c39-b8a6-b81d87d6f370
 md"""
@@ -493,6 +550,7 @@ DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 GaussianProcesses = "891a1506-143c-57d2-908e-e1f8e92e6de9"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
@@ -506,6 +564,7 @@ DataFrames = "~1.3.2"
 Distributions = "~0.24.18"
 GaussianProcesses = "~0.12.4"
 HTTP = "~0.9.17"
+Interpolations = "~0.13.5"
 LaTeXStrings = "~1.3.0"
 Optim = "~1.6.2"
 Plots = "~1.27.1"
@@ -539,6 +598,12 @@ version = "5.0.5"
 
 [[Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[AxisAlgorithms]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "WoodburyMatrices"]
+git-tree-sha1 = "66771c8d21c8ff5e3a93379480a2307ac36863f7"
+uuid = "13072b0f-2c55-5437-9ae7-d433b7a33950"
+version = "1.0.1"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -923,6 +988,12 @@ version = "1.1.2"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
+[[Interpolations]]
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "b15fc0a95c564ca2e0a7ae12c1f095ca848ceb31"
+uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+version = "0.13.5"
+
 [[InverseFunctions]]
 deps = ["Test"]
 git-tree-sha1 = "91b5dcf362c5add98049e6c29ee756910b03051d"
@@ -1133,6 +1204,12 @@ version = "0.3.7"
 [[NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
+[[OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "043017e0bdeff61cfbb7afeb558ab29536bbb5ed"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.10.8"
+
 [[Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
@@ -1283,6 +1360,12 @@ uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 [[Random]]
 deps = ["Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Ratios]]
+deps = ["Requires"]
+git-tree-sha1 = "dc84268fe0e3335a62e315a3a7cf2afa7178a734"
+uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
+version = "0.4.3"
 
 [[RecipesBase]]
 git-tree-sha1 = "6bf3f380ff52ce0832ddd3a2a7b9538ed1bcca7d"
@@ -1502,6 +1585,12 @@ git-tree-sha1 = "b1be2855ed9ed8eac54e5caff2afcdb442d52c23"
 uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
 version = "1.4.2"
 
+[[WoodburyMatrices]]
+deps = ["LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "de67fa59e33ad156a590055375a30b23c40299d3"
+uuid = "efce3f68-66dc-5838-9240-27a6d6f5f9b6"
+version = "0.5.5"
+
 [[XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
 git-tree-sha1 = "1acf5bdf07aa0907e0a37d3718bb88d4b687b74a"
@@ -1708,10 +1797,14 @@ version = "0.9.1+5"
 # ╠═1032164a-894b-45c0-a6f6-96c280fddf00
 # ╠═595e7e4f-60a5-4666-903b-c292a57e82af
 # ╟─1f636e3c-172e-4aa3-a50b-370aacf0a24e
+# ╟─17b605dc-fd6a-4bb5-90f7-d827cc1e407c
+# ╠═c76a7aab-b613-40a8-8aa0-9a46cc0c560a
+# ╠═77164223-fc16-4af9-ba61-2832404d2ee2
+# ╟─fe323332-5c06-4bb2-8d71-953fbe8a18fb
+# ╠═7e6beced-8689-4eca-8bb3-236f6e9f5fe5
 # ╠═a63e246b-5cac-431d-9fce-a550e9c0ce47
 # ╟─705bc545-4056-4314-bff7-9e3f26f669f4
 # ╠═99c4590c-38b8-45a2-ae4d-ccb6e15f94af
-# ╠═873dbdf4-5c4b-44e7-9192-2e363a8cb152
 # ╠═3645b651-b65a-4847-93a8-e81707e044af
 # ╟─9f1aef00-4105-4e99-b433-ee1fcb00ad5c
 # ╠═b24862e9-8f73-40a3-862a-af2d5a3e0325
@@ -1729,7 +1822,7 @@ version = "0.9.1+5"
 # ╟─101161af-d850-49da-a8f1-95b66416e552
 # ╠═71abeada-179c-411c-999e-9514f12f671a
 # ╠═eedd6b4d-9894-4932-b16d-cc219b38a0f7
-# ╠═7c846ff2-84cf-4f80-aaf5-5648128de166
+# ╟─7c846ff2-84cf-4f80-aaf5-5648128de166
 # ╠═a3dc9fcb-c13f-4a84-b453-5cc681461a91
 # ╠═e7d611ac-3b9e-41e9-a466-c24fcd0ca9bf
 # ╟─95b649ad-42ee-437f-a95f-745fed8752df
@@ -1747,9 +1840,8 @@ version = "0.9.1+5"
 # ╟─10a73e7d-cff1-4255-bf37-fbbf70de8dfb
 # ╠═a6a21dca-0ae3-4eb4-8360-f2ac9050e802
 # ╠═69e54f00-9e8e-4f04-be87-52e6485bb96c
-# ╠═0b7f5103-6e6c-4773-b41e-cb69b38d4259
 # ╟─d58d5828-1f84-4801-9686-7c0d8ea81edf
-# ╠═2847aaee-3f38-4c39-b8a6-b81d87d6f370
+# ╟─2847aaee-3f38-4c39-b8a6-b81d87d6f370
 # ╠═e4ccd0c6-5404-4f8f-a6cf-5ad5f67fe47b
 # ╠═83e9c00c-c8e8-4577-9628-59f26b4831d9
 # ╟─00000000-0000-0000-0000-000000000001
