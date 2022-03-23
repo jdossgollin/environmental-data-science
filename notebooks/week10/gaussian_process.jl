@@ -60,7 +60,7 @@ f(t) = @. sin(2 * π * t / 7.2 + 0.9) + sin(2 * π * t / 2.5 + 1.3);
 # ╔═╡ 1032164a-894b-45c0-a6f6-96c280fddf00
 begin
 	N = 15 # number of observations
-	σ_true = 0.1; # noise parameter
+	σ_true = 0.25; # noise parameter
 	x0 = 0
 	x1 = 10
 	x = collect(range(x0, x1, length=N)) # observations
@@ -250,7 +250,7 @@ We can use this formulation to optimize $\sigma$ and $\ell$ by finding values of
 """
 
 # ╔═╡ 87f6f009-d1ab-48f4-acc4-c38089fdf5fb
-function gp_logpdf(x, y, logσ, logℓ)
+function gp_logpdf(x, y, logσ, logℓ; ϵ=0.001)
 	
 	N = length(x)
 	σ = exp(logσ)
@@ -258,6 +258,11 @@ function gp_logpdf(x, y, logσ, logℓ)
 	
 	μ = ones(N) .* mean(y)
 	Σ = exp_cov(x, x, ℓ, σ)
+
+	# add noise for stability
+	for i in 1:N
+		Σ[i, i] += ϵ
+	end
 	
 	joint_dist = MvNormal(μ, Σ)
 	logpdf(joint_dist, y)
@@ -421,7 +426,7 @@ let
 	μ = GaussianProcesses.MeanZero()
 	gp = GP(x, y, μ, kern, log(σy))
 	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label=false, linewidth=3)
-	plot!(gp, label=false, title="Guess Parameters")
+	plot!(gp, label=false, title="Random Guess Parameters")
 end
 
 # ╔═╡ 6d1787a3-4b14-406d-86b4-11d010bea570
@@ -454,11 +459,14 @@ gp3 = let
 end;
 
 # ╔═╡ 69e54f00-9e8e-4f04-be87-52e6485bb96c
-plot(gp3)
+let
+	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label="True", linewidth=3, title="Samples from Optimized Fit")
+	plot!(gp3, label="GP Fit", legend=:bottomright)
+end
 
 # ╔═╡ 0b7f5103-6e6c-4773-b41e-cb69b38d4259
 let
-	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label="True", linewidth=3)
+	plot(x_true, y_true, xlabel=L"$x$", ylabel=L"$y(x)$", label="True", linewidth=3, title="Samples from Optimized Fit")
 	scatter!(x, y, label="Observed")
 	samples = rand(gp3, xprime, 50)
 	plot!(xprime, samples, label=false, color=:gray, alpha=0.5)
