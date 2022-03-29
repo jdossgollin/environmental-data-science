@@ -6,11 +6,11 @@ using InteractiveUtils
 
 # ╔═╡ b621493c-054b-4b2f-9ef7-d466287d1dab
 begin
-	using Distributions
-	using Plots
-	using PlutoUI
-	using StatsBase
-	using StatsPlots
+    using Distributions
+    using Plots
+    using PlutoUI
+    using StatsBase
+    using StatsPlots
 end
 
 # ╔═╡ 9c460991-ccdb-44a7-9ce8-5d13a4043338
@@ -81,7 +81,7 @@ Modify the following function (which returns the sample mean) to return the samp
 
 # ╔═╡ 2a7b2edc-86b8-4e0c-b5e7-e19dc63c46b3
 function sample_quantile(dist, q, N)
-	return mean(rand(dist, N))
+    return mean(rand(dist, N))
 end;
 
 # ╔═╡ a0b30eb4-3a7e-40f8-9039-05cf2fbdc33a
@@ -92,16 +92,16 @@ Similarly, modify the following function to plot a histogram of the sample quant
 
 # ╔═╡ b8c97ebc-ba6b-4c2e-afbc-a5fa1b336331
 function plot_sample_quantile(dist, q, nsamples, ndraws)
-	sample_qtiles = [sample_quantile(dist, q, nsamples) for _ in 1:ndraws]
-	p = histogram(
-		sample_qtiles,
-		normalize=true,
-		label="Sampling",
-		ylabel="Probability Density",
-		xlabel="Sample Quantile, N=$nsamples, Q=$my_quantile",
-	)
-	vline!(p, [quantile(dist, q)], label="True Value", linewidth=3)
-	return p
+    sample_qtiles = [sample_quantile(dist, q, nsamples) for _ in 1:ndraws]
+    p = histogram(
+        sample_qtiles;
+        normalize=true,
+        label="Sampling",
+        ylabel="Probability Density",
+        xlabel="Sample Quantile, N=$nsamples, Q=$my_quantile",
+    )
+    vline!(p, [quantile(dist, q)]; label="True Value", linewidth=3)
+    return p
 end;
 
 # ╔═╡ d6431e7a-f61d-44df-bca6-2b0b51ded404
@@ -140,7 +140,7 @@ Modify the following code (which currently returns a running mean) to return a r
 
 # ╔═╡ 15b76fe5-7ad8-424b-9467-353b215ec694
 function running_quantile(x, q)
-	return [mean(x[1:i]) for i in 1:length(x)]
+    return [mean(x[1:i]) for i in 1:length(x)]
 end;
 
 # ╔═╡ 699c10d5-8f4c-46bb-8cdf-f29cbaeac3e5
@@ -166,7 +166,7 @@ function plot_running_quantiles(dist, q, nsamples, ndraws)
             label=false,
             xlabel="Sample size",
             ylabel="Running Estimate",
-			title = "$(my_quantile*100)th Percentile Estimates",
+            title="$(my_quantile*100)th Percentile Estimates",
         )
     end
     return p

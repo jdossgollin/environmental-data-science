@@ -6,13 +6,13 @@ using InteractiveUtils
 
 # ╔═╡ f9a1099d-6421-460b-8132-ee88f5e1b36c
 begin
-	using Distributions
-	using LaTeXStrings
-	using PlutoUI
-	using RDatasets
-	using Plots
-	using StatsPlots
-	TableOfContents()
+    using Distributions
+    using LaTeXStrings
+    using PlutoUI
+    using RDatasets
+    using Plots
+    using StatsPlots
+    TableOfContents()
 end
 
 # ╔═╡ cd15a33a-c0be-49ce-acff-749498b578f1
@@ -73,7 +73,7 @@ For example, if we fix $N=9$ and $\theta=0.5$, here's the probability mass funct
 """
 
 # ╔═╡ 541e99c7-1a69-4899-8785-5c69f72111e6
-plot(0:9, pdf.(Binomial(9, 0.5), 0:9), st=:sticks, shape=:o, label="Binomial PMF")
+plot(0:9, pdf.(Binomial(9, 0.5), 0:9); st=:sticks, shape=:o, label="Binomial PMF")
 
 # ╔═╡ e5e21377-3f82-483d-90a0-2ddb2f5251d7
 md"""
@@ -87,16 +87,16 @@ For us, we can approximate this very nicely by *discretizing* p and looking at s
 
 # ╔═╡ 05c13e8a-c340-4888-a9d0-f77c74996c8f
 let
-	θ_grid = 0:0.005:1
-	lik(θ) = pdf(Binomial(9, θ), 8)
-	plot(
-		θ_grid,
-		lik,
-		xlabel = L"$\theta$",
-		ylabel = L"$\mathrm{Likelihood}~~p(y | \theta)$ for many $\theta$",
-		label = "y=8, N=9",
-		legend = :topleft,
-	)
+    θ_grid = 0:0.005:1
+    lik(θ) = pdf(Binomial(9, θ), 8)
+    plot(
+        θ_grid,
+        lik;
+        xlabel=L"$\theta$",
+        ylabel=L"$\mathrm{Likelihood}~~p(y | \theta)$ for many $\theta$",
+        label="y=8, N=9",
+        legend=:topleft,
+    )
 end
 
 # ╔═╡ 824838a4-43c9-437a-b85c-a5c63797bf26
@@ -131,13 +131,20 @@ md"We can make a 2D plot:"
 
 # ╔═╡ 76f96c91-8ec0-4e84-9e27-162c7c1f005b
 let
-	N = 100
-	μ_try = range(2, 8, length=N)
-	σ_try = range(0.1, 1.5, length=N)
+    N = 100
+    μ_try = range(2, 8; length=N)
+    σ_try = range(0.1, 1.5; length=N)
 
-	lik(μ, σ) = pdf(Normal(μ, σ), height)
+    lik(μ, σ) = pdf(Normal(μ, σ), height)
 
-	heatmap(μ_try, σ_try, lik, title=L"$p(y | \mu, \sigma)$", xlabel=L"$\mu$", ylabel=L"$\sigma$")
+    heatmap(
+        μ_try,
+        σ_try,
+        lik;
+        title=L"$p(y | \mu, \sigma)$",
+        xlabel=L"$\mu$",
+        ylabel=L"$\sigma$",
+    )
 end
 
 # ╔═╡ c69bd847-f088-4b1d-a61e-a1488e7a4b83
@@ -164,18 +171,40 @@ Only once we have $\log p(y_1, \ldots, y_N)$ should we exponentiate to take get 
 """
 
 # ╔═╡ ec7b19ef-c4b3-4184-a516-35c8a547cba2
-heights = [5.8399, 5.54462, 5.18701, 5.15092, 5.01969, 5.05249, 5.18701, 5.21654, 5.21654, 5.54462, 5.15092, 5.68241, 5.0853, 5.54462];
+heights = [
+    5.8399,
+    5.54462,
+    5.18701,
+    5.15092,
+    5.01969,
+    5.05249,
+    5.18701,
+    5.21654,
+    5.21654,
+    5.54462,
+    5.15092,
+    5.68241,
+    5.0853,
+    5.54462,
+];
 
 # ╔═╡ 101c4e47-11e8-4ff6-8f28-e0e795db1c6e
 let
-	N = 100
-	μ_try = range(2, 8, length=N)
-	σ_try = range(0.1, 1.5, length=N)
+    N = 100
+    μ_try = range(2, 8; length=N)
+    σ_try = range(0.1, 1.5; length=N)
 
-	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height_i) for height_i in heights])
-	lik(μ, σ) = exp(log_lik(μ, σ))
+    log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height_i) for height_i in heights])
+    lik(μ, σ) = exp(log_lik(μ, σ))
 
-	heatmap(μ_try, σ_try, lik, title=L"$p(y | \mu, \sigma)$", xlabel=L"$\mu$", ylabel=L"$\sigma$")
+    heatmap(
+        μ_try,
+        σ_try,
+        lik;
+        title=L"$p(y | \mu, \sigma)$",
+        xlabel=L"$\mu$",
+        ylabel=L"$\sigma$",
+    )
 end
 
 # ╔═╡ ee51d810-745b-456d-93a2-79e26e330d5e
@@ -185,14 +214,21 @@ When using these methods, it's often helpful to narrow in a bit.
 
 # ╔═╡ 2d72dd8e-86da-4a28-b8a9-6c0d28defb70
 let
-	N = 100
-	μ_try = range(4.8, 5.8, length=N)
-	σ_try = range(0.1, 0.5, length=N)
+    N = 100
+    μ_try = range(4.8, 5.8; length=N)
+    σ_try = range(0.1, 0.5; length=N)
 
-	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
-	lik(μ, σ) = exp(log_lik(μ, σ))
+    log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
+    lik(μ, σ) = exp(log_lik(μ, σ))
 
-	heatmap(μ_try, σ_try, lik, title=L"$p(y | \mu, \sigma)$", xlabel=L"$\mu$", ylabel=L"$\sigma$")
+    heatmap(
+        μ_try,
+        σ_try,
+        lik;
+        title=L"$p(y | \mu, \sigma)$",
+        xlabel=L"$\mu$",
+        ylabel=L"$\sigma$",
+    )
 end
 
 # ╔═╡ e30aa4a6-dd88-4de7-94f7-cf316a6938d3
@@ -251,28 +287,27 @@ After much back and forth conversation (this iterative model buidling is a key f
 
 # ╔═╡ 25b3bbb2-f488-4fd4-bb30-35f647cf17e7
 let
-	
-	p_grid = 0:0.005:1
-	likelihood(θ) = pdf(Binomial(9, θ), 8)
-	prior(θ) = pdf(Beta(4, 4), θ)
-	posterior(θ) = prior(θ) * likelihood(θ)
+    p_grid = 0:0.005:1
+    likelihood(θ) = pdf(Binomial(9, θ), 8)
+    prior(θ) = pdf(Beta(4, 4), θ)
+    posterior(θ) = prior(θ) * likelihood(θ)
 
-	lik = likelihood.(p_grid)
-	pri = prior.(p_grid)
-	post = posterior.(p_grid)
-	
-	plot(
-		p_grid,
-		lik ./ sum(lik),
-		xlabel = L"$\theta$",
-		ylabel = L"$\mathrm{Likelihood}~~p(y | \theta)$",
-		title = "Binomial: y=8, N=9",
-		label = "Likelihood",
-		legend = :topleft,
-		linewidth = 2,
-	)
-	plot!(p_grid, pri ./ sum(pri), label="Prior", linewidth = 2)
-	plot!(p_grid, post ./ sum(post), label="Posterior", linewidth = 4)
+    lik = likelihood.(p_grid)
+    pri = prior.(p_grid)
+    post = posterior.(p_grid)
+
+    plot(
+        p_grid,
+        lik ./ sum(lik);
+        xlabel=L"$\theta$",
+        ylabel=L"$\mathrm{Likelihood}~~p(y | \theta)$",
+        title="Binomial: y=8, N=9",
+        label="Likelihood",
+        legend=:topleft,
+        linewidth=2,
+    )
+    plot!(p_grid, pri ./ sum(pri); label="Prior", linewidth=2)
+    plot!(p_grid, post ./ sum(post); label="Posterior", linewidth=4)
 end
 
 # ╔═╡ 97f7e081-68cc-4e52-9cc6-a27c4d7152f5
@@ -288,27 +323,27 @@ Notice that if we repeat our analysis but use a uniform prior, there is no such 
 
 # ╔═╡ 13700bca-e409-4aad-9000-297bb73b50ba
 let
-	p_grid = 0:0.005:1
-	likelihood(θ) = pdf(Binomial(9, θ), 8)
-	prior(θ) = pdf(Uniform(0, 1), θ)
-	posterior(θ) = prior(θ) * likelihood(θ)
+    p_grid = 0:0.005:1
+    likelihood(θ) = pdf(Binomial(9, θ), 8)
+    prior(θ) = pdf(Uniform(0, 1), θ)
+    posterior(θ) = prior(θ) * likelihood(θ)
 
-	lik = likelihood.(p_grid)
-	pri = prior.(p_grid)
-	post = posterior.(p_grid)
-	
-	plot(
-		p_grid,
-		lik ./ sum(lik),
-		xlabel = L"$\theta$",
-		ylabel = L"$\mathrm{Likelihood}~~p(y | \theta)$",
-		title = "Binomial: y=8, N=9",
-		label = "Likelihood",
-		legend = :topleft,
-		linewidth = 2,
-	)
-	plot!(p_grid, pri ./ sum(pri), label="Prior", linewidth = 2)
-	plot!(p_grid, post ./ sum(post), label="Posterior", linewidth = 4)
+    lik = likelihood.(p_grid)
+    pri = prior.(p_grid)
+    post = posterior.(p_grid)
+
+    plot(
+        p_grid,
+        lik ./ sum(lik);
+        xlabel=L"$\theta$",
+        ylabel=L"$\mathrm{Likelihood}~~p(y | \theta)$",
+        title="Binomial: y=8, N=9",
+        label="Likelihood",
+        legend=:topleft,
+        linewidth=2,
+    )
+    plot!(p_grid, pri ./ sum(pri); label="Prior", linewidth=2)
+    plot!(p_grid, post ./ sum(post); label="Posterior", linewidth=4)
 end
 
 # ╔═╡ 8cc1ade7-695e-49d7-aaa3-11cf0cc29531
@@ -347,17 +382,24 @@ Here's what these priors give us
 
 # ╔═╡ cac3169d-90d0-4e89-b4ad-2c64323b29ba
 let
-	N = 100
-	μ_try = range(4.8, 5.8, length=N)
-	σ_try = range(0.1, 0.5, length=N)
+    N = 100
+    μ_try = range(4.8, 5.8; length=N)
+    σ_try = range(0.1, 0.5; length=N)
 
-	log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
-	lik(μ, σ) = exp(log_lik(μ, σ))
-	log_prior(μ, σ) = logpdf(Normal(5.5, 0.75), μ) + logpdf(Exponential(0.5), σ)
-	prior(μ, σ) = exp(log_prior(μ, σ))
-	posterior(μ, σ) = lik(μ, σ) * prior(μ, σ)
+    log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), height) for height in heights])
+    lik(μ, σ) = exp(log_lik(μ, σ))
+    log_prior(μ, σ) = logpdf(Normal(5.5, 0.75), μ) + logpdf(Exponential(0.5), σ)
+    prior(μ, σ) = exp(log_prior(μ, σ))
+    posterior(μ, σ) = lik(μ, σ) * prior(μ, σ)
 
-	heatmap(μ_try, σ_try, posterior, title=L"$p(\mu, \sigma | y)$", xlabel=L"$\mu$", ylabel=L"$\sigma$")
+    heatmap(
+        μ_try,
+        σ_try,
+        posterior;
+        title=L"$p(\mu, \sigma | y)$",
+        xlabel=L"$\mu$",
+        ylabel=L"$\sigma$",
+    )
 end
 
 # ╔═╡ 9688e10b-04c1-4aa0-9bb8-bc8b258f8ea8

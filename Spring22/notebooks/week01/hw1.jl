@@ -6,9 +6,9 @@ using InteractiveUtils
 
 # ╔═╡ 05616b15-728b-47ee-8d8d-d030dbe0bdb7
 begin
-	using Pkg
-	#Pkg.upgrade_manifest()
-	Pkg.update()
+    using Pkg
+    #Pkg.upgrade_manifest()
+    Pkg.update()
 end
 
 # ╔═╡ 48c4bef4-c5ba-4ef3-bc9c-50039eaeb60f

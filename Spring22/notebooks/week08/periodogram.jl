@@ -6,10 +6,10 @@ using InteractiveUtils
 
 # ╔═╡ 6fee671f-91a2-4cee-8c4c-d2d01fbeebcf
 begin
-	using Distributions
-	using DSP # for periodogram
-	using Plots
-	using StatsPlots
+    using Distributions
+    using DSP # for periodogram
+    using Plots
+    using StatsPlots
 end
 
 # ╔═╡ 0a564ab2-99d4-11ec-0d68-af83002ec566
@@ -28,22 +28,22 @@ Let's simulate some AR(2) data:
 
 # ╔═╡ 83e42621-430b-4a4a-bd55-c1843d3fac66
 y = let
-	ϕ = [0.7, -0.5]
-	α =0.0
-	σ = 0.5
-	y = zeros(1_000)
-	for i in 1:length(y)
-		if i == 1
-			yi = 0.4
-		elseif i == 2
-			yi = 0.1
-		else
-			μ = α + ϕ[1] * y[i-1] + ϕ[2] * y[i-2]
-			yi = rand(Normal(μ, σ))
-		end
-		y[i] = yi
-	end
-	y
+    ϕ = [0.7, -0.5]
+    α = 0.0
+    σ = 0.5
+    y = zeros(1_000)
+    for i in 1:length(y)
+        if i == 1
+            yi = 0.4
+        elseif i == 2
+            yi = 0.1
+        else
+            μ = α + ϕ[1] * y[i - 1] + ϕ[2] * y[i - 2]
+            yi = rand(Normal(μ, σ))
+        end
+        y[i] = yi
+    end
+    y
 end;
 
 # ╔═╡ 1a2942e7-fcc2-4ab8-8a66-dfb75509731a
@@ -53,20 +53,18 @@ Now we can plot it and fit the periodogram
 
 # ╔═╡ 8696cf0c-10ca-46c5-9d35-e6d7a991b45c
 let
-	p1 = plot(y, label=false, xlabel="t", ylabel="y(t)")
+    p1 = plot(y; label=false, xlabel="t", ylabel="y(t)")
 
-	# fit the periodogram
-	Y = DSP.periodogram(y; fs=1)
+    # fit the periodogram
+    Y = DSP.periodogram(y; fs=1)
 
-	# plot the periodogram
-	p2 = plot(
-		Y.freq, Y.power, label=false, xlims=(0, 0.35),
-		xlabel="Frequency",
-		ylabel="Power",
-	)
+    # plot the periodogram
+    p2 = plot(
+        Y.freq, Y.power; label=false, xlims=(0, 0.35), xlabel="Frequency", ylabel="Power"
+    )
 
-	# plot both
-	plot(p1, p2)
+    # plot both
+    plot(p1, p2)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

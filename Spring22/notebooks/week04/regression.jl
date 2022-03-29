@@ -326,7 +326,8 @@ function get_mc_predictions(X, chain)
 	yscaled = α' .+ X * β'
 
 	# un-scale our predictions for better comparison
-	y = μy .+ σy .* yscaled
+
+	y .+ σy .* yscaled
 	
 	return y
 end;

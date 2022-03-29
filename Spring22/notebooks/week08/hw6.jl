@@ -6,23 +6,23 @@ using InteractiveUtils
 
 # ╔═╡ db27e570-964f-11ec-182c-f524f469b3b5
 begin
-	using CSV
-	using DataFrames
-	using Dates
-	using DSP # for periodogram
-	using DynamicHMC
-	using HTTP
-	using Optim
-	using Plots
-	using StatsBase: pacf, autocor
-	using StatsPlots
-	using Turing
+    using CSV
+    using DataFrames
+    using Dates
+    using DSP # for periodogram
+    using DynamicHMC
+    using HTTP
+    using Optim
+    using Plots
+    using StatsBase: pacf, autocor
+    using StatsPlots
+    using Turing
 end
 
 # ╔═╡ a5d978d0-c62d-43b6-9c52-d1cb916a76f2
 begin
-	using PlutoUI
-	TableOfContents()
+    using PlutoUI
+    TableOfContents()
 end
 
 # ╔═╡ 37b49eab-be70-4982-b511-dec2bad61cc1
@@ -38,17 +38,17 @@ md"## Part I: AR models"
 
 # ╔═╡ 20015d9d-c0b6-4142-8ff7-5d2979091fa5
 function read_huron(fname)
-	df = DataFrame(CSV.File(fname, header=["lake"]))
-	huron = df[!, :lake]
-	years = collect(1875:1972)
-	return huron, years
+    df = DataFrame(CSV.File(fname; header=["lake"]))
+    huron = df[!, :lake]
+    years = collect(1875:1972)
+    return huron, years
 end;
 
 # ╔═╡ 3abb5e74-e27b-4741-9e49-2021c4a74cf0
 huron, years = read_huron("../../assets/data/lake.tsm");
 
 # ╔═╡ ac7782a3-d679-4671-a520-d29ac3c26179
-plot(years, huron, xlabel="Year", label=false, marker=:o)
+plot(years, huron; xlabel="Year", label=false, marker=:o)
 
 # ╔═╡ 0227dafe-e11a-43af-a7db-9217ab579506
 md"""
@@ -123,9 +123,9 @@ N_forecast = 20;
 
 # ╔═╡ 4742359f-2ea3-4b75-bc46-060b4c7dcab9
 ynew = let
-	# this cell is disabled but included to remind you of the syntax
-	chains_params = Turing.MCMCChains.get_sections(chains, :parameters)
-	generated_quantities(ar_trend_model, chains_params) 
+    # this cell is disabled but included to remind you of the syntax
+    chains_params = Turing.MCMCChains.get_sections(chains, :parameters)
+    generated_quantities(ar_trend_model, chains_params)
 end;
 
 # ╔═╡ b7e125c7-40cf-4084-bf18-2a224452b5be
@@ -167,28 +167,31 @@ What do you notice?
 
 # ╔═╡ 92ef0e86-db92-40f8-a4ab-24397951260f
 function read_enso()
-	url = "https://psl.noaa.gov/data/correlation/nina3.data"
-	df  = CSV.File(
-		HTTP.get(url).body,
-		header=false,
-		footerskip=4,
-		missingstring="-99.99",
-		skipto=4,
-		delim=" ",
-		ignorerepeated=true,
-	) |> DataFrame
-	syear = df[1, 1]
-	y = Array(df[!, 2:13])
-	y = collect(vec(y'))
-	dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
-	DataFrame(:t => dates, :sst => y)
+    url = "https://psl.noaa.gov/data/correlation/nina3.data"
+    df = DataFrame(
+        CSV.File(
+            HTTP.get(url).body;
+            header=false,
+            footerskip=4,
+            missingstring="-99.99",
+            skipto=4,
+            delim=" ",
+            ignorerepeated=true,
+        ),
+    )
+    syear = df[1, 1]
+    y = Array(df[!, 2:13])
+    y = collect(vec(y'))
+    dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
+    return DataFrame(:t => dates, :sst => y)
 end;
 
 # ╔═╡ bbb66382-5961-4463-8cc0-9a16d28ec398
-enso = read_enso(); first(enso, 5)
+enso = read_enso();
+first(enso, 5);
 
 # ╔═╡ f94ec611-1a89-44ac-89dd-68f7b8c2c793
-plot(enso.t, enso.sst, xlabel="Time", ylabel="NINO3 Mean SSTs", label=false)
+plot(enso.t, enso.sst; xlabel="Time", ylabel="NINO3 Mean SSTs", label=false)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
