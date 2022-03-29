@@ -6,17 +6,17 @@ using InteractiveUtils
 
 # ╔═╡ 6e93c333-95df-47af-9104-590f96adec4d
 begin
-	using CSV
-	using DataFrames
-	using Distributions
-	using DynamicHMC
-	using HTTP
-	using LaTeXStrings
-	using MCMCChains
-	using StatsBase
-	using StatsPlots
-	using Turing
-	using StatsFuns: logistic
+    using CSV
+    using DataFrames
+    using Distributions
+    using DynamicHMC
+    using HTTP
+    using LaTeXStrings
+    using MCMCChains
+    using StatsBase
+    using StatsPlots
+    using Turing
+    using StatsFuns: logistic
 end
 
 # ╔═╡ f95f9354-8ea9-11ec-2f41-db4100dbc0d5
@@ -56,14 +56,14 @@ The Beta distribution is a tricky creature; both parameters could depend on the 
 
 # ╔═╡ 341d21b1-1ce0-47ed-9cf8-0683877a2f95
 let
-	p = plot(title="Beta Distributions", legend=:topleft)
-	for α in (2, 10)
-		for β in (3, 7)
-			label = L"$\mathrm{Beta}(%$α, %$β)$"
-			plot!(p, Beta(α, β), label=label)
-		end
-	end
-	p
+    p = plot(; title="Beta Distributions", legend=:topleft)
+    for α in (2, 10)
+        for β in (3, 7)
+            label = L"$\mathrm{Beta}(%$α, %$β)$"
+            plot!(p, Beta(α, β); label=label)
+        end
+    end
+    p
 end
 
 # ╔═╡ 0835bd75-5550-4868-b0a4-1bb12591ef36
@@ -101,9 +101,9 @@ Make sure it has `N` rows, and that the first column is a column of ones though!
 
 # ╔═╡ e7e3fc31-ea8f-4783-85f0-79f3bd08cff8
 function make_X(N)
-	X = rand(N, 3) # FILL IN!
-	X = hcat(ones(N), X) # this will add the intercept column
-	return X
+    X = rand(N, 3) # FILL IN!
+    X = hcat(ones(N), X) # this will add the intercept column
+    return X
 end;
 
 # ╔═╡ d1c0a94a-ec03-4d27-adf8-749e1b4e7554
@@ -113,9 +113,9 @@ Next, write a function to simulate $y$ from $p(y | x)$ for known parameters
 
 # ╔═╡ c21c23d4-016f-45e6-ad2e-1cf771448838
 function simulate_zero_inflated_beta(; γ, ϕ, N)
-	X = make_X(N)
-	y = 1 # change this
-	return X, y
+    X = make_X(N)
+    y = 1 # change this
+    return X, y
 end;
 
 # ╔═╡ d774747c-11a7-4c67-aa6a-a855622890fb
@@ -139,10 +139,10 @@ If you can't recover known parameter values *when the data is really generated b
 
 # ╔═╡ ed8864b8-4cc5-4288-a052-46015f48ffaa
 begin
-	γ = [1, 1] # FILL IN -- MAKE SURE IT'S RIGHT DIMENSIONS
-	ϕ = 1 # FILL IN
-	N = 100
-	y = simulate_zero_inflated_beta(γ=γ, ϕ=ϕ, N=N)
+    γ = [1, 1] # FILL IN -- MAKE SURE IT'S RIGHT DIMENSIONS
+    ϕ = 1 # FILL IN
+    N = 100
+    y = simulate_zero_inflated_beta(; γ=γ, ϕ=ϕ, N=N)
 end;
 
 # ╔═╡ 4a4e23c8-53e1-4e52-b2f7-6c8255b38e3a

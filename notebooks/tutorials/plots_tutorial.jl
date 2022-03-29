@@ -59,8 +59,8 @@ md"""
 
 # ╔═╡ 6b55e978-88d5-11eb-1fea-739e61bbb35a
 begin
-		plot!(rand(4))
-		scatter!(rand(4))
+    plot!(rand(4))
+    scatter!(rand(4))
 end
 
 # ╔═╡ 198eb00c-88d5-11eb-3d3c-3963d197f0e0
@@ -69,7 +69,7 @@ md"""
 """
 
 # ╔═╡ 2b4cc1d0-88d5-11eb-0afd-3988abd9a870
-plot!(legend=false, axis=false, grid=false, ticks=false )
+plot!(; legend=false, axis=false, grid=false, ticks=false)
 
 # ╔═╡ dd81f7a5-1acf-430d-9d25-ab2877bf34cf
 md"""
@@ -83,9 +83,9 @@ md"""
 
 # ╔═╡ da7b4c10-88d7-11eb-011e-dbb639e6fa2b
 begin
-	v = rand(4)
-	plot(v, ratio=1, legend=false)
-	scatter!(v)
+    v = rand(4)
+    plot(v; ratio=1, legend=false)
+    scatter!(v)
 end
 
 # ╔═╡ cca58686-88d8-11eb-2fe4-d7d378c5408a
@@ -95,31 +95,42 @@ yflip = true places the 2,1 entry where you want it, since you want to interchan
 """
 
 # ╔═╡ d2c81aec-88d8-11eb-0e25-57a2068c3bf9
-A = [ 1 1000 1 ; 1 1 1; 1 1 1]
+A = [1 1000 1; 1 1 1; 1 1 1]
 
 # ╔═╡ e3f7d1ea-88d8-11eb-21bf-cbcdec1e8810
-heatmap(A, ratio=1, yflip=true, legend=false, axis=false, grid=false,  ticks=false)
+heatmap(A; ratio=1, yflip=true, legend=false, axis=false, grid=false, ticks=false)
 
 # ╔═╡ b059780e-88db-11eb-028c-6b07355fb1ab
-heatmap( rand(10,10), clim=(0,1), ratio=1, legend=false, axis=false, ticks=false)
+heatmap(rand(10, 10); clim=(0, 1), ratio=1, legend=false, axis=false, ticks=false)
 
 # ╔═╡ 48561d5a-8991-11eb-2a55-db793e4c9fea
 begin
-	MM = [ 0 1 0; 0 0 0; 1 0 0]
-	
-	whiteblack = [RGBA(1,1,1,0), RGB(0,0,0)]
-	 heatmap(c=whiteblack, MM, aspect_ratio = 1, ticks=.5:3.5, lims=(.5,3.5), gridalpha=1, legend=false, axis=false, ylabel="i", xlabel="j")
+    MM = [0 1 0; 0 0 0; 1 0 0]
+
+    whiteblack = [RGBA(1, 1, 1, 0), RGB(0, 0, 0)]
+    heatmap(;
+        c=whiteblack,
+        MM,
+        aspect_ratio=1,
+        ticks=0.5:3.5,
+        lims=(0.5, 3.5),
+        gridalpha=1,
+        legend=false,
+        axis=false,
+        ylabel="i",
+        xlabel="j",
+    )
 end
 
 # ╔═╡ 1bc15efe-8a44-11eb-11e4-5349f4279202
 begin
-	p=plot(1:4,guideposition=:top)
+    p = plot(1:4; guideposition=:top)
 end
 
 # ╔═╡ 63a807fe-8a44-11eb-3a3f-23fdf0804149
 begin
-	p.attr[:foreground_color] = RGB(1,0,0)
-	p.attr[:foreground_color]
+    p.attr[:foreground_color] = RGB(1, 0, 0)
+    p.attr[:foreground_color]
 end
 
 # ╔═╡ a0cd1d04-8a44-11eb-248c-1f5d699d60d2
@@ -127,8 +138,8 @@ p
 
 # ╔═╡ b3aba314-8a44-11eb-0ea1-c9aafbecbd7e
 begin
-		q = (p.series_list[1]).plotattributes
-	    q.explicit[:linecolor]=:green
+    q = (p.series_list[1]).plotattributes
+    q.explicit[:linecolor] = :green
 end
 
 # ╔═╡ 5bb7a350-8a45-11eb-15eb-d76bc70ab2bc
@@ -143,15 +154,13 @@ md"""
 Colors.color_names
 
 # ╔═╡ 1d8dd040-898c-11eb-387b-3143b3997eee
-mycolors = [colorant"lightslateblue",colorant"limegreen",colorant"red"]
+mycolors = [colorant"lightslateblue", colorant"limegreen", colorant"red"]
 
 # ╔═╡ 3d2c46d0-898b-11eb-3073-e1012b3ebb67
 begin
-	
-	AA = [i for i=50:300, j=1:100]
+    AA = [i for i in 50:300, j in 1:100]
 
-	heatmap(AA, c=mycolors, clim=(1,300))
-	
+    heatmap(AA; c=mycolors, clim=(1, 300))
 end
 
 # ╔═╡ 0b8a01aa-8993-11eb-2e43-074f49edc175
@@ -161,39 +170,39 @@ md"""
 
 # ╔═╡ e2046a88-8991-11eb-0906-2f0e89a943c3
 begin
-	y = rand(10)
-	plot(y, fillrange= y.*0 .+ .5, label= "above/below 1/2", legend =:topleft)
+    y = rand(10)
+    plot(y; fillrange=y .* 0 .+ 0.5, label="above/below 1/2", legend=:topleft)
 end
 
 # ╔═╡ a990150c-8992-11eb-22f5-bfdf98f17298
 begin
-	x = LinRange(0,2,100)
-	y1 = exp.(x)
-	y2 = exp.(1.3 .* x)
-	
-	plot(x, y1, fillrange = y2, fillalpha = 0.35, c = 1, label = "Confidence band", legend = :topleft)
+    x = LinRange(0, 2, 100)
+    y1 = exp.(x)
+    y2 = exp.(1.3 .* x)
+
+    plot(x, y1; fillrange=y2, fillalpha=0.35, c=1, label="Confidence band", legend=:topleft)
 end
 
 # ╔═╡ 940bd6dc-8c12-11eb-09a2-89206356c143
 let
-	x = -3:.01:3
-	areaplot(x, exp.(-x.^2/2)/√(2π),alpha=.25,legend=false)
+    x = -3:0.01:3
+    areaplot(x, exp.(-x .^ 2 / 2) / √(2π); alpha=0.25, legend=false)
 end
 
 # ╔═╡ 78727c02-8c13-11eb-16b7-bd7d4414577d
 begin
-	M = [1 2 3; 7 8 9; 4 5 6; 0 .5 1.5]
-	areaplot(1:3, M, seriescolor = [:red :green :blue ], fillalpha = [0.2 0.3 0.4])
+    M = [1 2 3; 7 8 9; 4 5 6; 0 0.5 1.5]
+    areaplot(1:3, M; seriescolor=[:red :green :blue], fillalpha=[0.2 0.3 0.4])
 end
 
 # ╔═╡ b8435896-8d81-11eb-3d44-7db7b987f992
 let
-	f = x->exp(-x^2/2)/√(2π)
-	δ = .01
-	plot()
-	x = √2 .* erfinv.(2 .*(δ/2 : δ : 1) .- 1)
-	areaplot( x, f.(x), seriescolor=[ :red,:blue], legend=false)
-	plot!( f, x,c=:black)
+    f = x -> exp(-x^2 / 2) / √(2π)
+    δ = 0.01
+    plot()
+    x = √2 .* erfinv.(2 .* ((δ / 2):δ:1) .- 1)
+    areaplot(x, f.(x); seriescolor=[:red, :blue], legend=false)
+    plot!(f, x; c=:black)
 end
 
 # ╔═╡ d2c45794-8c12-11eb-17bb-a37bae10d084
@@ -203,14 +212,17 @@ md"""
 
 # ╔═╡ dcafeb72-8bce-11eb-23ae-37cad92e0f82
 begin
-	rectangle(w, h, x, y) = Shape(x .+ [0,w,w,0], y .+ [0,0,h,h])
-	circle(r,x,y) = (θ = LinRange(0,2π,500); (x.+r.*cos.(θ), y.+r.*sin.(θ)))
+    rectangle(w, h, x, y) = Shape(x .+ [0, w, w, 0], y .+ [0, 0, h, h])
+    circle(r, x, y) = (θ = LinRange(0, 2π, 500);
+    (x .+ r .* cos.(θ), y .+ r .* sin.(θ)))
 end
 
 # ╔═╡ d7c8534e-8c12-11eb-211f-6b8718e52dd7
 begin
-	plot(circle(5,0,0), ratio=1, c=:red, fill=true)
-	plot!(rectangle(5*√2,5*√2,-2.5*√2,-2.5*√2),c=:white,fill=true,legend=false)
+    plot(circle(5, 0, 0); ratio=1, c=:red, fill=true)
+    plot!(
+        rectangle(5 * √2, 5 * √2, -2.5 * √2, -2.5 * √2); c=:white, fill=true, legend=false
+    )
 end
 
 # ╔═╡ c798a01a-8b51-11eb-2517-c7f45234db58
@@ -219,7 +231,7 @@ md"""
 """
 
 # ╔═╡ dbfaa24e-8b51-11eb-3c20-bf7919c3a167
-pl = plot(1:4,[1, 4, 9, 16])
+pl = plot(1:4, [1, 4, 9, 16])
 
 # ╔═╡ ebbb02a0-8b51-11eb-08ef-4bb2f55782c1
 pl.attr
@@ -228,7 +240,7 @@ pl.attr
 pl.series_list[1]
 
 # ╔═╡ 131aa286-8b4a-11eb-3b4b-fb34a39cc7fb
-pl[:size]=(300,200)
+pl[:size] = (300, 200)
 
 # ╔═╡ 111bec42-8b4a-11eb-08ca-e194014175f7
 pl
@@ -239,64 +251,58 @@ md"""
 """
 
 # ╔═╡ 78f0c7c6-8d6a-11eb-29f4-af99ddf71960
-@vlplot(:point, rand(10), rand(10) )
+@vlplot(:point, rand(10), rand(10))
 
 # ╔═╡ 129de546-8d81-11eb-2ea0-a3e60e88ae13
 begin
-	dataset("zipcodes") |>
-	@vlplot(
-	    :circle,
-	    width=500, height=300,
-	    transform=[{calculate="substring(datum.zip_code, 0, 1)", as=:digit}],
-	    projection={type=:albersUsa},
-	    longitude=:longitude,
-	    latitude=:latitude,
-	    size={value=1},
-	    color="digit:n"
-	)
+    @vlplot(
+        :circle,
+        width = 500,
+        height = 300,
+        transform = [{calculate = "substring(datum.zip_code, 0, 1)", as = :digit}],
+        projection = {type = :albersUsa},
+        longitude = :longitude,
+        latitude = :latitude,
+        size = {value = 1},
+        color = "digit:n"
+    )(
+        dataset("zipcodes")
+    )
 end
 
 # ╔═╡ 837a7086-8dc7-11eb-3397-e10d6f40481f
- d = DataFrame(dataset("zipcodes"))
+d = DataFrame(dataset("zipcodes"))
 
 # ╔═╡ c0494eba-8dc7-11eb-3c1a-1f19979a4f4a
-scatter( d[!,:longitude], d[!,:latitude], m=:., ms=1, xlim=(-150,-50), ylim=(20,55))
+scatter(d[!, :longitude], d[!, :latitude]; m=:., ms=1, xlim=(-150, -50), ylim=(20, 55))
 
 # ╔═╡ 3395ee1c-8d81-11eb-3e94-b1373d69dc93
 
-
 # ╔═╡ 6dbc29fc-8da3-11eb-3196-e1e235eb6e86
 begin
-	
-	struct RankOneMatrix{T} 
-	  v::AbstractVector{T}
-	   w::AbstractVector{T}
-	end
-	
-
-	
-	
+    struct RankOneMatrix{T}
+        v::AbstractVector{T}
+        w::AbstractVector{T}
+    end
 end
 
 # ╔═╡ 2e9d597e-8da5-11eb-114b-5f87731d4ced
 
-
 # ╔═╡ 41e5e100-8da4-11eb-3bb8-d9d414af8e2a
-RankOneMatrix( rand(3) , rand(3) )
+RankOneMatrix(rand(3), rand(3))
 
 # ╔═╡ e9b2b30e-8da4-11eb-04b3-8ba421898f0a
 methods(RankOneMatrix)
 
 # ╔═╡ 311ce496-8dad-11eb-330c-d3757a6fac8f
 begin
-	xx = .1:.1:1
-	plot(xx.^2, xaxis=:log, yaxis=:log)
+    xx = 0.1:0.1:1
+    plot(xx .^ 2; xaxis=:log, yaxis=:log)
 end
 
 # ╔═╡ 5ae674d6-8dad-11eb-3abf-6fdbbb6cfe43
 begin
-	
-	plot(exp.(x), yaxis=:log)
+    plot(exp.(x); yaxis=:log)
 end
 
 # ╔═╡ eb3e721e-88d4-11eb-1f09-cfba69f498d4

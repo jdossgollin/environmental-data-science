@@ -6,17 +6,17 @@ using InteractiveUtils
 
 # ╔═╡ adc876e3-62b3-494b-b5b7-da148e2e5413
 begin
-	using CSV
-	using DataFrames
-	using Dates
-	using Distributions
-	using HMMBase
-	using HTTP
-	using LaTeXStrings
-	using Plots
-	using StatsPlots
-	using PlutoUI
-	TableOfContents()
+    using CSV
+    using DataFrames
+    using Dates
+    using Distributions
+    using HMMBase
+    using HTTP
+    using LaTeXStrings
+    using Plots
+    using StatsPlots
+    using PlutoUI
+    TableOfContents()
 end
 
 # ╔═╡ 40620d08-9f56-11ec-0b3f-a73680cad4b7
@@ -64,28 +64,29 @@ We've seen how to build them in Julia, too:
 
 # ╔═╡ c7a907fc-93d1-43d8-8ea5-008b90109ce2
 let
-	d1 = Normal(0, 1)
-	d2 = Normal(2.5, 1.5)
-	d = MixtureModel([d1, d2], [0.6, 0.4])
-	plot(x -> pdf(d, x), -4, 8, label="Mixture", linewidth=3,
-	xlabel=L"$x$", ylabel=L"$p(x)$")
-	plot!(x -> pdf(d1, x), label="d1", linewidth=3)
-	plot!(x -> pdf(d2, x), label="d2", linewidth=3)
+    d1 = Normal(0, 1)
+    d2 = Normal(2.5, 1.5)
+    d = MixtureModel([d1, d2], [0.6, 0.4])
+    plot(
+        x -> pdf(d, x), -4, 8; label="Mixture", linewidth=3, xlabel=L"$x$", ylabel=L"$p(x)$"
+    )
+    plot!(x -> pdf(d1, x); label="d1", linewidth=3)
+    plot!(x -> pdf(d2, x); label="d2", linewidth=3)
 end
 
 # ╔═╡ 3751f020-3507-4eed-9900-4fc6fc0ba9db
 let
-	kwargs = Dict(:marker => :o)
-	λ = [10, 2.5, 0.5]
-	dists = [Poisson(λi) for λi in λ]
-	mix = MixtureModel(dists) # uniform weight
-	xvals = 1:20
-	p = plot(xlabel=L"$x$", ylabel=L"$p(x)$")
-	for (i, d) in enumerate(dists)
-		plot!(p, xvals, x -> pdf.(d, x); label="d$i", kwargs...)
-	end
-	plot!(p, xvals, x -> pdf.(mix, x); label="Mixture", kwargs...,  linewidth=6)
-	p
+    kwargs = Dict(:marker => :o)
+    λ = [10, 2.5, 0.5]
+    dists = [Poisson(λi) for λi in λ]
+    mix = MixtureModel(dists) # uniform weight
+    xvals = 1:20
+    p = plot(; xlabel=L"$x$", ylabel=L"$p(x)$")
+    for (i, d) in enumerate(dists)
+        plot!(p, xvals, x -> pdf.(d, x); label="d$i", kwargs...)
+    end
+    plot!(p, xvals, x -> pdf.(mix, x); label="Mixture", kwargs..., linewidth=6)
+    p
 end
 
 # ╔═╡ 5b0183b7-70ab-4925-bb5a-4a54aeb69483
@@ -106,19 +107,25 @@ We set $S_1 = 1$.
 
 # ╔═╡ 6be6452e-1965-4daa-8f8e-9be270011f87
 let
-	# two ways to write a matrix
-	P = vcat([0.7, 0.3]', [0.5, 0.5]')
-	Palt = [0.7 0.3; 0.5 0.5]
+    # two ways to write a matrix
+    P = vcat([0.7, 0.3]', [0.5, 0.5]')
+    Palt = [0.7 0.3; 0.5 0.5]
 
-	state = 1 # could call it i
-	hist = []
-	for _ in 1:50
-		push!(hist, state) # add to record
-		probs = P[state, :]
-		state = rand(Categorical(probs))
-	end
-	plot(hist, label=false, xlabel="Time Step", ylabel="State", marker=:o,
-	title="A simple Markov chain")
+    state = 1 # could call it i
+    hist = []
+    for _ in 1:50
+        push!(hist, state) # add to record
+        probs = P[state, :]
+        state = rand(Categorical(probs))
+    end
+    plot(
+        hist;
+        label=false,
+        xlabel="Time Step",
+        ylabel="State",
+        marker=:o,
+        title="A simple Markov chain",
+    )
 end
 
 # ╔═╡ 88765db0-fd2c-4f93-a5cc-bf6c51663b5b
@@ -158,33 +165,50 @@ Let's illustrate this for $K=2$
 # ╔═╡ 9472db35-69c4-4aac-a839-cc9145858a8c
 let
 
-	# we know the parameters
-	P = [0.7 0.3; 0.2 0.8] # transition matrix
-	D = [Normal(-2.5, 1), Normal(2.5, 1)] # distributions
-	S = 1 # initial state
+    # we know the parameters
+    P = [0.7 0.3; 0.2 0.8] # transition matrix
+    D = [Normal(-2.5, 1), Normal(2.5, 1)] # distributions
+    S = 1 # initial state
 
-	# history
-	S_hist = []
-	X_hist = []
+    # history
+    S_hist = []
+    X_hist = []
 
-	Nsim = 5000
-	Nplot = 100
-	for _ in 1:Nsim
-		X = rand(D[S])
-		push!(S_hist, S)
-		push!(X_hist, X)
-		probs = P[S, :]
-		S = rand(Categorical(probs))
-	end
+    Nsim = 5000
+    Nplot = 100
+    for _ in 1:Nsim
+        X = rand(D[S])
+        push!(S_hist, S)
+        push!(X_hist, X)
+        probs = P[S, :]
+        S = rand(Categorical(probs))
+    end
 
-	# plots
-	p11 = plot(S_hist[1:Nplot], label=false, ylabel=L"$S_t$", marker=:o)
-	p12 = histogram(S_hist, orientation=:horizontal, bins=0.5:1:2.5, label=false, normalize=:pdf)
-	p21 = plot(X_hist[1:Nplot], label=false, ylabel=L"$X_t$", xlabel="First $Nplot steps", marker=:o)
-	p22 = histogram(X_hist, orientation=:horizontal, label=false, normalize=:pdf)
+    # plots
+    p11 = plot(S_hist[1:Nplot]; label=false, ylabel=L"$S_t$", marker=:o)
+    p12 = histogram(
+        S_hist; orientation=:horizontal, bins=0.5:1:2.5, label=false, normalize=:pdf
+    )
+    p21 = plot(
+        X_hist[1:Nplot];
+        label=false,
+        ylabel=L"$X_t$",
+        xlabel="First $Nplot steps",
+        marker=:o,
+    )
+    p22 = histogram(X_hist; orientation=:horizontal, label=false, normalize=:pdf)
 
-	# plot everything
-	plot(p11, p12, p21, p22, layout=grid(2, 2, widths=[0.7, 0.3]), size=(1000, 600), left_margin=5Plots.mm, bottom_margin=5Plots.mm)
+    # plot everything
+    plot(
+        p11,
+        p12,
+        p21,
+        p22;
+        layout=grid(2, 2; widths=[0.7, 0.3]),
+        size=(1000, 600),
+        left_margin=5Plots.mm,
+        bottom_margin=5Plots.mm,
+    )
 end
 
 # ╔═╡ 9cefa9f2-dcab-4110-88be-b016e4e19cb3
@@ -213,7 +237,7 @@ To create a model with known parameters, we define a `HMM` with a transition mat
 """
 
 # ╔═╡ 2e699821-c3dc-4d68-9115-7229d737ebae
-hmm = HMM([0.8 0.2; 0.33 0.67], [Normal(-3,0.5), Normal(3,1.5)])
+hmm = HMM([0.8 0.2; 0.33 0.67], [Normal(-3, 0.5), Normal(3, 1.5)])
 
 # ╔═╡ f8e579ce-4c51-4e51-97b6-a240c14980a2
 md"""
@@ -224,7 +248,7 @@ Let's generate some fake data to fit
 hmm_fake_data = rand(hmm, 50);
 
 # ╔═╡ a44aa82f-39d4-4848-8985-11d78592086b
-plot(hmm_fake_data, size=(800, 250), label=false)
+plot(hmm_fake_data; size=(800, 250), label=false)
 
 # ╔═╡ de8df808-f163-48da-9367-dc4596e0ae2e
 md"To fit a HMM with this package, we need to specify an initial guess. Here let's consider a HMM with two states, uniform transition matrics, and Normal distributions with the same standard deviation but different means."
@@ -300,12 +324,12 @@ We'll guess a uniform transition matrix (guessing high persistence would also be
 
 # ╔═╡ 29d75b7a-f38c-4035-9422-3af815f70c74
 hmm_enso_guess = let
-	K = 3
-	Σ = ones(K, K)
-	Σ = Σ ./ sum.(eachrow(Σ)) # normalize!
-	μ = randn(K)
-	σ = ones(K)
-	HMM(Σ, [Normal(μi, σi) for (μi, σi) in zip(μ, σ)])
+    K = 3
+    Σ = ones(K, K)
+    Σ = Σ ./ sum.(eachrow(Σ)) # normalize!
+    μ = randn(K)
+    σ = ones(K)
+    HMM(Σ, [Normal(μi, σi) for (μi, σi) in zip(μ, σ)])
 end
 
 # ╔═╡ 6c02acbf-c61d-4d13-9210-7766ccded428
@@ -329,21 +353,23 @@ md"""
 
 # ╔═╡ 2bb8321a-504e-4506-b72c-291dddc51828
 function read_enso(; fname="nino3.txt")
-	url = "https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.anom.data"
-	df  = CSV.File(
-		HTTP.get(url).body,
-		header=false,
-		footerskip=7,
-		missingstring="-99.99",
-		skipto=2,
-		delim=" ",
-		ignorerepeated=true,
-	) |> DataFrame
-	syear = df[1, 1]
-	y = Array(df[!, 2:13])
-	y = collect(vec(y'))
-	dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
-	DataFrame(:t => dates, :sst => y)
+    url = "https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.anom.data"
+    df = DataFrame(
+        CSV.File(
+            HTTP.get(url).body;
+            header=false,
+            footerskip=7,
+            missingstring="-99.99",
+            skipto=2,
+            delim=" ",
+            ignorerepeated=true,
+        ),
+    )
+    syear = df[1, 1]
+    y = Array(df[!, 2:13])
+    y = collect(vec(y'))
+    dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
+    return DataFrame(:t => dates, :sst => y)
 end;
 
 # ╔═╡ 92a991ad-51e9-4a81-a9db-a88fe6be0c6b
@@ -357,21 +383,21 @@ plot(hist_enso.logtots)
 
 # ╔═╡ 3232d3b6-a416-4bbe-81c6-099f6a96e7fc
 let
-	Nsteps = 12 * 10
-	Nsim = 1
-	tidx = 1400:nrow(enso)
-	tplot = enso.t[tidx]
-	
-	ynew = [rand(hmm_enso, Nsteps) for _ in 1:Nsim];
-	p1 = plot(tplot, enso.sst[tidx], label="NINO 3.4", legend=:bottomleft, ylabel="NINO3.4")
-	tnew = maximum(tplot) .+ Dates.Month.(1:Nsteps)
-	for yn in ynew
-		plot!(p1, tnew, yn, color=:gray, label="Simulated")
-	end
+    Nsteps = 12 * 10
+    Nsim = 1
+    tidx = 1400:nrow(enso)
+    tplot = enso.t[tidx]
 
-	states = viterbi(hmm_enso, enso.sst)
-	p2 = plot(tplot, states[tidx], ylabel="Inferred State", legend=false)
-	plot(p1, p2, layout=grid(2, 1, heights=[0.7, 0.3]), link=:x)
+    ynew = [rand(hmm_enso, Nsteps) for _ in 1:Nsim]
+    p1 = plot(tplot, enso.sst[tidx]; label="NINO 3.4", legend=:bottomleft, ylabel="NINO3.4")
+    tnew = maximum(tplot) .+ Dates.Month.(1:Nsteps)
+    for yn in ynew
+        plot!(p1, tnew, yn; color=:gray, label="Simulated")
+    end
+
+    states = viterbi(hmm_enso, enso.sst)
+    p2 = plot(tplot, states[tidx]; ylabel="Inferred State", legend=false)
+    plot(p1, p2; layout=grid(2, 1; heights=[0.7, 0.3]), link=:x)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

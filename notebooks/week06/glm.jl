@@ -6,10 +6,10 @@ using InteractiveUtils
 
 # ╔═╡ 54a38fd8-8e87-11ec-09d6-c96fdfad1e81
 begin
-	using Distributions
-	using LaTeXStrings
-	using Plots
-	using PlutoUI
+    using Distributions
+    using LaTeXStrings
+    using Plots
+    using PlutoUI
 end
 
 # ╔═╡ 1a7beaff-a436-4c21-bee4-af9f9b7195ec
@@ -86,18 +86,18 @@ inv_probit(x) = cdf(Normal(0, 1), x);
 
 # ╔═╡ 4cc12f9b-1825-4445-93f8-638b2741747f
 let
-	μ = LinRange(-5, 5, 500)
-	p1 = inv_logit.(μ)
-	p2 = inv_probit.(μ)
-	plot(
-		μ,
-		p1,
-		label="Logit",
-		xlabel=L"$\alpha + \beta x_i$",
-		ylabel=L"$p_i = f(\alpha + \beta x_i)$",
-		legend=:topleft,
-	)
-	plot!(μ, p2, label="Probit")
+    μ = LinRange(-5, 5, 500)
+    p1 = inv_logit.(μ)
+    p2 = inv_probit.(μ)
+    plot(
+        μ,
+        p1;
+        label="Logit",
+        xlabel=L"$\alpha + \beta x_i$",
+        ylabel=L"$p_i = f(\alpha + \beta x_i)$",
+        legend=:topleft,
+    )
+    plot!(μ, p2; label="Probit")
 end
 
 # ╔═╡ 2198d3c5-bff4-4988-b009-c1e30bd57acf
@@ -119,17 +119,17 @@ y_i &\sim \mathrm{Poisson}(\lambda_i) \\
 
 # ╔═╡ 4c89125d-840e-4847-94ca-7e0949e31d58
 let
-	μ = LinRange(-3, 3, 500)
-	λ = exp.(μ)
-	y = rand.(Poisson.(λ))
-	scatter(
-		μ,
-		y,
-		label=false,
-		xlabel=L"$\alpha + \beta x_i$",
-		ylabel=L"$y_i \sim \mathrm{Poiss}(\exp(\alpha + \beta x_i))$",
-		alpha=0.5,
-	)
+    μ = LinRange(-3, 3, 500)
+    λ = exp.(μ)
+    y = rand.(Poisson.(λ))
+    scatter(
+        μ,
+        y;
+        label=false,
+        xlabel=L"$\alpha + \beta x_i$",
+        ylabel=L"$y_i \sim \mathrm{Poiss}(\exp(\alpha + \beta x_i))$",
+        alpha=0.5,
+    )
 end
 
 # ╔═╡ da5f2fa9-8c60-4d00-887b-9007d234cb2a

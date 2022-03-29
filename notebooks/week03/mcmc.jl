@@ -6,15 +6,15 @@ using InteractiveUtils
 
 # ╔═╡ 0d6900ae-7aef-11ec-1822-43e9e2b5ab14
 begin
-	using Distributions
-	using DynamicHMC
-	using LaTeXStrings
-	using Optim
-	using Plots
-	using PlutoUI
-	using StatsPlots
-	using Turing
-	TableOfContents()
+    using Distributions
+    using DynamicHMC
+    using LaTeXStrings
+    using Optim
+    using Plots
+    using PlutoUI
+    using StatsPlots
+    using Turing
+    TableOfContents()
 end
 
 # ╔═╡ a5c07f65-bf90-43c6-b109-3ea2e9717d7c
@@ -47,10 +47,10 @@ Let's see an example -- and what better than our beloved coin flipping experimen
 
 # ╔═╡ 5b9986fa-5c4a-4ade-9494-01fcc099ea96
 begin
-	coin_flips = ["H", "H", "H", "T", "H", "H", "H", "H", "H"]
-	heads = [flip == "H" for flip in coin_flips]
-	N = length(coin_flips)
-	n_heads = sum(heads)
+    coin_flips = ["H", "H", "H", "T", "H", "H", "H", "H", "H"]
+    heads = [flip == "H" for flip in coin_flips]
+    N = length(coin_flips)
+    n_heads = sum(heads)
 end;
 
 # ╔═╡ 27ebfe8a-8296-44b9-a2f0-cb73452b13f0
@@ -64,12 +64,12 @@ md"and use it inside"
 
 # ╔═╡ 82610f52-cd2a-46f9-89c0-7edfd982a455
 @model function coinflip(x)
-    
-	# now our priors do matter!
-	p ~ prior_dist
+
+    # now our priors do matter!
+    p ~ prior_dist
 
     # The number of observations.
-    x .~ Bernoulli(p)
+    return x .~ Bernoulli(p)
 end
 
 # ╔═╡ c90367b6-ede8-45b5-b136-07626ffcbcc1
@@ -82,10 +82,10 @@ Here's the syntax to do that
 
 # ╔═╡ 6e334d4a-3708-492d-9c1f-ccb7312adc2f
 chain = let
-	model = coinflip(heads)
-	sampler = DynamicNUTS()
-	nsamples = 5000
-	sample(model, sampler, nsamples, drop_warmup=true)
+    model = coinflip(heads)
+    sampler = DynamicNUTS()
+    nsamples = 5000
+    sample(model, sampler, nsamples; drop_warmup=true)
 end
 
 # ╔═╡ 676d449d-0fdb-4182-92aa-829e08c85868
@@ -123,10 +123,10 @@ A histogram shows that our samples very closely match the true posterior
 
 # ╔═╡ 768684e1-e43f-4fce-b482-2c5392e0ba7b
 let
-	p_summary = chain[:p]
-	histogram(p_summary, label="Posterior", normalize=true, legend=:topleft)
-	closed_form = Beta(5+8, 5+1)
-	plot!(closed_form, label="Closed Form", linewidth=3)
+    p_summary = chain[:p]
+    histogram(p_summary; label="Posterior", normalize=true, legend=:topleft)
+    closed_form = Beta(5 + 8, 5 + 1)
+    plot!(closed_form; label="Closed Form", linewidth=3)
 end
 
 # ╔═╡ 46baa45f-fa28-47a3-9c5c-d719a96c004f
@@ -140,11 +140,11 @@ Here's how to do that:
 
 # ╔═╡ d9703f72-776c-421d-9f0d-f40e1a0a8b5c
 chains = let
-	model = coinflip(heads)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	nchains = 4
-	sample(model, sampler, MCMCThreads(), n_per_chain, nchains, drop_warmup=true)
+    model = coinflip(heads)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    nchains = 4
+    sample(model, sampler, MCMCThreads(), n_per_chain, nchains; drop_warmup=true)
 end
 
 # ╔═╡ ed2184e5-5774-4bc4-8e00-acd3ee3c294e
@@ -160,9 +160,9 @@ md"We can again plot the posterior of our chains"
 
 # ╔═╡ 333d29bd-bd83-487e-ac8f-0177288d6909
 let
-	p_summary = vec(chains[:p])
-	histogram(p_summary, label="Posterior", normalize=true, legend=:topleft)
-	plot!(closed_form, label="Closed Form", linewidth=3)
+    p_summary = vec(chains[:p])
+    histogram(p_summary; label="Posterior", normalize=true, legend=:topleft)
+    plot!(closed_form; label="Closed Form", linewidth=3)
 end
 
 # ╔═╡ cfcac5c5-4596-4173-a5e4-2eb15e2c8009
@@ -173,39 +173,59 @@ Let's quickly revisit this for the heights problem
 """
 
 # ╔═╡ 69b2fb6c-93a2-4c77-85b9-1dcc0b2dbc1f
-heights = [5.8399, 5.54462, 5.18701, 5.15092, 5.01969, 5.05249, 5.18701, 5.21654, 5.21654, 5.54462, 5.15092, 5.68241, 5.0853, 5.54462];
+heights = [
+    5.8399,
+    5.54462,
+    5.18701,
+    5.15092,
+    5.01969,
+    5.05249,
+    5.18701,
+    5.21654,
+    5.21654,
+    5.54462,
+    5.15092,
+    5.68241,
+    5.0853,
+    5.54462,
+];
 
 # ╔═╡ d4501482-af50-4bee-9cb6-8595fe898b7b
 @model function normal1d(x)
-    
-	# define parameters through a prior
-	μ ~ Normal(0, 10) # very weak
-	σ ~ TruncatedNormal(0, 2.5, 0, Inf) # trunace so cannot be >1
+
+    # define parameters through a prior
+    μ ~ Normal(0, 10) # very weak
+    σ ~ TruncatedNormal(0, 2.5, 0, Inf) # trunace so cannot be >1
 
     # Data model
-    x .~ Normal(μ, σ)
+    return x .~ Normal(μ, σ)
 end
 
 # ╔═╡ a71badff-2aa1-421a-8280-a0967c9b39be
 heights_posterior = let
-	model = normal1d(heights)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	n_chains = 4
-	sample(model, sampler, MCMCThreads(), n_per_chain, n_chains, drop_warmup=true)
+    model = normal1d(heights)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    n_chains = 4
+    sample(model, sampler, MCMCThreads(), n_per_chain, n_chains; drop_warmup=true)
 end
 
 # ╔═╡ 76c0d8fa-73e1-4ee7-a818-851cb564faae
 let
-	μpost = vec(heights_posterior[:μ])
-	σpost = vec(heights_posterior[:σ])
-	N = length(heights)
-	scatter(
-		μpost, σpost,
-		title="How are heights of 7th grade boys distributed?\nN=$N",
-		markersize=0.125, color=:black, alpha=0.5,
-		label=false, xlabel=L"$\mu$ [ft]", ylabel=L"$\sigma$ [ft]",
-	)
+    μpost = vec(heights_posterior[:μ])
+    σpost = vec(heights_posterior[:σ])
+    N = length(heights)
+    scatter(
+        μpost,
+        σpost;
+        title="How are heights of 7th grade boys distributed?\nN=$N",
+        markersize=0.125,
+        color=:black,
+        alpha=0.5,
+        label=false,
+        xlabel=L"$\mu$ [ft]",
+        ylabel=L"$\sigma$ [ft]",
+    )
 end
 
 # ╔═╡ ef3db979-627c-4b02-8777-521ca8b09a6b
@@ -217,14 +237,14 @@ Here's another way of visualizing that "sample of distributions":
 
 # ╔═╡ 222b41c5-cd87-4630-bbda-08536cbe1319
 let
-	μpost = vec(heights_posterior[:μ])
-	σpost = vec(heights_posterior[:σ])
-	normal_dists = [Normal(μ, σ) for (μ, σ) in zip(μpost, σpost)]
-	p = plot(xlabel=L"$y$", ylabel="Posterior Predictive Density")
-	for i in 1:500
-		plot!(p, normal_dists[i], label=false, color=:gray, alpha=0.1)
-	end
-	p
+    μpost = vec(heights_posterior[:μ])
+    σpost = vec(heights_posterior[:σ])
+    normal_dists = [Normal(μ, σ) for (μ, σ) in zip(μpost, σpost)]
+    p = plot(; xlabel=L"$y$", ylabel="Posterior Predictive Density")
+    for i in 1:500
+        plot!(p, normal_dists[i]; label=false, color=:gray, alpha=0.1)
+    end
+    p
 end
 
 # ╔═╡ 645bc843-7a32-4a0d-bc95-74f08d5b484a
@@ -241,36 +261,70 @@ For example, if we collected some data on extreme rainfall and built a model for
 md"What happens to this as we collect some more data?"
 
 # ╔═╡ 82ade360-d2ae-4d15-9ba9-5f82e8f38aa2
-new_heights = [4.64239, 4.72441, 4.85564, 4.92126, 4.95407, 4.98688, 4.98688, 5.01969, 5.05249, 5.0853, 5.0853, 5.0853, 5.11811, 5.13451, 5.15092, 5.15092, 5.24934, 5.26575, 5.28215, 5.28215, 5.31496, 5.36417, 5.42979, 5.44619, 5.51181, 5.72507];
+new_heights = [
+    4.64239,
+    4.72441,
+    4.85564,
+    4.92126,
+    4.95407,
+    4.98688,
+    4.98688,
+    5.01969,
+    5.05249,
+    5.0853,
+    5.0853,
+    5.0853,
+    5.11811,
+    5.13451,
+    5.15092,
+    5.15092,
+    5.24934,
+    5.26575,
+    5.28215,
+    5.28215,
+    5.31496,
+    5.36417,
+    5.42979,
+    5.44619,
+    5.51181,
+    5.72507,
+];
 
 # ╔═╡ 100b00f4-b72a-4de3-b0ed-8393d5999b17
 all_heights = vcat(heights, new_heights)
 
 # ╔═╡ badfc017-f952-4936-9e8b-39a2e1b4c83e
-md"Let's plot our posterior. I've also added a dot showing where the maximum likelihood estimate (MLE) is, and where the MAP estimate is. The MAP (*maximum a posteriori*) estimate is a point estimate like the MLE, but it takes prior information into account. In this case my prior information is extremely weak, so they're very nearly the same." 
+md"Let's plot our posterior. I've also added a dot showing where the maximum likelihood estimate (MLE) is, and where the MAP estimate is. The MAP (*maximum a posteriori*) estimate is a point estimate like the MLE, but it takes prior information into account. In this case my prior information is extremely weak, so they're very nearly the same."
 
 # ╔═╡ bb4c69e8-2ff6-48a0-be4d-e8f1f90885b8
 mle = let
-	model = normal1d(all_heights)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	n_chains = 4
-	heights_posterior = sample(model, sampler, MCMCThreads(), n_per_chain, n_chains, drop_warmup=true)
-	μpost = collect(vec(heights_posterior[:μ]))
-	σpost = collect(vec(heights_posterior[:σ]))
-	N = length(all_heights)
-	scatter(
-		μpost, σpost,
-		title="How are heights of 7th grade boys distributed?\nN=$N",
-		markersize=0.125, color=:black, alpha=0.5,
-		label=false, xlabel=L"$\mu$ [ft]", ylabel=L"$\sigma$ [ft]",
-	)
-	mle = optimize(model, MLE())
-	μml, σml = mle.values
-	scatter!([μml], [σml], label="MLE", markersize=8, alpha=0.5)
-	map = optimize(model, MAP())
-	μmap, σmap = map.values
-	scatter!([μmap], [σmap], label="MAP", markersize=8, alpha=0.5)
+    model = normal1d(all_heights)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    n_chains = 4
+    heights_posterior = sample(
+        model, sampler, MCMCThreads(), n_per_chain, n_chains; drop_warmup=true
+    )
+    μpost = collect(vec(heights_posterior[:μ]))
+    σpost = collect(vec(heights_posterior[:σ]))
+    N = length(all_heights)
+    scatter(
+        μpost,
+        σpost;
+        title="How are heights of 7th grade boys distributed?\nN=$N",
+        markersize=0.125,
+        color=:black,
+        alpha=0.5,
+        label=false,
+        xlabel=L"$\mu$ [ft]",
+        ylabel=L"$\sigma$ [ft]",
+    )
+    mle = optimize(model, MLE())
+    μml, σml = mle.values
+    scatter!([μml], [σml]; label="MLE", markersize=8, alpha=0.5)
+    map = optimize(model, MAP())
+    μmap, σmap = map.values
+    scatter!([μmap], [σmap]; label="MAP", markersize=8, alpha=0.5)
 end
 
 # ╔═╡ b1ac17bb-39aa-4ca6-bc68-8512bff9a2e3

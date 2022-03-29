@@ -6,22 +6,18 @@ using InteractiveUtils
 
 # ╔═╡ c2135d1a-3b5b-43bb-a433-4148ba69bec9
 begin
-	using ColorSchemes
-	using CSV
-	using DataFrames
+	using Distances # we will use to compute pairwise Euclidean distance
 	using Distributions
 	using GaussianProcesses # this package provides useful syntax
-	using HTTP
 	using LaTeXStrings
+	using LinearAlgebra 
 	using Optim
 	using Plots
+	using Random
 end
 
 # ╔═╡ c76a7aab-b613-40a8-8aa0-9a46cc0c560a
 using Interpolations
-
-# ╔═╡ a3dc9fcb-c13f-4a84-b453-5cc681461a91
-using BlackBoxOptim
 
 # ╔═╡ e4ccd0c6-5404-4f8f-a6cf-5ad5f67fe47b
 using PlutoUI
@@ -71,13 +67,14 @@ f(t) = @. sin(2 * π * t / 7.2 + 0.9) + sin(2 * π * t / 2.5 + 1.3);
 
 # ╔═╡ 1032164a-894b-45c0-a6f6-96c280fddf00
 begin
-	N = 15 # number of observations
-	σ_true = 0.25; # noise parameter
+	N = 25 # number of observations
+	σy = 0.25; # noise parameter
 	x0 = 0 # lower bound
 	x1 = 10 # upper bound
+	Random.seed!(70005) # set seed
 	x = sort(rand(Uniform(x0, x1), N)) # points we observe at
 	xprime = collect(range(x0, x1, length=1_000)); # locations to estimate
-	y = f(x) .+ rand(Normal(0, σ_true), N) # values we observe
+	y = f(x) .+ rand(Normal(0, σy), N) # values we observe
 	baseplot = plot(xlabel=L"$x$", ylabel=L"$y(t)", legend=:bottomright) # for plots
 end;
 
@@ -130,40 +127,25 @@ Our prediction at new point $x'$ would then be
 \mathbb{E}[y'] = \sum_{n=1}^N w_n y_n
 ```
 where $\sum_{w_n} = 1$.
-We're free to do what we like with the weights, but a common approach is to set the weights to 1 divided by the distance between $x$ and $x'$ (for now we will think of Euclidean distance but keep in the back of your mind that there are other ways to think about distance).
-Here's an implementation:
+We're free to do what we like with the weights, but a common approach is to set the weights to 1 divided by the distance between $x$ and $x'$ (for now we will think of Euclidean distance $w_n \propto \frac{1}{(x - x')^2}$ (the $\propto$ refers to the fact that this will not be normalized -- we need to normalize so the weights sum to 1) but keep in the back of your mind that there are other ways to think about distance).
+
+We can most efficiently compute this using linear algebra.
 """
 
-# ╔═╡ 7e6beced-8689-4eca-8bb3-236f6e9f5fe5
-dist(x1, x2) = (x1 - x2) ^2; # distance between two points
-
-# ╔═╡ a63e246b-5cac-431d-9fce-a550e9c0ce47
-function idw1D(x::Vector{T}, y::Vector{T}, xprime::T) where T <: Real
-	distances = dist.(x, xprime)
-	w = 1 ./ distances # unnormalized weights
-	w = w ./ sum(w) # normalized
-	return sum(y .* w)
-end;
-
-# ╔═╡ 705bc545-4056-4314-bff7-9e3f26f669f4
-md"""
-Here's how we could vectorize this
-
-> This also uses "multiple dispatch", which is a key piece of what makes Julia cool. In a sentence, it allows us to have multiple functions with the same name, but to change what it does based on the type of the input. For more see [this blog post](https://miguelraz.github.io/blog/dispatch/) by Miguel Raz.
-
-We could also use `Distances.jl` to calculate pairwise distance between points more efficiently if we really wanted.
-"""
+# ╔═╡ 4457e0af-2f64-4aa9-b38a-7d417942becc
+calc_dist(x1, x2) = Distances.pairwise(Distances.Euclidean(), x1, x2);
 
 # ╔═╡ 99c4590c-38b8-45a2-ae4d-ccb6e15f94af
-function idw1D(x::Vector{T}, y::Vector{T}, xprime::Vector{T}) where T <: Real
-	# equivalent to
-	# [idw1D(x, y, xp) for xp in xprime]
-	return map(xp -> idw1D(x, y, xp), xprime)
+function idw(x, y, xprime) where T <: Real
+	dist = Distances.pairwise(Distances.Euclidean(), x, xprime)
+	weights = dist .^ (-2)
+	weights_norm = weights ./ sum(weights, dims=1)
+	return weights_norm' * y
 end;
 
 # ╔═╡ 3645b651-b65a-4847-93a8-e81707e044af
 let
-	yprime = idw1D(x, y, xprime)
+	yprime = idw(x, y, xprime)
 	p = deepcopy(baseplot)
 	plot!(p, f, x0, x1, label="True Values")
 	scatter!(p, x, y, label="Observed Points")
@@ -184,29 +166,49 @@ In practice this often improves interpolation algorithms by setting the influenc
 """
 
 # ╔═╡ b24862e9-8f73-40a3-862a-af2d5a3e0325
-function knn1D(x::Vector{T}, y::Vector{T}, xprime::T, K::Int) where T <: Real
-	w = zeros(length(x))
-	dist = (x .- xprime) .^2
-	ranks = sortperm(dist)[1:K]
-	for n in ranks
-		w[n] = 1 / dist[n]
-	end
-	w = w ./ sum(w)
-	return sum(y .* w)
+function knn(x, y, xprime, K) where T <: Real
+	dist = Distances.pairwise(Distances.Euclidean(), x, xprime)
+	weights = dist .^ (-2)
+	
+	# the only step that's different here is we truncate some weights to zero
+	ranks = hcat([sortperm(col; rev=true) for col in eachcol(weights)]...)
+	weights[ranks .> K] .= 0
+
+	# now normalize and done
+	weights_norm = weights ./ sum(weights, dims=1)
+	return weights_norm' * y
 end;
+
+# ╔═╡ f51d860e-5424-4438-bf36-c86daaa1a420
+md"Notice how when $K=N$ we get our IDW estimate"
 
 # ╔═╡ 02117329-6535-4ee6-9ce6-04565f1fad04
 let
-	K = 4
-	yprime = map(xi -> knn1D(x, y, xi, K), xprime)
+	K = N
+	yprime = knn(x, y, xprime, K)
 	p = deepcopy(baseplot)
-	plot!(p, f, x0, x1, label="True Values")
+	plot!(p, f, x0, x1, label="True Values", title="K=N")
+	scatter!(p, x, y, label="Observed Points")
+	plot!(p, xprime, yprime, label="Predicted (KNN)")
+end
+
+# ╔═╡ a2966076-90d6-41e6-b523-9039424408a8
+md"But when we reduce K, we change our estimates"
+
+# ╔═╡ 1c5c44de-b61d-401e-be0d-00a6a88a2d63
+let
+	K = 5
+	yprime = knn(x, y, xprime, K)
+	p = deepcopy(baseplot)
+	plot!(p, f, x0, x1, label="True Values", title="K=$K")
 	scatter!(p, x, y, label="Observed Points")
 	plot!(p, xprime, yprime, label="Predicted (KNN)")
 end
 
 # ╔═╡ 6c67be2c-f23c-4da2-b8e0-5dd1b2951d10
 md"""
+This algorithm can be a bit choppy when points are far away from each other and $K$ is small because a very small change in $x$ wcan change the set of neighbors that is selected. This makes the weights discontinuous and can lead to 'jumpy' predictions
+
 * Try playing around with different values of $K$. What do you notice?
 * This is similar, but less smooth because the set of nearest neighbors can jump around
 * Finding a good value of $K$ usually takes some playing around
@@ -247,36 +249,44 @@ It has the form
 ```math
 K(x, x' | \sigma, \ell) = \sigma^2 \exp \left[ -\frac{1}{2\ell^2} (x-x')^2 \right].
 ```
+For computational reasons we typically add $\epsilon I$ to this, where $I$ is a diagonal matrix of ones.
+"""
+
+# ╔═╡ ae04d017-7295-4483-921f-6b1d0dbadbcc
+md"""
+Letting $D$ be be the matrix of pairwise distances $(x-x')^2$, we can write our kernel in terms of these distances.
+Let's parameterize in terms of $\log \ell$ and $\log \sigma$ because $\ell > 0$ and $\sigma > 0$, and take advantage of the fact that $\exp(x)^2 = \exp(2x)$.
 """
 
 # ╔═╡ ce8fe84f-e70b-4173-897d-e85389f5b6a6
-function exp_cov(x1::T, x2::T, ℓ::T, σ::T) where T <: Real
-	σ^2 * exp( -1 / (2 * ℓ^2) * (x1 - x2) ^ 2)
-end;
-
-# ╔═╡ d060302e-1572-4e09-8510-384888b2a6e5
-function exp_cov(x1::Vector{T}, x2::Vector{T}, σ::T, ℓ::T) where T <: Real
-	hcat(
-		[[exp_cov(x1i, x2i, ℓ, σ) for x1i in x1] for x2i in x2]...
-	);
+function sqexp_cov_fn(D, log_ℓ, log_σ) 
+	exp(2 * log_σ) * exp.(- D.^2 ./ (2 * exp(2 * log_ℓ)))
 end;
 
 # ╔═╡ c3d41de5-38ff-466b-ace3-14a8c1973286
 md"""
-Given some known values of $\sigma$ and $\ell$, we can use this function to calculate the kernel for each pair of points in our data (an $N \times N$ matrix).
+Given some known values of $\sigma$ and $\ell$, we can use this function to calculate the kernel for each pair of points in our data ($x$ and $x$ -- this will give us an $N \times N$ matrix).
 For reasons that will become apparent shortly, we'll call it $\Sigma{x,x}$.
 """
 
-# ╔═╡ 81f4c689-810c-49e1-bedc-ad52a1eb3232
-begin
-	ℓ_guess = 1.0 # guess
-	σ_guess = 1.0 # guess
-end;
+# ╔═╡ 0794f0db-d6bc-4457-b652-66654a2a5368
+D_x_x = Distances.pairwise(Distances.Euclidean(), x, x); # pairwise x to x
 
 # ╔═╡ fbd84b17-683c-48fc-9cc3-3afa5ddfddca
 let
-	Σ_xx = exp_cov(x, x, ℓ_guess, σ_guess)
-	heatmap(Σ_xx, xlabel=L"Index of $x$", ylabel=L"Index of $x$", title=L"$\Sigma_{x,x}$")
+	ℓ_guess = 1.0 # guess
+	σ_guess = 1.0 # guess
+
+	ϵ = 1.0e-3
+	Σ_x_x = sqexp_cov_fn(D_x_x, ℓ_guess, σ_guess)
+
+	p1 = heatmap(D_x_x, xlabel=L"$x$", ylabel=L"Also $x$", title="Distance")
+	p2 = heatmap(
+		Σ_x_x,
+		xlabel=L"Index of $x$", ylabel=L"Index of $x$",
+		title=L"$\Sigma_{x,x}$",
+	)
+	plot(p1, p2, size=(800, 400))
 end
 
 # ╔═╡ ba48ed3b-3131-404e-a3da-34fd975fd6f0
@@ -284,10 +294,11 @@ md"""
 How does this help us?
 Our  model for the $(length(x)) data points that we have thus far is
 ```math
-p(\mathbf{y} | \sigma, \ell) \sim \mathrm{N} \left(0, \Sigma_{x,x} \right)
+p(\mathbf{y} | \sigma, \ell) \sim \mathrm{N} \left(\mu, K(x, x' | \ell, \sigma) + \sigma_y^2 I \right)
 ```
-where $\Sigma_{x,x}$ depends on $\sigma$ and $\ell$ as shown above.
-(We could relax the assumption of mean zero, but let's leave it for now).
+where $\mu = \frac{1}{N} \sum_i y_i$, $K$ is the kernel function described above, $\sigma_y$ is our noise parameter, and $I$ is the identity matrix (a square matrix with ones on the diagonal).
+
+Using $\sigma_y$ is important -- what this is really saying is that the $y$ we observed had some normally distributed noise (which is how we generated the data!)
 
 ### Kernel Parameters
 
@@ -298,19 +309,13 @@ We can use this formulation to optimize $\sigma$ and $\ell$ by finding values of
 """
 
 # ╔═╡ 87f6f009-d1ab-48f4-acc4-c38089fdf5fb
-function gp_logpdf(x, y, logσ, logℓ; ϵ=0.001)
+function gp_logpdf(D, logℓ, logσ, logσy)
 	
-	N = length(x)
-	σ = exp(logσ)
-	ℓ = exp(logℓ)
+	N = size(D, 1)
 	
-	μ = ones(N) .* mean(y)
-	Σ = exp_cov(x, x, ℓ, σ)
-
-	# this is a numerical hack that adds stability to the matrix
-	for i in 1:N
-		Σ[i, i] += ϵ
-	end
+	μ = ones(N) * mean(y)
+	K = sqexp_cov_fn(D, logℓ, logσ)
+	Σ = K + LinearAlgebra.I * exp(logσy)^2
 	
 	joint_dist = MvNormal(μ, Σ)
 	logpdf(joint_dist, y)
@@ -319,24 +324,26 @@ end;
 # ╔═╡ 101161af-d850-49da-a8f1-95b66416e552
 md"Some parameter guesses are more likely than others"
 
-# ╔═╡ 71abeada-179c-411c-999e-9514f12f671a
-gp_logpdf(x, y, 0.5, 0.5)
-
 # ╔═╡ eedd6b4d-9894-4932-b16d-cc219b38a0f7
-gp_logpdf(x, y, -0.5, 0.0)
+gp_logpdf(D_x_x, -2.5, 2.0, 1.0)
+
+# ╔═╡ 71abeada-179c-411c-999e-9514f12f671a
+gp_logpdf(D_x_x, 0.5, 1.0, -0.1)
 
 # ╔═╡ 7c846ff2-84cf-4f80-aaf5-5648128de166
 md"""
-We can fully optimize! This optimization problem turns out to be a bit tricky.
-To get the best parameters we'll use the `BlackBoxOptim` package.
-You should use these tools with caution (optimization is hard!), but it should work well enough for our purposes.
+We can even optimize this to find the "best parameters"!
+Let's fix $\sigma_y$ to be constant, because otherwise the optimizer will always set $\sigma_y \rightarrow 0$.
+We defined $\sigma_y=$ $(σy) above, so let's use the known value for now
 """
 
 # ╔═╡ e7d611ac-3b9e-41e9-a466-c24fcd0ca9bf
-logℓ_best, logσ_best = let
-	f(θ) = -gp_logpdf(x, y, θ[1], θ[2])
-	res = BlackBoxOptim.bboptimize(f; NumDimensions = 2)
-	BlackBoxOptim.best_candidate(res)
+θ_best = let
+	θ0 = zeros(2)
+	P = length(θ0)
+	f(θ) = -gp_logpdf(D_x_x, θ[1], θ[2], log(σy))
+	res = optimize(f, θ0)
+	Optim.minimizer(res)
 end
 
 # ╔═╡ 95b649ad-42ee-437f-a95f-745fed8752df
@@ -351,9 +358,10 @@ To do that we again write down a joint probability distribution using a multivar
 Let's write this out using some slightly funky notation:
 ```math
 \left[ \begin{matrix} y' \\ y \end{matrix} \right] \sim \mathcal{N} \left( 
-\left[ \begin{matrix} x' \\ x \end{matrix} \right],
+\left[ \begin{matrix} \mu' \\ \mu \end{matrix} \right],
 \left[ \begin{matrix} K(x',x') & K(x', x) \\ K(x, x') & K(x, x) \end{matrix} \right]
-\right)
++ \sigma_y^2 I
+\right) 
 ```
 This is not a $2 \times 2$ matrix!
 If $x$ has $N$ points and $x'$ has $N'$ points, then 
@@ -374,79 +382,54 @@ If you're reading the [GP not quite for dummies](https://yugeten.github.io/posts
 \left[ \begin{matrix} y' \\ y \end{matrix} \right] \sim \mathcal{N} \left( 
 \left[ \begin{matrix} \mathbf{a} \\ \mathbf{b} \end{matrix} \right],
 \left[ \begin{matrix} A & B \\ B^T & C \end{matrix} \right]
++ \sigma_y^2 I
 \right)
 ```
 ($B^T$ is the transpose of $B$).
 
-While we're complaining about notation, I find the convention of writing $\left[ \begin{matrix} y' \\ y \end{matrix} \right]$ and not $\left[ \begin{matrix} y \\ y' \end{matrix} \right]$ a bit confusing, but no one asked me.
-
-The post explains how we can reason about $p(y')$ using Bayes rule:
+As discussed in the not quite for dummies post, we have
 ```math
-p(y' | y) = \frac{p(y, y')}{p(y)}
+\begin{align}
+y &\sim \mathcal{N} \left( \mathbf{m}, S \right) \\
+\mathbf{m} &= \mathbf{a} + B C^{-1} \left(x - \mathbf{b} \right) \\
+S &= A - B C^{-1} B^{T} + \sigma_y^2 I
+\end{align}
 ```
-and (read the post, we're moving fast here!) the very nice properties of the Normal distribution lead to the solution
-```math
-p(y') = \mathcal{N}(\mu', \Sigma')
-```
-where
-```math
-\mu' = \mathbf{a} + B C^{-1}(y - \mathbf{b})
-```
-and
-```math
-\Sigma' = A - B C^{-1} B^T
-```
-we can implement this!
+where $B^{T}$ is the transpose of $B$.
+Note that we are assuming stationary means: $\mathbf{a} = \mathbf{b} = \mu = \frac{1}{N} \sum y_j$.
 """
 
-# ╔═╡ dd65a9a1-5606-4e63-92fe-160e2dbc339b
-μprime, Σprime = let
-	σ = exp(logσ_best)
-	ℓ = exp(logℓ_best)
-	
-	a = xprime
-	b = x
+# ╔═╡ f623d720-74b3-4995-9cf4-e1af0988b575
+function predict_gp(logℓ, logσ, logσy, x, y, xprime)
 
-	A = exp_cov(xprime, xprime, σ, ℓ)
-	B = exp_cov(xprime, x, σ, ℓ)
-	C = exp_cov(x, x, σ, ℓ)
+    N = length(x)
+    M = length(xprime)
+    Q = N + M
+    Z = vcat(xprime, x) # all obs
+    D = pairwise(Euclidean(), Z, Z)
+	mu = mean(y)
 
-	μ = a + B / C * (y - b)
-	Σ = A - B / C * B'
-	μ, Σ
+	# total kernel [A B; B' C]
+	K = sqexp_cov_fn(D, logℓ, logσ) + exp(2 * logσy) * I
+
+	Koo_inv = inv(K[(M+1):end, (M+1):end])
+    Knn = K[1:M, 1:M]
+	Kno = K[1:M, (M+1):end]
+	C = Kno * Koo_inv
+	m = C * (y .- mu) .+ mu
+	S = Matrix(LinearAlgebra.Hermitian(Knn - C * Kno'))
+	mvn = MvNormal(m, S)
+	return mvn
 end;
 
-# ╔═╡ 8284b4e6-1fef-45bc-b84f-133c217b29f3
-md"We can plot our solution:"
-
-# ╔═╡ ac0d3de0-433e-4f5e-b9d3-34a500cabd62
+# ╔═╡ 80ab8bfb-7ab1-4425-804c-794c90a8a4de
 let
+	mvn = predict_gp(θ_best[1], θ_best[2], log(σy), x, y, xprime)
 	p = deepcopy(baseplot)
-	plot!(p, f, x0, x1, label="True Values")
-	scatter!(x, y, label="Obs")
-	plot!(xprime, μprime, label="Kriging")
-	xlims!(minimum(x), maximum(x))
+	σ = sqrt.(diag(mvn.Σ))
+	plot!(p, xprime, mvn.μ, ribbon=2σ, label=L"Gaussian Process $\pm 2\sigma$")
+	scatter!(p, x, y, label="Observed Points")
 end
-
-# ╔═╡ 89c07d05-9ef4-4d7c-8a1b-f166eba7911d
-md"""
-This looks pretty good, though it is of course not perfect.
-In particular, it will run into trouble if our observational noise is higher.
-"""
-
-# ╔═╡ 6054ab6f-0e23-486d-bb3d-7f5aa4908475
-md"""
-### Observing with noise
-
-If the data we observe is noisy, we should account for that.
-We can modify our equation:
-
-```math
-p(f(x) ∣\theta ) = \mathcal{GP}(0, K(x, x') + I \sigma_y^2)
-```
-where $\sigma_y$ is the noise parameter and $I \sigma_y^2$ indicates that it is a diagonal matrix.
-This will change our solutions and adds a parameter that we need to perform inference over, so we won't go through the derivations
-"""
 
 # ╔═╡ a450382a-4c03-4c69-b03f-b55233458a99
 md"""
@@ -474,14 +457,14 @@ We can plot really easily.
 # ╔═╡ 12b5c75a-31a4-4452-8dea-2a62167c2db6
 let
 	σy = 0.25 # if we think the data is observed with noise
-	ℓ = 1.0
-	σ = 0.5
+	ℓ = 1.5
+	σ = 1.5
 	kern = GaussianProcesses.SE(log(ℓ), log(σ)) # note: log σ, log ℓ
 	μ = GaussianProcesses.MeanZero()
 	gp = GP(x, y, μ, kern, log(σy))
 	p = deepcopy(baseplot)
-	plot!(p, f, x0, x1, label="True Values")
-	plot!(gp, label=false, title="Random Guess Parameters")
+	plot!(p, f, x0, x1, label="True Values", linewidth=3)
+	plot!(gp, label=false, title="Random Guess Parameters", linewidth=3)
 end
 
 # ╔═╡ 6d1787a3-4b14-406d-86b4-11d010bea570
@@ -490,12 +473,12 @@ md"We can repeat the exercise by plugging in the parameters that we developed be
 # ╔═╡ 05672787-edd7-4cd3-8cb8-bf4b1d79dd89
 let
 	σy = 0.25 # if we think the data is observed with noise
-	kern = GaussianProcesses.SE(logℓ_best, logσ_best) # note: log σ, log ℓ
+	kern = GaussianProcesses.SE(θ_best...) # note: log σ, log ℓ
 	μ = GaussianProcesses.MeanZero()
 	gp2 = GP(x, y, μ, kern, log(σy))
 	p = deepcopy(baseplot)
-	plot!(p, f, x0, x1, label="True Values")
-	plot!(gp2, label=false, title="Fitted Parameters")
+	plot!(p, f, x0, x1, label="True Values", linewidth=3)
+	plot!(gp2, label=false, title="Fitted Parameters", linewidth=3)
 end
 
 # ╔═╡ 10a73e7d-cff1-4255-bf37-fbbf70de8dfb
@@ -507,19 +490,25 @@ Last but not least, we can use stable built-in optimization methods.
 # ╔═╡ a6a21dca-0ae3-4eb4-8360-f2ac9050e802
 gp3 = let
 	σy = 0.25 # if we think the data is observed with noise
-	kern = GaussianProcesses.SE(logℓ_best, logσ_best) # note: log σ, log ℓ
+	kern = GaussianProcesses.SE(θ_best...) # note: log σ, log ℓ
 	μ = GaussianProcesses.MeanZero()
 	gp3 = GP(x, y, μ, kern, log(σy))
 	optimize!(gp3) # piece of cake!
 	gp3
 end;
 
+# ╔═╡ a526bd7a-98bc-4130-b0df-b3ce68399665
+gp3.kernel # log ℓ, log σ
+
 # ╔═╡ 69e54f00-9e8e-4f04-be87-52e6485bb96c
 let
 	p = deepcopy(baseplot)
-	plot!(p, f, x0, x1, label="True Values")
-	plot!(p, gp3, label="GP Fit", legend=:bottomright)
+	plot!(p, f, x0, x1, label="True Values", linewidth=3)
+	plot!(p, gp3, label="GP Fit", legend=:bottomright, linewidth=3)
 end
+
+# ╔═╡ 3621ecae-4856-4dcb-90bd-3a2b41ebfb2b
+md"This looks much better! We can see that the uncertainty grows where we don't have any data, which seems appropriate!"
 
 # ╔═╡ d58d5828-1f84-4801-9686-7c0d8ea81edf
 md"""
@@ -543,27 +532,21 @@ TableOfContents()
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-BlackBoxOptim = "a134a8b2-14d6-55f6-9291-3336d3ab0209"
-CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
-DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 GaussianProcesses = "891a1506-143c-57d2-908e-e1f8e92e6de9"
-HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
-BlackBoxOptim = "~0.6.1"
-CSV = "~0.10.3"
-ColorSchemes = "~3.17.1"
-DataFrames = "~1.3.2"
+Distances = "~0.10.7"
 Distributions = "~0.24.18"
 GaussianProcesses = "~0.12.4"
-HTTP = "~0.9.17"
 Interpolations = "~0.13.5"
 LaTeXStrings = "~1.3.0"
 Optim = "~1.6.2"
@@ -608,28 +591,11 @@ version = "1.0.1"
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[BlackBoxOptim]]
-deps = ["CPUTime", "Compat", "Distributed", "Distributions", "HTTP", "JSON", "LinearAlgebra", "Printf", "Random", "SpatialIndexing", "StatsBase"]
-git-tree-sha1 = "41e347c63757dde7d22b2665b4efe835571983d4"
-uuid = "a134a8b2-14d6-55f6-9291-3336d3ab0209"
-version = "0.6.1"
-
 [[Bzip2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "19a35467a82e236ff51bc17a3a44b69ef35185a2"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.8+0"
-
-[[CPUTime]]
-git-tree-sha1 = "2dcc50ea6a0a1ef6440d6eecd0fe3813e5671f45"
-uuid = "a9c8d775-2e2e-55fc-8582-045d282d599e"
-version = "1.0.0"
-
-[[CSV]]
-deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings"]
-git-tree-sha1 = "9310d9495c1eb2e4fa1955dd478660e2ecab1fbb"
-uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-version = "0.10.3"
 
 [[Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
@@ -654,12 +620,6 @@ deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
 git-tree-sha1 = "bf98fa45a0a4cee295de98d4c1462be26345b9a1"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.2"
-
-[[CodecZlib]]
-deps = ["TranscodingStreams", "Zlib_jll"]
-git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
-uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.7.0"
 
 [[ColorSchemes]]
 deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
@@ -701,21 +661,10 @@ git-tree-sha1 = "9f02045d934dc030edad45944ea80dbd1f0ebea7"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.5.7"
 
-[[Crayons]]
-git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
-uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
-version = "4.1.1"
-
 [[DataAPI]]
 git-tree-sha1 = "cc70b17275652eb47bc9e5f81635981f13cea5c8"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
 version = "1.9.0"
-
-[[DataFrames]]
-deps = ["Compat", "DataAPI", "Future", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "Markdown", "Missings", "PooledArrays", "PrettyTables", "Printf", "REPL", "Reexport", "SortingAlgorithms", "Statistics", "TableTraits", "Tables", "Unicode"]
-git-tree-sha1 = "ae02104e835f219b8930c7664b8012c93475c340"
-uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-version = "1.3.2"
 
 [[DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
@@ -822,12 +771,6 @@ git-tree-sha1 = "58d83dd5a78a36205bdfddb82b1bb67682e64487"
 uuid = "442a2c76-b920-505d-bb47-c5924d526838"
 version = "0.4.9"
 
-[[FilePathsBase]]
-deps = ["Compat", "Dates", "Mmap", "Printf", "Test", "UUIDs"]
-git-tree-sha1 = "129b104185df66e408edd6625d480b7f9e9823a0"
-uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
-version = "0.9.18"
-
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays"]
 git-tree-sha1 = "693210145367e7685d8604aee33d9bfb85db8b31"
@@ -875,10 +818,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "aa31987c2ba8704e23c6c8ba8a4f769d5d7e4f91"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
 version = "1.0.10+0"
-
-[[Future]]
-deps = ["Random"]
-uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
@@ -978,12 +917,6 @@ git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
 version = "0.5.1"
 
-[[InlineStrings]]
-deps = ["Parsers"]
-git-tree-sha1 = "61feba885fac3a407465726d0c330b3055df897f"
-uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
-version = "1.1.2"
-
 [[InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
@@ -999,11 +932,6 @@ deps = ["Test"]
 git-tree-sha1 = "91b5dcf362c5add98049e6c29ee756910b03051d"
 uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
 version = "0.1.3"
-
-[[InvertedIndices]]
-git-tree-sha1 = "bee5f1ef5bf65df56bdd2e40447590b272a5471f"
-uuid = "41ab1584-1d38-5bbf-9106-f11c6c58b48f"
-version = "1.1.0"
 
 [[IrrationalConstants]]
 git-tree-sha1 = "7fd44fd4ff43fc60815f8e764c0f352b83c49151"
@@ -1307,12 +1235,6 @@ git-tree-sha1 = "bf0a1121af131d9974241ba53f601211e9303a9e"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.37"
 
-[[PooledArrays]]
-deps = ["DataAPI", "Future"]
-git-tree-sha1 = "db3a23166af8aebf4db5ef87ac5b00d36eb771e2"
-uuid = "2dfb63ee-cc39-5dd5-95bd-886bf059d720"
-version = "1.4.0"
-
 [[PositiveFactorizations]]
 deps = ["LinearAlgebra"]
 git-tree-sha1 = "17275485f373e6673f7e7f97051f703ed5b15b20"
@@ -1324,12 +1246,6 @@ deps = ["TOML"]
 git-tree-sha1 = "d3538e7f8a790dc8903519090857ef8e1283eecd"
 uuid = "21216c6a-2e73-6563-6e65-726566657250"
 version = "1.2.5"
-
-[[PrettyTables]]
-deps = ["Crayons", "Formatting", "Markdown", "Reexport", "Tables"]
-git-tree-sha1 = "dfb54c4e414caa595a1f2ed759b160f5a3ddcba5"
-uuid = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
-version = "1.3.1"
 
 [[Printf]]
 deps = ["Unicode"]
@@ -1422,12 +1338,6 @@ git-tree-sha1 = "0b4b7f1393cff97c33891da2a0bf69c6ed241fda"
 uuid = "6c6a2e73-6563-6170-7368-637461726353"
 version = "1.1.0"
 
-[[SentinelArrays]]
-deps = ["Dates", "Random"]
-git-tree-sha1 = "6a2f7d70512d205ca8c7ee31bfa9f142fe74310c"
-uuid = "91c51154-3ec4-41a3-a24f-3f23e20d615c"
-version = "1.3.12"
-
 [[Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
@@ -1453,11 +1363,6 @@ version = "1.0.1"
 [[SparseArrays]]
 deps = ["LinearAlgebra", "Random"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
-
-[[SpatialIndexing]]
-git-tree-sha1 = "fb7041e6bd266266fa7cdeb80427579e55275e4f"
-uuid = "d4ead438-fe20-5cc5-a293-4fd39a41b74c"
-version = "0.1.3"
 
 [[SpecialFunctions]]
 deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
@@ -1533,12 +1438,6 @@ uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
-[[TranscodingStreams]]
-deps = ["Random", "Test"]
-git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
-uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.9.6"
-
 [[URIs]]
 git-tree-sha1 = "97bbe755a53fe859669cd907f2d96aee8d2c1355"
 uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
@@ -1578,12 +1477,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "4528479aa01ee1b3b4cd0e6faef0e04cf16466da"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.25.0+0"
-
-[[WeakRefStrings]]
-deps = ["DataAPI", "InlineStrings", "Parsers"]
-git-tree-sha1 = "b1be2855ed9ed8eac54e5caff2afcdb442d52c23"
-uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
-version = "1.4.2"
 
 [[WoodburyMatrices]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -1801,37 +1694,34 @@ version = "0.9.1+5"
 # ╠═c76a7aab-b613-40a8-8aa0-9a46cc0c560a
 # ╠═77164223-fc16-4af9-ba61-2832404d2ee2
 # ╟─fe323332-5c06-4bb2-8d71-953fbe8a18fb
-# ╠═7e6beced-8689-4eca-8bb3-236f6e9f5fe5
-# ╠═a63e246b-5cac-431d-9fce-a550e9c0ce47
-# ╟─705bc545-4056-4314-bff7-9e3f26f669f4
+# ╠═4457e0af-2f64-4aa9-b38a-7d417942becc
 # ╠═99c4590c-38b8-45a2-ae4d-ccb6e15f94af
 # ╠═3645b651-b65a-4847-93a8-e81707e044af
 # ╟─9f1aef00-4105-4e99-b433-ee1fcb00ad5c
 # ╠═b24862e9-8f73-40a3-862a-af2d5a3e0325
+# ╟─f51d860e-5424-4438-bf36-c86daaa1a420
 # ╠═02117329-6535-4ee6-9ce6-04565f1fad04
+# ╟─a2966076-90d6-41e6-b523-9039424408a8
+# ╠═1c5c44de-b61d-401e-be0d-00a6a88a2d63
 # ╟─6c67be2c-f23c-4da2-b8e0-5dd1b2951d10
 # ╟─6ed69ac4-f57b-4db4-95cd-04dfb527212c
 # ╟─7a44bcdb-7604-4cd5-9bfd-fd041dd10760
+# ╟─ae04d017-7295-4483-921f-6b1d0dbadbcc
 # ╠═ce8fe84f-e70b-4173-897d-e85389f5b6a6
-# ╠═d060302e-1572-4e09-8510-384888b2a6e5
 # ╟─c3d41de5-38ff-466b-ace3-14a8c1973286
-# ╠═81f4c689-810c-49e1-bedc-ad52a1eb3232
+# ╠═0794f0db-d6bc-4457-b652-66654a2a5368
 # ╠═fbd84b17-683c-48fc-9cc3-3afa5ddfddca
 # ╟─ba48ed3b-3131-404e-a3da-34fd975fd6f0
 # ╠═87f6f009-d1ab-48f4-acc4-c38089fdf5fb
 # ╟─101161af-d850-49da-a8f1-95b66416e552
-# ╠═71abeada-179c-411c-999e-9514f12f671a
 # ╠═eedd6b4d-9894-4932-b16d-cc219b38a0f7
+# ╠═71abeada-179c-411c-999e-9514f12f671a
 # ╟─7c846ff2-84cf-4f80-aaf5-5648128de166
-# ╠═a3dc9fcb-c13f-4a84-b453-5cc681461a91
 # ╠═e7d611ac-3b9e-41e9-a466-c24fcd0ca9bf
 # ╟─95b649ad-42ee-437f-a95f-745fed8752df
 # ╟─1f1056a4-e75d-4c27-b302-96d62e674302
-# ╠═dd65a9a1-5606-4e63-92fe-160e2dbc339b
-# ╟─8284b4e6-1fef-45bc-b84f-133c217b29f3
-# ╠═ac0d3de0-433e-4f5e-b9d3-34a500cabd62
-# ╟─89c07d05-9ef4-4d7c-8a1b-f166eba7911d
-# ╟─6054ab6f-0e23-486d-bb3d-7f5aa4908475
+# ╠═f623d720-74b3-4995-9cf4-e1af0988b575
+# ╠═80ab8bfb-7ab1-4425-804c-794c90a8a4de
 # ╟─a450382a-4c03-4c69-b03f-b55233458a99
 # ╟─ebc6554d-e753-4c8a-9e83-1e942c3c90fa
 # ╠═12b5c75a-31a4-4452-8dea-2a62167c2db6
@@ -1839,7 +1729,9 @@ version = "0.9.1+5"
 # ╠═05672787-edd7-4cd3-8cb8-bf4b1d79dd89
 # ╟─10a73e7d-cff1-4255-bf37-fbbf70de8dfb
 # ╠═a6a21dca-0ae3-4eb4-8360-f2ac9050e802
+# ╠═a526bd7a-98bc-4130-b0df-b3ce68399665
 # ╠═69e54f00-9e8e-4f04-be87-52e6485bb96c
+# ╟─3621ecae-4856-4dcb-90bd-3a2b41ebfb2b
 # ╟─d58d5828-1f84-4801-9686-7c0d8ea81edf
 # ╟─2847aaee-3f38-4c39-b8a6-b81d87d6f370
 # ╠═e4ccd0c6-5404-4f8f-a6cf-5ad5f67fe47b

@@ -6,12 +6,12 @@ using InteractiveUtils
 
 # ╔═╡ 75f821f9-121e-4bdd-9feb-8e3bfecd415c
 begin
-	using DataFrames
-	using Distributions
-	using PlutoUI
-	using Statistics
-	using Symbolics
-	TableOfContents()
+    using DataFrames
+    using Distributions
+    using PlutoUI
+    using Statistics
+    using Symbolics
+    TableOfContents()
 end
 
 # ╔═╡ fafae38e-e852-11ea-1208-732b4744e4c2
@@ -147,8 +147,9 @@ Water quality data has been collected at a lake for several years. Answer the fo
 
 # ╔═╡ 70d94571-6c34-4e89-a256-49bbad8cdd57
 water_quality = DataFrame(
-	"DO [mg/L]" => [6, 6, 9, 11, 120, 11, 9, 7, 5, 9],
-	"Dead Fish Present" => [true, false, true, false, false, false, false, false, true, false],
+    "DO [mg/L]" => [6, 6, 9, 11, 120, 11, 9, 7, 5, 9],
+    "Dead Fish Present" =>
+        [true, false, true, false, false, false, false, false, true, false],
 )
 
 # ╔═╡ eeee51eb-29aa-44aa-b07d-8272db7c4ac2
@@ -173,9 +174,7 @@ A new data set was collected by a citizen group. This data is shown below. Unfor
 """
 
 # ╔═╡ a6020a7f-36fe-4e43-be41-7c00e0ea7804
-citizen_water_quality = DataFrame(
-	"DO < 8 mg/L" => [true, true, true, true, false]
-)
+citizen_water_quality = DataFrame("DO < 8 mg/L" => [true, true, true, true, false])
 
 # ╔═╡ 67626d97-e7da-41e2-afb1-cb41525291e4
 md"""
