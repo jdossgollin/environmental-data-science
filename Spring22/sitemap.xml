@@ -158,6 +158,18 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>11_gp2d/index.html</loc>
+    <lastmod>2022-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>11_variograms/index.html</loc>
+    <lastmod>2022-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>index.html</loc>
     <lastmod>2022-03-29</lastmod>
     <changefreq>monthly</changefreq>
