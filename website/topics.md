@@ -18,7 +18,7 @@ The following syllabus will be adjusted as needed.
 | 8 | Time series | (1) [Fitting AR Models](/08_ar/), (2) [Periodograms](/08_periodogram/) | ITSF[^4] 1.1-1.5, [QuantEcon](https://julia.quantecon.org/) 54-55 | [HW6](/08_hw6/) |
 | 9 | Latent variable models | (1) [Hidden Markov Models](/09_hmm/) (2) Missing Data | BDA3 Ch. 8 | [HW7](/09_hw7/)  |
 | 10 | Gaussian processes | (1) [1D Gaussian processes](/10_gaussian_process/) | See Notebook | TBD |
-| 11 | Spatial models  | (1) 2D Gaussian processes (2) Choosing Variograms (3) Dimension Reduction | | |
+| 11 | Spatial models  | (1) [2D Gaussian processes](/11_gp2d/) (2) [Choosing Variograms](/11_variograms/) | | |
 | 12 | Machine learning | (1) Random forests (2) Neural networks | | |
 | 13 | Black-box models | (1) Global sensitivity analysis (2) Joint probability methods (3) approximate Bayesian computation | | |
 | 14 | Final projects | | | |
