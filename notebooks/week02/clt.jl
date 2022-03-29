@@ -227,9 +227,9 @@ TableOfContents() # uses PlutoUI
 function plot_dist(dist; name="", xlims=missing)
     ub = quantile(dist, 0.998)
     lb = quantile(dist, 0.002)
-    p =  plot(x -> pdf(dist, x); ylabel="Probability Density", label=name, xlims=(lb, ub))
-	!ismissing(xlims) && xlims!(p, xlims)
-	return p
+    p = plot(x -> pdf(dist, x); ylabel="Probability Density", label=name, xlims=(lb, ub))
+    !ismissing(xlims) && xlims!(p, xlims)
+    return p
 end;
 
 # ╔═╡ 3002a66d-f939-4a81-be78-1d1a2c4ca354

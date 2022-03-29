@@ -6,25 +6,25 @@ using InteractiveUtils
 
 # ╔═╡ 21a09f2a-132b-4ddc-ad23-f482a68f3c4d
 begin
-	using CSV
-	using DataFrames
-	using Distributions
-	using DynamicHMC
-	using FileIO
-	using ImageIO
-	using ImageShow
-	using HTTP
-	using MCMCChains
-	using StatsBase
-	using StatsPlots
-	using Turing
-	using StatsFuns: logistic
+    using CSV
+    using DataFrames
+    using Distributions
+    using DynamicHMC
+    using FileIO
+    using ImageIO
+    using ImageShow
+    using HTTP
+    using MCMCChains
+    using StatsBase
+    using StatsPlots
+    using Turing
+    using StatsFuns: logistic
 end
 
 # ╔═╡ 55f68f85-d694-434d-8e93-f4bd1c2604db
 begin
-	using PlutoUI
-	#TableOfContents()
+    using PlutoUI
+    #TableOfContents()
 end
 
 # ╔═╡ d029139c-8fa1-11ec-0d36-f137a55141f4
@@ -49,11 +49,19 @@ This data describes the proportion of successful putts by professional golfers a
 
 # ╔═╡ 3bbe732e-5cf5-46e3-916a-32481abdcdab
 golf = let
-	url = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Golf/data/golf.txt"
-	df  = CSV.File(HTTP.get(url).body, delim=" ", missingstring="NA", header=3, 	normalizenames=true) |> DataFrame
-	df[!, :pct_made] = df.y ./ df.n
-	df[!, :error] = @. sqrt.((df.pct_made * (1 - df.pct_made) / df.n))
-	rename!(df, :x => :distance_ft, :n => :attempts, :y => :successes)
+    url = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Golf/data/golf.txt"
+    df = DataFrame(
+        CSV.File(
+            HTTP.get(url).body;
+            delim=" ",
+            missingstring="NA",
+            header=3,
+            normalizenames=true,
+        ),
+    )
+    df[!, :pct_made] = df.y ./ df.n
+    df[!, :error] = @. sqrt.((df.pct_made * (1 - df.pct_made) / df.n))
+    rename!(df, :x => :distance_ft, :n => :attempts, :y => :successes)
 end;
 
 # ╔═╡ 102b456a-316a-4ab3-b7ca-cfca13beb3f7
@@ -66,36 +74,33 @@ Unsurprisingly, the probability of making the shot declines as a function of dis
 
 # ╔═╡ ef531804-37c1-41d3-9e61-1f01d9eea144
 function plot_golf!(p, df; color=:blue)
-	scatter!(
-		p,
-	    df.distance_ft,
-	    df.pct_made,
-	    yerror = df.error,
-	    ylim=(0,1),
-	    label=false,
-		color=color,
-	)
-	
-	for row in eachrow(df)
-	    annot = string(row.successes, "/", row.attempts)
-	    annotate!(
-			p,
-			row.distance_ft,
-			row.pct_made + 0.04,
-			text(annot, :bottom,:left, :gray40, 5),
-		)
-	end
-	return p
+    scatter!(
+        p,
+        df.distance_ft,
+        df.pct_made;
+        yerror=df.error,
+        ylim=(0, 1),
+        label=false,
+        color=color,
+    )
+
+    for row in eachrow(df)
+        annot = string(row.successes, "/", row.attempts)
+        annotate!(
+            p, row.distance_ft, row.pct_made + 0.04, text(annot, :bottom, :left, :gray40, 5)
+        )
+    end
+    return p
 end;
 
 # ╔═╡ fb2ca0da-c33f-4c4c-9863-8f23856bd27a
 p_base = let
-	p = plot(
-		xlabel="Distance from hole (feet)",
-	    ylabel="Probability of success",
-	    legend=false,
-	)
-	plot_golf!(p, golf)
+    p = plot(;
+        xlabel="Distance from hole (feet)",
+        ylabel="Probability of success",
+        legend=false,
+    )
+    plot_golf!(p, golf)
 end
 
 # ╔═╡ 23492724-316c-4217-9586-7035297b9419
@@ -120,10 +125,10 @@ In Turing, this is:
     # priors
     α ~ Normal(0, 1)
     β ~ Normal(0, 1)
-    
+
     # model
     p = @. logistic(α + β * x)
-    y .~ Binomial.(n, p)
+    return y .~ Binomial.(n, p)
 end;
 
 # ╔═╡ 40064a16-b7c9-4728-a916-c968cdf18ecc
@@ -134,11 +139,11 @@ We fit the model as before:
 
 # ╔═╡ d8002538-0a07-4b38-9588-85be7dfe77a2
 logistic_chain = let
-	model = golf_logistic(golf.distance_ft, golf.successes, golf.attempts)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	nchains = 4
-	sample(model, sampler, MCMCThreads(), n_per_chain, nchains, drop_warmup=true)
+    model = golf_logistic(golf.distance_ft, golf.successes, golf.attempts)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    nchains = 4
+    sample(model, sampler, MCMCThreads(), n_per_chain, nchains; drop_warmup=true)
 end;
 
 # ╔═╡ 50878987-ab99-4f2d-9c72-4980f09e7d80
@@ -152,22 +157,22 @@ md"The following graph shows the fit plotted along with the data:"
 
 # ╔═╡ df22ea07-473d-444b-9c70-7f0cb45c402e
 let
-	a_post = median(logistic_chain[:α])
-	b_post = median(logistic_chain[:β])
-	
-	# iterator for distance from hole calcs
-	xrng = 1:1:21
-	post_lines = [logistic(a_post + b_post * x) for x in xrng]
-	
-	# 10 draws from the posterior
-	N = 50
-	a_samp = StatsBase.sample(logistic_chain[:α], N)
-	b_samp = StatsBase.sample(logistic_chain[:β], N)
-	
-	post_samp = [logistic(a_samp[i] + b_samp[i] * x) for x in xrng, i in 1:N]
-	p = deepcopy(p_base)
-	plot!(p, post_samp, alpha = 0.25, color = :green) # add uncertainty samples
-	plot!(p, post_lines, color = :black) # add median
+    a_post = median(logistic_chain[:α])
+    b_post = median(logistic_chain[:β])
+
+    # iterator for distance from hole calcs
+    xrng = 1:1:21
+    post_lines = [logistic(a_post + b_post * x) for x in xrng]
+
+    # 10 draws from the posterior
+    N = 50
+    a_samp = StatsBase.sample(logistic_chain[:α], N)
+    b_samp = StatsBase.sample(logistic_chain[:β], N)
+
+    post_samp = [logistic(a_samp[i] + b_samp[i] * x) for x in xrng, i in 1:N]
+    p = deepcopy(p_base)
+    plot!(p, post_samp; alpha=0.25, color=:green) # add uncertainty samples
+    plot!(p, post_lines; color=:black) # add median
 end
 
 # ╔═╡ 81c20d85-75ae-4cdb-8ae9-e4da67ef87f1
@@ -218,26 +223,25 @@ Phi(x) = cdf.(Normal(0, 1), x);
 
 # ╔═╡ a7071dc6-36bd-4f0c-a79d-77e56ff58f30
 @model function golf_angle(x, y, n; r, R)
+    J = length(x)
 
-	J = length(x)
-	
-	# transformed data
-	threshold_angle = asin.((R - r) ./ x)
+    # transformed data
+    threshold_angle = asin.((R - r) ./ x)
 
-	# parameters
-	σ ~ truncated(Normal(0, 0.5), 0, Inf)
-	
-	# model
-	p = 2 * Phi(threshold_angle / σ) .- 1
-	for j in 1:J
-		y[j] ~ Binomial(n[j], p[j])
-	end
+    # parameters
+    σ ~ truncated(Normal(0, 0.5), 0, Inf)
+
+    # model
+    p = 2 * Phi(threshold_angle / σ) .- 1
+    for j in 1:J
+        y[j] ~ Binomial(n[j], p[j])
+    end
 end;
 
 # ╔═╡ 2e22ce25-9ca6-4a91-9f9c-8c7b09081e53
 begin
-	r = (1.68 / 2) / 12
-	R = (4.25 / 2) / 12
+    r = (1.68 / 2) / 12
+    R = (4.25 / 2) / 12
 end;
 
 # ╔═╡ 4bcdb914-174b-4aba-93e3-259a041fb7df
@@ -247,8 +251,8 @@ We can sample from the prior
 
 # ╔═╡ 7c7ccdf1-0a1e-40dc-9936-fa24da8a13b8
 prior = let
-	model = golf_angle(golf.distance_ft, golf.successes, golf.attempts; r=r, R=R)
-	sample(model, Prior(), 10000)
+    model = golf_angle(golf.distance_ft, golf.successes, golf.attempts; r=r, R=R)
+    sample(model, Prior(), 10000)
 end;
 
 # ╔═╡ bed51537-aa59-4526-a4f7-80a11020d4e9
@@ -256,32 +260,26 @@ md"And visualize it"
 
 # ╔═╡ f126f83b-5dd2-49fc-a908-bdc9fd3e7420
 let
-	angle_prior = StatsBase.sample(prior[:σ], 500)
-	angle_of_shot = rand.(Normal.(0, angle_prior), 1)  # radians
-	angle_of_shot = getindex.(angle_of_shot) # extract array
-	
-	distance = 20 # feet
-	
-	end_positions = [
-	    distance * cos.(angle_of_shot),
-	    distance * sin.(angle_of_shot)
-	]
-	
-	# visualize
-	 plot(
-	   [[0, i] for i in end_positions[1]],
-	   [[0, i] for i in end_positions[2]],
-	   labels = false,
-	   legend = :topleft,
-	   color = :black,
-	   alpha = 0.3,
-	)
-	scatter!(
-		end_positions[1], end_positions[2],
-		color = :black, labels=false, alpha=0.1,
-	)
-	scatter!((0,0), color = :green, label = "start", markersize = 6)
-	scatter!((20, 0), color = :red, label = "goal", markersize = 6)
+    angle_prior = StatsBase.sample(prior[:σ], 500)
+    angle_of_shot = rand.(Normal.(0, angle_prior), 1)  # radians
+    angle_of_shot = getindex.(angle_of_shot) # extract array
+
+    distance = 20 # feet
+
+    end_positions = [distance * cos.(angle_of_shot), distance * sin.(angle_of_shot)]
+
+    # visualize
+    plot(
+        [[0, i] for i in end_positions[1]],
+        [[0, i] for i in end_positions[2]];
+        labels=false,
+        legend=:topleft,
+        color=:black,
+        alpha=0.3,
+    )
+    scatter!(end_positions[1], end_positions[2]; color=:black, labels=false, alpha=0.1)
+    scatter!((0, 0); color=:green, label="start", markersize=6)
+    scatter!((20, 0); color=:red, label="goal", markersize=6)
 end
 
 # ╔═╡ 4f8fd4ad-d4ac-4a69-8845-2d04d0cb7b81
@@ -289,11 +287,11 @@ md"We conduct posterior inference:"
 
 # ╔═╡ be0dd5ca-286f-41e2-a678-07b10ae98986
 angle_chain = let
-	model = golf_angle(golf.distance_ft, golf.successes, golf.attempts; r=r, R=R)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	nchains = 4
-	sample(model, sampler, MCMCThreads(), n_per_chain, nchains, drop_warmup=true)
+    model = golf_angle(golf.distance_ft, golf.successes, golf.attempts; r=r, R=R)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    nchains = 4
+    sample(model, sampler, MCMCThreads(), n_per_chain, nchains; drop_warmup=true)
 end;
 
 # ╔═╡ 0b32c092-ec6d-4fff-b916-ee0dfc826d3b
@@ -306,31 +304,30 @@ With Turing we can write a model that's much more readable than the original Gel
 
 # ╔═╡ a386c7fb-bac6-4d4b-ab95-a6a8050d88b1
 @model function golf_angle2(x, y, n; r, R)
+    J = length(x)
 
-	J = length(x)
-	
-	# transformed data
-	threshold_angle = asin.((R - r) ./ x)
+    # transformed data
+    threshold_angle = asin.((R - r) ./ x)
 
-	# parameter
-	σ ~ truncated(Normal(0, 0.5), 0, Inf)
-	
-	# model
-	dist = Normal(0, σ)
-	p = @. cdf(dist, threshold_angle) - cdf(dist, - threshold_angle)
-	y .~ Binomial.(n, p)
+    # parameter
+    σ ~ truncated(Normal(0, 0.5), 0, Inf)
 
-	# generated quantities
-	σ_deg = rad2deg(σ)
+    # model
+    dist = Normal(0, σ)
+    p = @. cdf(dist, threshold_angle) - cdf(dist, -threshold_angle)
+    y .~ Binomial.(n, p)
+
+    # generated quantities
+    return σ_deg = rad2deg(σ)
 end;
 
 # ╔═╡ 23c18e01-f080-4c0d-a40f-72f5fe38de22
 angle2_chain = let
-	model = golf_angle2(golf.distance_ft, golf.successes, golf.attempts, r=r, R=R)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	nchains = 4
-	sample(model, sampler, MCMCThreads(), n_per_chain, nchains, drop_warmup=true)
+    model = golf_angle2(golf.distance_ft, golf.successes, golf.attempts; r=r, R=R)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    nchains = 4
+    sample(model, sampler, MCMCThreads(), n_per_chain, nchains; drop_warmup=true)
 end;
 
 # ╔═╡ f0a3cf65-0c03-4fe1-8a31-2e48b78cc44e
@@ -352,20 +349,20 @@ prob_angle(threshold, σ) = 2 * Phi(threshold / σ) .- 1;
 
 # ╔═╡ f2efdce6-050c-42ab-afc8-dead68ffd09a
 let
-	a_post = median(logistic_chain[:α])
-	b_post = median(logistic_chain[:β])
-	
-	# iterator for distance from hole calcs
-	xrng = 1:1:21
-	post_lines = [logistic(a_post + b_post * x) for x in xrng]
-	post_sigma = median(angle_chain[:σ])
-	threshold_angle = [asin((R - r) / x) for x in xrng]
-	geom_lines = prob_angle(threshold_angle, post_sigma)
-	
-	p = deepcopy(p_base)
-	plot!(p, post_lines, color = :black, label = "Logistic regression")
-	plot!(p, geom_lines, color = 1, label = "Geometry-based model")
-	plot(p, legend=:topright)
+    a_post = median(logistic_chain[:α])
+    b_post = median(logistic_chain[:β])
+
+    # iterator for distance from hole calcs
+    xrng = 1:1:21
+    post_lines = [logistic(a_post + b_post * x) for x in xrng]
+    post_sigma = median(angle_chain[:σ])
+    threshold_angle = [asin((R - r) / x) for x in xrng]
+    geom_lines = prob_angle(threshold_angle, post_sigma)
+
+    p = deepcopy(p_base)
+    plot!(p, post_lines; color=:black, label="Logistic regression")
+    plot!(p, geom_lines; color=1, label="Geometry-based model")
+    plot(p; legend=:topright)
 end
 
 # ╔═╡ cd64dce7-4012-4ab1-82b7-f5f0a741ec43
@@ -385,17 +382,25 @@ Dr. Gelman writes
 
 # ╔═╡ 960b111e-d11a-4031-979d-1b050bc9377e
 golf2 = let
-	url = "https://raw.githubusercontent.com/stan-dev/example-models/master/knitr/golf/golf_data_new.txt"
-	df  = CSV.File(HTTP.get(url).body, delim=" ", missingstring="NA", header=3, 	normalizenames=true) |> DataFrame
-	df[!, :pct_made] = df.y ./ df.n
-	df[!, :error] = @. sqrt.((df.pct_made * (1 - df.pct_made) / df.n))
-	rename!(df, :x => :distance_ft, :n => :attempts, :y => :successes)
+    url = "https://raw.githubusercontent.com/stan-dev/example-models/master/knitr/golf/golf_data_new.txt"
+    df = DataFrame(
+        CSV.File(
+            HTTP.get(url).body;
+            delim=" ",
+            missingstring="NA",
+            header=3,
+            normalizenames=true,
+        ),
+    )
+    df[!, :pct_made] = df.y ./ df.n
+    df[!, :error] = @. sqrt.((df.pct_made * (1 - df.pct_made) / df.n))
+    rename!(df, :x => :distance_ft, :n => :attempts, :y => :successes)
 end;
 
 # ╔═╡ 93cf15e7-2e6f-44f9-af71-443f49711377
 p_base2 = let
-	p = deepcopy(p_base)
-	plot_golf!(p, golf2, color=:red)
+    p = deepcopy(p_base)
+    plot_golf!(p, golf2; color=:red)
 end
 
 # ╔═╡ 74e87218-8f06-4786-b2ff-b8528afa9510

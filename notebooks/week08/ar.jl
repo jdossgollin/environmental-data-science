@@ -6,14 +6,14 @@ using InteractiveUtils
 
 # ╔═╡ fdefc6ea-3fc7-48ed-b4b9-64a0c5ba59e8
 begin
-	using Distributions
-	using DynamicHMC
-	using GLM
-	using Optim
-	using Plots
-	using StatsBase: autocor
-	using StatsPlots
-	using Turing
+    using Distributions
+    using DynamicHMC
+    using GLM
+    using Optim
+    using Plots
+    using StatsBase: autocor
+    using StatsPlots
+    using Turing
 end
 
 # ╔═╡ 28252c12-99c9-11ec-2d5a-8123ebb1b8e6
@@ -35,13 +35,13 @@ This is easy to write down in Turing!
 
 # ╔═╡ 6e4613f3-981e-4394-a591-d9f4eb5ae6c3
 @model function ar_p(y, p)
-	α ~ Normal(0, 1)
-	σ ~ LogNormal(0, 1)
-	ϕ ~ filldist(Normal(0, 1), p)
-	for t in (p+1):length(y)
-		μ = α + sum(ϕ .* y[(t-p):(t-1)])
-		y[t] ~ Normal(μ, σ)
-	end
+    α ~ Normal(0, 1)
+    σ ~ LogNormal(0, 1)
+    ϕ ~ filldist(Normal(0, 1), p)
+    for t in (p + 1):length(y)
+        μ = α + sum(ϕ .* y[(t - p):(t - 1)])
+        y[t] ~ Normal(μ, σ)
+    end
 end;
 
 # ╔═╡ 58c024ee-cdd4-4353-a465-ccc81a84e0c1
@@ -49,10 +49,10 @@ md"Let's simulate some fake data. AR models should fit a sinusoid pretty well!"
 
 # ╔═╡ 61e855f9-46f8-43d1-be71-7b88713d22a2
 y = let
-	t = 0:0.1:5
-	T = 2.5
-	σ = 0.5
-	sin.(2 * π * t ./ T) .+ rand(Normal(0, σ), length(t))
+    t = 0:0.1:5
+    T = 2.5
+    σ = 0.5
+    sin.(2 * π * t ./ T) .+ rand(Normal(0, σ), length(t))
 end;
 
 # ╔═╡ d6705a16-c34a-4389-add3-7a87fb25e82b
@@ -62,7 +62,7 @@ See Brockwell 1.4.1 for a discussion of the sample autocorrelation -- this is ou
 "
 
 # ╔═╡ cb732866-ec2d-4330-8d31-5a3dcbd38517
-plot(autocor(y, 1:43), line=:stem, marker=:o, label=false, ylabel="ACF")
+plot(autocor(y, 1:43); line=:stem, marker=:o, label=false, ylabel="ACF")
 
 # ╔═╡ 553f6f70-1ee6-4681-ba2e-9271656309cf
 md"Now we can do some inference!"
@@ -81,13 +81,10 @@ md"Or we could sample from the posterior"
 
 # ╔═╡ 5bcad362-ce31-42bb-99bf-79f932439043
 chains = let
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	nchains = 4
-	sample(
-		ar_model, sampler, MCMCThreads(),
-		n_per_chain, nchains, drop_warmup=true,
-	)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    nchains = 4
+    sample(ar_model, sampler, MCMCThreads(), n_per_chain, nchains; drop_warmup=true)
 end;
 
 # ╔═╡ dfa05697-9852-42fd-951f-40509ace0eb3

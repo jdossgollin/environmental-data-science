@@ -6,17 +6,17 @@ using InteractiveUtils
 
 # ╔═╡ ffc70e7c-f831-46cd-b87e-fb58ec91ea46
 begin
-	using CSV
-	using DataFrames
-	using DataFramesMeta
-	using Dates
-	using Distributions
-	using LaTeXStrings
-	using Optim
-	using Plots
-	using PlutoUI
-	using StatsPlots
-	using Turing
+    using CSV
+    using DataFrames
+    using DataFramesMeta
+    using Dates
+    using Distributions
+    using LaTeXStrings
+    using Optim
+    using Plots
+    using PlutoUI
+    using StatsPlots
+    using Turing
 end
 
 # ╔═╡ 73f58c68-7a20-11ec-221e-19b02b2ab517
@@ -54,11 +54,11 @@ Use this function to produce a plot of the posterior density for the data and pr
 
 # ╔═╡ bf81c48a-cb94-4894-bed5-7bfb7fa1e039
 function poisson_posterior(μ, σ, y, θ)
-	prior = 0 # FILL IN
-	log_likelihood = 0 # FILL IN
-	likelihood = exp.(log_likelihood)
-	posterior = prior .* likelihood
-	return posterior
+    prior = 0 # FILL IN
+    log_likelihood = 0 # FILL IN
+    likelihood = exp.(log_likelihood)
+    posterior = prior .* likelihood
+    return posterior
 end;
 
 # ╔═╡ 8f733fa2-438c-4bfb-999a-4be52e1b8d8d
@@ -74,16 +74,16 @@ count_data = [8, 6, 2, 2, 9, 4, 7, 4, 7, 4, 7, 6, 3, 7, 7, 6, 1];
 ln_prior = LogNormal(μ_prior, σ_prior)
 
 # ╔═╡ ee80faab-5eff-4b8a-899a-db597a29ca9c
-plot(ln_prior, 0, 25, label="Prior", xlabel=L"$\theta$", ylabel=L"$p(\theta)$")
+plot(ln_prior, 0, 25; label="Prior", xlabel=L"$\theta$", ylabel=L"$p(\theta)$")
 
 # ╔═╡ 7a9d1463-b8f0-4b0c-99f2-ce1eabfcd5e9
 md"This plot is giving an error now because our `poisson_posterior` function always returns zero, but it will work once you fill it in!"
 
 # ╔═╡ 4003a632-7b99-44f8-9ff3-3f6aa722f95d
 let
-	θ_grid = range(1, 7, length=100)
-	posterior = [poisson_posterior(μ_prior, σ_prior, count_data, θi) for θi in θ_grid]
-	plot(θ_grid, posterior, yaxis=:log, label=false)
+    θ_grid = range(1, 7; length=100)
+    posterior = [poisson_posterior(μ_prior, σ_prior, count_data, θi) for θi in θ_grid]
+    plot(θ_grid, posterior; yaxis=:log, label=false)
 end
 
 # ╔═╡ ebe5cd7e-cb28-4fd6-bae0-9d27045fbe2e
@@ -102,24 +102,19 @@ To make your life easier, the following function will load the data
 
 # ╔═╡ 1547bd89-0b5e-4145-ac72-dfc205466b02
 function load_data()
-	fname = "../../assets/data/norfolk-hourly-surge-2015.csv" # CHANGE
-	date_format = "yyyy-mm-dd HH:MM"
-	# this uses the DataFramesMeta package -- it's pretty cool
-	return @chain fname begin
-		CSV.File(dateformat=date_format)
-		DataFrame
-		rename(
-			"Time (GMT)" => "time",
-			"Predicted (m)" => "harmonic",
-			"Verified (m)" => "gauge",
-		)
-		@transform :datetime = (
-			Date.(:Date, "yyyy/mm/dd") +
-			Time.(:time)
-		)
-		select(:datetime, :gauge, :harmonic)
-		@transform :weather = :gauge - :harmonic
-	end
+    fname = "../../assets/data/norfolk-hourly-surge-2015.csv" # CHANGE
+    date_format = "yyyy-mm-dd HH:MM"
+    # this uses the DataFramesMeta package -- it's pretty cool
+    return @chain fname begin
+        CSV.File(; dateformat=date_format)
+        DataFrame
+        rename(
+            "Time (GMT)" => "time", "Predicted (m)" => "harmonic", "Verified (m)" => "gauge"
+        )
+        @transform :datetime = (Date.(:Date, "yyyy/mm/dd") + Time.(:time))
+        select(:datetime, :gauge, :harmonic)
+        @transform :weather = :gauge - :harmonic
+    end
 end;
 
 # ╔═╡ 36d53c1d-c987-4262-9562-5511a723e98c
@@ -137,12 +132,18 @@ md"Let's take a quick look"
 
 # ╔═╡ 41ad60f7-eb6b-4975-8af1-743b6662a996
 begin
-	plot(data.datetime, data.gauge, ylabel="Gauge [m]", label="Observed", legend=:topleft)
-	plot!(data.datetime, data.harmonic, label="Harmonics")
+    plot(data.datetime, data.gauge; ylabel="Gauge [m]", label="Observed", legend=:topleft)
+    plot!(data.datetime, data.harmonic; label="Harmonics")
 end
 
 # ╔═╡ 16181720-4fa2-4cf6-a27a-e65b80c2a613
-plot(data.datetime, data.weather, ylabel="Gauge [m]", label="Weather-Driven Variability", legend=:topleft)
+plot(
+    data.datetime,
+    data.weather;
+    ylabel="Gauge [m]",
+    label="Weather-Driven Variability",
+    legend=:topleft,
+)
 
 # ╔═╡ 134af426-8972-4786-945c-2bd8c4837cf2
 md"""
@@ -163,26 +164,26 @@ md"""
 
 # ╔═╡ 809264f0-b262-4208-a987-dea91270adf4
 MLE_sample = let
-	μ = mean(data.weather)
-	σ = 1.4
-	# this is a let block, so you can create variables here
-	# they will only be defined inside this let block
-	# the MLE_sample will be defined as the last line of this block
-	Normal(μ, σ) # FILL IN
- end
+    μ = mean(data.weather)
+    σ = 1.4
+    # this is a let block, so you can create variables here
+    # they will only be defined inside this let block
+    # the MLE_sample will be defined as the last line of this block
+    Normal(μ, σ) # FILL IN
+end
 
 # ╔═╡ 288963f8-24f0-46f4-b420-6f2ac3601f17
 log_lik(μ, σ) = sum([logpdf(Normal(μ, σ), x) for x in your_data])
 
 # ╔═╡ 621e1fce-b7d2-4dc8-acc7-1ff43ec570a7
 MLE_grid = let
-	μ = -2:0.01:5
-	Normal() # FILL IN
- end
+    μ = -2:0.01:5
+    Normal() # FILL IN
+end
 
 # ╔═╡ 772bee6c-dbc6-4c84-b028-62cb70e56213
 MLE_optim = let
-	Normal() # FILL IN
+    Normal() # FILL IN
 end
 
 # ╔═╡ cc715cad-db33-4c43-934b-d23960098781
@@ -190,17 +191,17 @@ md"We have already seen how to write a model in Turing for a `1D normal distribu
 
 # ╔═╡ f76ac6b8-cd53-452d-a044-3087ff13e7a8
 @model function normal1d(x)
-    
-	# define parameters through a prior
-	μ ~ Normal(0, 10) # very weak
-	σ ~ TruncatedNormal(0, 2.5, 0, Inf) # trunace so cannot be >1
 
-    x .~ Normal(μ, σ)
+    # define parameters through a prior
+    μ ~ Normal(0, 10) # very weak
+    σ ~ TruncatedNormal(0, 2.5, 0, Inf) # trunace so cannot be >1
+
+    return x .~ Normal(μ, σ)
 end
 
 # ╔═╡ 5eaa967f-30fd-402b-bd4a-3dc8eb4fb88f
 MLE_turing = let
-	Normal() # FILL IN
+    Normal() # FILL IN
 end
 
 # ╔═╡ 4ebb9746-f869-48bc-b0c2-b8d31414bb4b

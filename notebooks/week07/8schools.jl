@@ -6,19 +6,19 @@ using InteractiveUtils
 
 # ╔═╡ 092d3842-faed-4653-a86d-71f3e85e1f92
 begin
-	using ColorSchemes
-	using DataFrames
-	using DynamicHMC
-	using Distributions
-	using LaTeXStrings
-	using StatsPlots
-	using Turing
+    using ColorSchemes
+    using DataFrames
+    using DynamicHMC
+    using Distributions
+    using LaTeXStrings
+    using StatsPlots
+    using Turing
 end
 
 # ╔═╡ a90d358f-cea0-465c-877f-f8321a3db2f3
 begin
-	using PlutoUI
-	#TableOfContents()
+    using PlutoUI
+    #TableOfContents()
 end
 
 # ╔═╡ 7ad470b3-71c5-475d-a9ac-43ec0a0601bf
@@ -51,10 +51,7 @@ For example, this [TensorFlow Probability](https://www.tensorflow.org/probabilit
 """
 
 # ╔═╡ bda717cf-aad4-406c-b00c-0f1c92e22cb4
-data = DataFrame(
-	yj = [28, 8, -3, 7, -1, 1, 18, 12],
-	σj = [15, 10, 16, 11, 9, 11, 10, 18],
-)
+data = DataFrame(; yj=[28, 8, -3, 7, -1, 1, 18, 12], σj=[15, 10, 16, 11, 9, 11, 10, 18])
 
 # ╔═╡ b13a4f5b-e641-43a6-b83f-040f49b92060
 md"When we plot this, we see the following estimates:"
@@ -71,15 +68,12 @@ We can plot them:
 
 # ╔═╡ a9315c31-cebb-4ffc-acdb-f88c38083533
 p_base = let
-	p = plot(
-		xlabel="Estimated Treatment Effect",
-		ylabel="Probability Density",
-	)
-	for (j, row) in enumerate(eachrow(data))
-		dist = Normal(row.yj, row.σj)
-		plot!(p, dist, label=j, linewidth=2, color=colors[j], alpha=0.6)
-	end
-	p
+    p = plot(; xlabel="Estimated Treatment Effect", ylabel="Probability Density")
+    for (j, row) in enumerate(eachrow(data))
+        dist = Normal(row.yj, row.σj)
+        plot!(p, dist; label=j, linewidth=2, color=colors[j], alpha=0.6)
+    end
+    p
 end
 
 # ╔═╡ e0812f83-0760-4c66-a80f-b7b94a5f2e6e
@@ -107,12 +101,9 @@ plugging in we get
 
 # ╔═╡ 8109714f-1c07-493e-9f7b-1f01bcf143bf
 pooled_est = let
-	variance = 1 / sum([1 ./ σj^2 for σj in data.σj])
-	ymean = (
-		sum([yj ./ σj^2 for (yj, σj) in zip(data.yj, data.σj)]) / 
-		(1 / variance)
-	)
-	Normal(ymean, sqrt(variance))
+    variance = 1 / sum([1 ./ σj^2 for σj in data.σj])
+    ymean = (sum([yj ./ σj^2 for (yj, σj) in zip(data.yj, data.σj)]) / (1 / variance))
+    Normal(ymean, sqrt(variance))
 end
 
 # ╔═╡ 31965ae4-0d88-40c3-b491-300c6797cd40
@@ -120,8 +111,8 @@ md"Here's that pooled estimate in context:"
 
 # ╔═╡ 35f87dbc-c66a-40c0-9fbd-2208b23fef97
 let
-	p = deepcopy(p_base)
-	plot!(p, pooled_est, color=:black, linewidth=3, label="Pooled")
+    p = deepcopy(p_base)
+    plot!(p, pooled_est; color=:black, linewidth=3, label="Pooled")
 end
 
 # ╔═╡ 10ca8f36-fdd7-49fa-8fa0-01de7fba3f23
@@ -162,7 +153,6 @@ for some $\lambda_j \in [0, 1]$.
 
 # ╔═╡ 2eb0e370-bccb-437a-9892-5d66da07b381
 
-
 # ╔═╡ 35dcc98e-4fd0-4ffb-b2a8-1731d4a4ffa0
 md"""
 If we call our effects at each school $\theta_j$, we could model this as
@@ -199,27 +189,27 @@ where $\sigma_j$ is the known uncertainty estimate for that shcool.
 
 # ╔═╡ 593a6955-b602-494a-b357-174eb422d03c
 @model function eight_schools(y, σ)
-	J = length(y)
-    
-	μ ~ Normal(0, 10)
+    J = length(y)
+
+    μ ~ Normal(0, 10)
     τ ~ τ_dist # just plugs in above
     θ̃ = tzeros(J) # trick: initialize blank
 
-	# this for loop syntax is easier to read
-	for j in 1:J
-		θ̃[j] ~ Normal(0, 1)
-		θj = μ + τ * θ̃[j]
-    	y[j] ~ Normal(θj, σ[j]) # data model
-	end
+    # this for loop syntax is easier to read
+    for j in 1:J
+        θ̃[j] ~ Normal(0, 1)
+        θj = μ + τ * θ̃[j]
+        y[j] ~ Normal(θj, σ[j]) # data model
+    end
 end;
 
 # ╔═╡ d01bf69f-150b-4a72-bd65-bd31cbe68080
 chains = let
-	model = eight_schools(data.yj, data.σj)
-	sampler = DynamicNUTS()
-	n_per_chain = 5000
-	nchains = 4
-	sample(model, sampler, MCMCThreads(), n_per_chain, nchains, drop_warmup=true)
+    model = eight_schools(data.yj, data.σj)
+    sampler = DynamicNUTS()
+    n_per_chain = 5000
+    nchains = 4
+    sample(model, sampler, MCMCThreads(), n_per_chain, nchains; drop_warmup=true)
 end;
 
 # ╔═╡ 26b171a4-b276-4fc4-b9e7-f5cbf748149c
@@ -233,24 +223,22 @@ plot(chains, :τ)
 
 # ╔═╡ 1b27a419-9b45-45b9-98fa-b6eec868b3be
 θ = let
-	θ̃ = Array(group(chains, :θ̃))
-	μ = Array(group(chains, :μ))
-	τ = Array(group(chains, :τ))
-	@. μ + θ̃  * τ
+    θ̃ = Array(group(chains, :θ̃))
+    μ = Array(group(chains, :μ))
+    τ = Array(group(chains, :τ))
+    @. μ + θ̃ * τ
 end;
 
 # ╔═╡ dbf986a5-79cd-4159-ab74-d7cbd104039a
 let
-	J = nrow(data)
-	p = plot(
-		xticks=(1:J, string.(1:J)),
-		xlabel="School Index",
-		ylabel="Posterior Estimate",
-	)
-	hline!(p, [pooled_est.μ], label="Pooled", linewidth=2, color=:black,)
-	boxplot!(θ, label=false, outliers=false, alpha=0.9)
-	scatter!(p, 1:J, data.yj, markersize=7, label="Unpooled")
-	p
+    J = nrow(data)
+    p = plot(;
+        xticks=(1:J, string.(1:J)), xlabel="School Index", ylabel="Posterior Estimate"
+    )
+    hline!(p, [pooled_est.μ]; label="Pooled", linewidth=2, color=:black)
+    boxplot!(θ; label=false, outliers=false, alpha=0.9)
+    scatter!(p, 1:J, data.yj; markersize=7, label="Unpooled")
+    p
 end
 
 # ╔═╡ 2b5fece7-3b3f-4f11-9c1c-00f28a9a511e
@@ -260,7 +248,7 @@ md"We can see that there's a comprosmise between the unpooled estimate (green do
 md"The [TensorFlow Probability notebook](https://www.tensorflow.org/probability/examples/Eight_Schools) uses a `LogNormal(5, 1)` distribution. Try plugging that into `τ_dist` instead!"
 
 # ╔═╡ 81885ab3-9357-4811-9226-a7d7a70104de
-plot(τ_dist, 0, 100, title=L"Prior over Variance $p(\tau)$", label=false)
+plot(τ_dist, 0, 100; title=L"Prior over Variance $p(\tau)$", label=false)
 
 # ╔═╡ 42c77b49-3152-412d-ae76-a28b24702734
 md"""

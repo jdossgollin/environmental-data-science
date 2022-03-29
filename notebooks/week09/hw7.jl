@@ -6,23 +6,23 @@ using InteractiveUtils
 
 # ╔═╡ 70e1238a-0a9e-4596-a193-a2892cc5aebf
 begin
-	# you do not need any additional packages
-	# so don't edit this block
-	using CSV
-	using DataFrames
-	using DataFramesMeta
-	using Dates
-	using DynamicHMC
-	using HMMBase
-	using HTTP
-	using LaTeXStrings
-	using Optim
-	using Plots
-	using PlutoUI
-	using StatsBase: autocor, pacf, mean, median
-	using StatsPlots
-	using Turing
-	TableOfContents()
+    # you do not need any additional packages
+    # so don't edit this block
+    using CSV
+    using DataFrames
+    using DataFramesMeta
+    using Dates
+    using DynamicHMC
+    using HMMBase
+    using HTTP
+    using LaTeXStrings
+    using Optim
+    using Plots
+    using PlutoUI
+    using StatsBase: autocor, pacf, mean, median
+    using StatsPlots
+    using Turing
+    TableOfContents()
 end
 
 # ╔═╡ 1318106c-9f16-11ec-1692-03df120ff0b2
@@ -62,7 +62,7 @@ Post on Slack if you get stuck with the Data Frames syntax -- it's powerful and 
 
 # ╔═╡ 2d986df4-053b-4add-ab33-a89ff2c49a82
 nino34 = let
-	# YOUR CODE HERE
+    # YOUR CODE HERE
 end
 
 # ╔═╡ fb43b8c5-4a45-4fd4-82be-8f55137cea6a
@@ -74,7 +74,7 @@ It may look a bit different from other plots of NINO 3.4 because we haven't divi
 """
 
 # ╔═╡ d03b11ae-2346-4f39-a13c-73e852a6357a
-plot(nino34.t, nino34.sst_anom, label=false, ylabel="SST Anomaly", xlabel="Time")
+plot(nino34.t, nino34.sst_anom; label=false, ylabel="SST Anomaly", xlabel="Time")
 
 # ╔═╡ d21fff3c-3f47-4a0b-a48a-1aba959cbe3a
 md"""
@@ -91,7 +91,7 @@ Define the model but *do not sample from it!*
 
 # ╔═╡ 3bfd8bfe-41ae-4f3c-bc08-708b26217a96
 @model function BayesHMM(y, K)
-	y ~ Normal(0, 1) # this is a placeholder -- fill it in!
+    return y ~ Normal(0, 1) # this is a placeholder -- fill it in!
 end;
 
 # ╔═╡ 971cdb37-f1ef-4ced-89a6-368a31e01af6
@@ -180,24 +180,64 @@ Here we input the data and create a visualization
 
 # ╔═╡ 793f1856-9ce2-48bf-825f-bc80e96d621c
 yield_df = let
-	treat = [
-		'B', 'E', 'A', 'C', 'D',
-		'D', 'A', 'E', 'B', 'C',
-		'E', 'B', 'C', 'D', 'A',
-		'A', 'C', 'D', 'E', 'B',
-		'C', 'D', 'B', 'A', 'E',
-	]
-	yield = [
-		257, 230, 279, 287, 202,
-		245, 283, 245, 280, 260,
-		182, 252, 280, 246, 250, 
-		203, 204, 227, 193, 259,
-		231, 271, 266, 334, 338,
-	]
-	col = repeat(1:5, 5)
-	row = mapreduce(x -> repeat([x], 5), vcat, 1:5)
-	df = DataFrame(:treatment => treat, :row => row, :column => col, :yield => yield)
-	@orderby df :row :column :treatment
+    treat = [
+        'B',
+        'E',
+        'A',
+        'C',
+        'D',
+        'D',
+        'A',
+        'E',
+        'B',
+        'C',
+        'E',
+        'B',
+        'C',
+        'D',
+        'A',
+        'A',
+        'C',
+        'D',
+        'E',
+        'B',
+        'C',
+        'D',
+        'B',
+        'A',
+        'E',
+    ]
+    yield = [
+        257,
+        230,
+        279,
+        287,
+        202,
+        245,
+        283,
+        245,
+        280,
+        260,
+        182,
+        252,
+        280,
+        246,
+        250,
+        203,
+        204,
+        227,
+        193,
+        259,
+        231,
+        271,
+        266,
+        334,
+        338,
+    ]
+    col = repeat(1:5, 5)
+    row = mapreduce(x -> repeat([x], 5), vcat, 1:5)
+    df = DataFrame(:treatment => treat, :row => row, :column => col, :yield => yield)
+    @orderby df :row :column :treatment
 end;
 
 # ╔═╡ c7d03524-0083-4807-bbd0-3e537d15f19a
@@ -205,41 +245,43 @@ first(yield_df, 4)
 
 # ╔═╡ 2e691624-d297-4694-ac36-c01ec13558d1
 let
-	function plotfn(var, name) 
-		df = @chain yield_df begin
-			groupby(var)
-			@combine begin
-				:μ = mean(:yield)
-				:σ = std(:yield)
-			end
-		end
-		p = plot(
-			df[!, var],
-			df[!, :μ];
-			line=false,
-			yerror = df[!, :σ],
-			marker=:o,
-			xlabel=name,
-			ylabel="Yield",
-			title="Yield by $var",
-			label=L"$\mathbb{E}[y]\pm \sqrt{\mathbb{V}[y]}$",
-			legend=:topleft,
-		)
-		hline!(p, [mean(yield_df.yield)], label=false, linestyle=:dash)
-		return p
-	end
-	
-	p1 = plotfn(:row, "Row")
-	p2 = plotfn(:column, "Column")
-	p3 = plotfn(:treatment, "Treatment")
-	plot(
-		p1, p2, p3,
-		layout=(1, 3),
-		size=(1200, 400),
-		left_margin=5Plots.mm,
-		bottom_margin=5Plots.mm,
-		link=:y,
-	)
+    function plotfn(var, name)
+        df = @chain yield_df begin
+            groupby(var)
+            @combine begin
+                :μ = mean(:yield)
+                :σ = std(:yield)
+            end
+        end
+        p = plot(
+            df[!, var],
+            df[!, :μ];
+            line=false,
+            yerror=df[!, :σ],
+            marker=:o,
+            xlabel=name,
+            ylabel="Yield",
+            title="Yield by $var",
+            label=L"$\mathbb{E}[y]\pm \sqrt{\mathbb{V}[y]}$",
+            legend=:topleft,
+        )
+        hline!(p, [mean(yield_df.yield)]; label=false, linestyle=:dash)
+        return p
+    end
+
+    p1 = plotfn(:row, "Row")
+    p2 = plotfn(:column, "Column")
+    p3 = plotfn(:treatment, "Treatment")
+    plot(
+        p1,
+        p2,
+        p3;
+        layout=(1, 3),
+        size=(1200, 400),
+        left_margin=5Plots.mm,
+        bottom_margin=5Plots.mm,
+        link=:y,
+    )
 end
 
 # ╔═╡ bbaacd47-b01e-45d4-a13a-1a68419d405c
@@ -284,21 +326,23 @@ md"""
 
 # ╔═╡ fe5ea52b-e6ea-477a-8bd8-13ffa933fd29
 function read_enso()
-	url = "https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.data"
-	df  = CSV.File(
-		HTTP.get(url).body,
-		header=false,
-		footerskip=5,
-		missingstring="-99.99",
-		skipto=2,
-		delim=" ",
-		ignorerepeated=true,
-	) |> DataFrame
-	syear = df[1, 1]
-	y = Array(df[!, 2:13])
-	y = collect(vec(y'))
-	dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
-	DataFrame(:t => dates, :sst => y)
+    url = "https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.data"
+    df = DataFrame(
+        CSV.File(
+            HTTP.get(url).body;
+            header=false,
+            footerskip=5,
+            missingstring="-99.99",
+            skipto=2,
+            delim=" ",
+            ignorerepeated=true,
+        ),
+    )
+    syear = df[1, 1]
+    y = Array(df[!, 2:13])
+    y = collect(vec(y'))
+    dates = Dates.Date(syear, 1, 1) .+ Dates.Month.(1:length(y))
+    return DataFrame(:t => dates, :sst => y)
 end;
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
