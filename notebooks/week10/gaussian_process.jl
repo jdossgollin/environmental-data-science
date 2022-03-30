@@ -390,8 +390,8 @@ If you're reading the [GP not quite for dummies](https://yugeten.github.io/posts
 As discussed in the not quite for dummies post, we have
 ```math
 \begin{align}
-y &\sim \mathcal{N} \left( \mathbf{m}, S \right) \\
-\mathbf{m} &= \mathbf{a} + B C^{-1} \left(x - \mathbf{b} \right) \\
+p(y' | y) &= \mathcal{N} \left( \mathbf{m}, S \right) \\
+\mathbf{m} &= \mathbf{a} + B C^{-1} \left(y - \mathbf{b} \right) \\
 S &= A - B C^{-1} B^{T} + \sigma_y^2 I
 \end{align}
 ```
@@ -400,26 +400,38 @@ Note that we are assuming stationary means: $\mathbf{a} = \mathbf{b} = \mu = \fr
 """
 
 # ╔═╡ f623d720-74b3-4995-9cf4-e1af0988b575
-function predict_gp(logℓ, logσ, logσy, x, y, xprime)
+"""
+Joint distribution of yprime as a function of y (given parameters, x, and xnew)
+"""
+function predict_gp(logℓ, logσ, logσy, x, y, xnew)
 
     N = length(x)
-    M = length(xprime)
+    M = length(xnew)
     Q = N + M
-    Z = vcat(xprime, x) # all obs
+    Z = vcat(xnew, x) # all obs
     D = pairwise(Euclidean(), Z, Z)
-	mu = mean(y)
+	μ = mean(y)
 
-	# total kernel [A B; B' C]
+	# the entire kernel in one step [A B; B' C]
 	K = sqexp_cov_fn(D, logℓ, logσ) + exp(2 * logσy) * I
 
-	Koo_inv = inv(K[(M+1):end, (M+1):end])
-    Knn = K[1:M, 1:M]
-	Kno = K[1:M, (M+1):end]
-	C = Kno * Koo_inv
-	m = C * (y .- mu) .+ mu
-	S = Matrix(LinearAlgebra.Hermitian(Knn - C * Kno'))
-	mvn = MvNormal(m, S)
-	return mvn
+	# indices
+	new = 1:M
+	old = (M+1):(M+N)
+
+	# A, B, C, a, b
+	A = K[new, new]
+	B = K[new, old]
+	C = K[old, old]
+	a = μ * ones(length(xnew)) # vector
+	b = μ * ones(length(x)) # vector
+
+	# compute m, S
+	m = a + B / C * (y - b)
+	S = A - B / C * B'
+	Σ = S + exp(2 * logσy) * I # add observational noise
+	Σ = Matrix(Hermitian(S)) # linear algebra trick
+	return MvNormal(m, Σ) #  we return the joint distribution
 end;
 
 # ╔═╡ 80ab8bfb-7ab1-4425-804c-794c90a8a4de
@@ -427,8 +439,13 @@ let
 	mvn = predict_gp(θ_best[1], θ_best[2], log(σy), x, y, xprime)
 	p = deepcopy(baseplot)
 	σ = sqrt.(diag(mvn.Σ))
-	plot!(p, xprime, mvn.μ, ribbon=2σ, label=L"Gaussian Process $\pm 2\sigma$")
+	plot!(
+		p, xprime, mvn.μ, ribbon=2σ,
+		label=L"Gaussian Process $\pm 2\sigma$", linewidth=3,
+	)
+	plot!(p, f, 0, 10, label="True Value", linewidth=2)
 	scatter!(p, x, y, label="Observed Points")
+	plot!(p, title="Linear Algebra Fit (No Package)")
 end
 
 # ╔═╡ a450382a-4c03-4c69-b03f-b55233458a99
@@ -456,29 +473,28 @@ We can plot really easily.
 
 # ╔═╡ 12b5c75a-31a4-4452-8dea-2a62167c2db6
 let
-	σy = 0.25 # if we think the data is observed with noise
-	ℓ = 1.5
+	ℓ = 2.5
 	σ = 1.5
-	kern = GaussianProcesses.SE(log(ℓ), log(σ)) # note: log σ, log ℓ
+	kern = GaussianProcesses.SE(log(ℓ), log(σ))
 	μ = GaussianProcesses.MeanZero()
 	gp = GP(x, y, μ, kern, log(σy))
 	p = deepcopy(baseplot)
 	plot!(p, f, x0, x1, label="True Values", linewidth=3)
-	plot!(gp, label=false, title="Random Guess Parameters", linewidth=3)
+	plot!(gp, title=L"Random Guess Parameters: $\ell=%$(ℓ)$, $\sigma=%$σ$", linewidth=3, label="Fit")
 end
 
 # ╔═╡ 6d1787a3-4b14-406d-86b4-11d010bea570
-md"We can repeat the exercise by plugging in the parameters that we developed before. We're still guessing the $\sigma_y$. Since the model we estimated didn't account for noise, we can probably do better than this."
+md"We can repeat the exercise by plugging in the parameters that we developed before. We're still using the true, known, value of $\sigma_y$.
+Since the model we estimated didn't account for noise, we can probably do better than this."
 
 # ╔═╡ 05672787-edd7-4cd3-8cb8-bf4b1d79dd89
 let
-	σy = 0.25 # if we think the data is observed with noise
-	kern = GaussianProcesses.SE(θ_best...) # note: log σ, log ℓ
-	μ = GaussianProcesses.MeanZero()
+	kern = GaussianProcesses.SE(θ_best...) # note: log ℓ, log σ
+	μ = GaussianProcesses.MeanConst(mean(y)) # constant mean
 	gp2 = GP(x, y, μ, kern, log(σy))
 	p = deepcopy(baseplot)
 	plot!(p, f, x0, x1, label="True Values", linewidth=3)
-	plot!(gp2, label=false, title="Fitted Parameters", linewidth=3)
+	plot!(gp2, label=false, title="Best Parameters (Manual Optimization)", linewidth=3)
 end
 
 # ╔═╡ 10a73e7d-cff1-4255-bf37-fbbf70de8dfb
@@ -489,21 +505,20 @@ Last but not least, we can use stable built-in optimization methods.
 
 # ╔═╡ a6a21dca-0ae3-4eb4-8360-f2ac9050e802
 gp3 = let
-	σy = 0.25 # if we think the data is observed with noise
-	kern = GaussianProcesses.SE(θ_best...) # note: log σ, log ℓ
+	kern = GaussianProcesses.SE(θ_best...)
 	μ = GaussianProcesses.MeanZero()
 	gp3 = GP(x, y, μ, kern, log(σy))
 	optimize!(gp3) # piece of cake!
 	gp3
 end;
 
-# ╔═╡ a526bd7a-98bc-4130-b0df-b3ce68399665
-gp3.kernel # log ℓ, log σ
-
 # ╔═╡ 69e54f00-9e8e-4f04-be87-52e6485bb96c
 let
 	p = deepcopy(baseplot)
-	plot!(p, f, x0, x1, label="True Values", linewidth=3)
+	plot!(
+		p, f, x0, x1, label="True Values", linewidth=3,
+		title="Best Parameters (Built-In Optimization)",
+	)
 	plot!(p, gp3, label="GP Fit", legend=:bottomright, linewidth=3)
 end
 
@@ -1729,7 +1744,6 @@ version = "0.9.1+5"
 # ╠═05672787-edd7-4cd3-8cb8-bf4b1d79dd89
 # ╟─10a73e7d-cff1-4255-bf37-fbbf70de8dfb
 # ╠═a6a21dca-0ae3-4eb4-8360-f2ac9050e802
-# ╠═a526bd7a-98bc-4130-b0df-b3ce68399665
 # ╠═69e54f00-9e8e-4f04-be87-52e6485bb96c
 # ╟─3621ecae-4856-4dcb-90bd-3a2b41ebfb2b
 # ╟─d58d5828-1f84-4801-9686-7c0d8ea81edf
