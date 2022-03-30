@@ -1,1 +1,1 @@
-{{ plutonotebookpage ../notebooks/week10/variograms.jl }}
+{{ plutonotebookpage ../notebooks/week11/variograms.jl }}
