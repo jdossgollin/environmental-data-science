@@ -122,6 +122,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>12_neural/index.html</loc>
+    <lastmod>2022-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>01_mosquitos/index.html</loc>
     <lastmod>2022-04-08</lastmod>
     <changefreq>monthly</changefreq>
