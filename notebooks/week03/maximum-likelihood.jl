@@ -6,14 +6,14 @@ using InteractiveUtils
 
 # ╔═╡ 00067ba7-dc0f-4e12-9ebd-b4592bb361cd
 begin
-	using Distributions
-	using LaTeXStrings
-	using Optim
-	using Plots
-	using PlutoUI
-	using StatsPlots
-	using Turing
-	TableOfContents()
+    using Distributions
+    using LaTeXStrings
+    using Optim
+    using Plots
+    using PlutoUI
+    using StatsPlots
+    using Turing
+    TableOfContents()
 end
 
 # ╔═╡ 144797b6-7ae3-11ec-07f4-1b18e77eaaf4
@@ -77,12 +77,12 @@ likelihood(θ) = exp(log_likelihood(θ));
 
 # ╔═╡ 7b9d9679-13c2-4279-94ef-e03c2fd894d0
 p = plot(
-	0:0.005:1,
-	likelihood,
-	xlabel = L"$\theta$",
-	ylabel = L"$\mathrm{Likelihood}~~p(y | \theta)$",
-	label = "Likelihood",
-	legend = :topleft,
+    0:0.005:1,
+    likelihood;
+    xlabel=L"$\theta$",
+    ylabel=L"$\mathrm{Likelihood}~~p(y | \theta)$",
+    label="Likelihood",
+    legend=:topleft,
 )
 
 # ╔═╡ 8870ba9c-9751-4322-bb37-9cb22d316075
@@ -92,7 +92,7 @@ In fact, it doesn't give anything away to tell you that the maximum likelihood e
 """
 
 # ╔═╡ f6c539b8-a290-49d9-97ee-8065891d92dd
-vline!(p, [8 / 9], label="MLE")
+vline!(p, [8 / 9]; label="MLE")
 
 # ╔═╡ a8687db6-cf8c-4d9f-abaf-589c04c4ef6a
 md"""
@@ -103,9 +103,9 @@ One way is to take the maximum over a grid:
 
 # ╔═╡ c5d6b3df-f42a-4122-9faf-a4acbc69ab38
 let
-	θ = range(0, 1, length=1001)
-	llik = log_likelihood.(θ)
-	θ[argmax(llik)]
+    θ = range(0, 1; length=1001)
+    llik = log_likelihood.(θ)
+    θ[argmax(llik)]
 end
 
 # ╔═╡ 916a2e88-18b5-4cbf-9a4a-f82eab04cbc8
@@ -116,9 +116,9 @@ We get the same answer if we use the likelihood rather than the log likelihood
 
 # ╔═╡ bfc5c06b-4094-4453-9519-d6583d3c2493
 let
-	θ = 0:0.001:1
-	lik = likelihood.(θ)
-	θ[argmax(lik)]
+    θ = 0:0.001:1
+    lik = likelihood.(θ)
+    θ[argmax(lik)]
 end
 
 # ╔═╡ ad57d57e-02b6-4e7d-994b-ba17944b1b8d
@@ -133,10 +133,10 @@ It's pretty complex -- their docs are [here](https://julianlsolvers.github.io/Op
 
 # ╔═╡ 7785ebc6-6c15-4686-a161-4a8be1b8cfa8
 begin
-	lower = 0.0
-	upper = 1.0
-	f(θ) = -likelihood(θ) # this *minimizes* a function -- watch out!
-	res1 = optimize(f, lower, upper)
+    lower = 0.0
+    upper = 1.0
+    f(θ) = -likelihood(θ) # this *minimizes* a function -- watch out!
+    res1 = optimize(f, lower, upper)
 end
 
 # ╔═╡ 21965ac7-56fc-4940-a6d5-20467661fb22
@@ -165,11 +165,11 @@ This is an example of a language that requires us to write down *generative mode
 
 # ╔═╡ c5fa66a8-47f6-4213-82ed-181e2886ecc4
 @model function coinflip(x)
-    
-	# we need to define p inside the model using this syntax so Turing knows it's a parameter
-	# it doesn't matter what prior we give -- it's the Max Likelihood Estimate!
+
+    # we need to define p inside the model using this syntax so Turing knows it's a parameter
+    # it doesn't matter what prior we give -- it's the Max Likelihood Estimate!
     #p ~ Uniform(0, 1)
-	θ ~ Beta(5, 5)
+    θ ~ Beta(5, 5)
 
     # The number of observations.
     N = length(x)
@@ -215,7 +215,7 @@ Specifically, let's say that our data is generated through a Gamma distribution:
 true_dist = Gamma(4, 1.5)
 
 # ╔═╡ 9cd61985-f689-45b4-86d4-a269f06dea8c
-p2 = plot(true_dist, label = "True Distribution")
+p2 = plot(true_dist; label="True Distribution")
 
 # ╔═╡ 3624af79-03a3-4e18-8ec4-ff4e50e1c393
 md"However, let's assume that we observe this data only with noise. Let's say that noise is normally distributed:"
@@ -236,16 +236,16 @@ gamma_data = rand(true_dist, gamma_N) + rand(noise_dist, gamma_N)
 md"Let's add this data to our plot"
 
 # ╔═╡ e4d9888f-111e-4d9f-9f4d-c69f087aec22
-histogram!(p2, gamma_data, normalize=true, bins=0:2:26, label="Samples", fillalpha=0.5)
+histogram!(p2, gamma_data; normalize=true, bins=0:2:26, label="Samples", fillalpha=0.5)
 
 # ╔═╡ fd4d17fc-e7a1-4c9f-b123-cd629a01b7bd
 md"Now, we define our model in Turing"
 
 # ╔═╡ 79eac78e-14aa-4012-ae7e-356ce07a84a6
 @model function naive_gamma(x)
-	α ~ Turing.FlatPos(0.0) # flat but ≥ 0
-	θ ~ Turing.FlatPos(0.0)
-	x .~ Gamma(α, θ)
+    α ~ Turing.FlatPos(0.0) # flat but ≥ 0
+    θ ~ Turing.FlatPos(0.0)
+    return x .~ Gamma(α, θ)
 end;
 
 # ╔═╡ 592ef35a-d163-4c4a-a822-ac3b4f5745c2
