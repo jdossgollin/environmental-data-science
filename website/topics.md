@@ -19,7 +19,7 @@ The following syllabus will be adjusted as needed.
 | 9 | Latent variable models | (1) [Hidden Markov Models](/09_hmm/) (2) Missing Data | BDA3 Ch. 8 | [HW7](/09_hw7/)  |
 | 10 | Gaussian processes | (1) [1D Gaussian processes](/10_gaussian_process/) | See Notebook | TBD |
 | 11 | Spatial models  | (1) [2D Gaussian processes](/11_gp2d/) (2) [Choosing Variograms](/11_variograms/) | | |
-| 12 | Machine learning | (1) Random forests (2) Neural networks | | |
+| 12 | Machine learning | (1) [Neural networks](/12_neural/) | | |
 | 13 | Black-box models | (1) Global sensitivity analysis (2) Joint probability methods (3) approximate Bayesian computation | | |
 | 14 | Final projects | | | |
 

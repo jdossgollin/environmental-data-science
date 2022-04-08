@@ -6,15 +6,15 @@ using InteractiveUtils
 
 # ╔═╡ bf28f1a4-b67f-11ec-23fe-f560dd635f45
 begin
-	using Flux
-	using LaTeXStrings
-	using Plots
+    using Flux
+    using LaTeXStrings
+    using Plots
 end
 
 # ╔═╡ eb9cb76a-e9fe-4197-9f66-aee743f74f67
 begin
-	using PlutoUI
-	TableOfContents()
+    using PlutoUI
+    TableOfContents()
 end
 
 # ╔═╡ 4d3e5c13-6fef-440a-b1cb-f014f7f480f2
@@ -76,36 +76,36 @@ to approximate the derivative by plugging in a small value of $h$ (this is a ver
 
 # ╔═╡ fa3cab29-4b56-402f-9037-058684206533
 function autodiff1D(f, xprime)
-	h = 1.0e-5
-	return (f(xprime + h) - f(xprime - h)) / (2h)
+    h = 1.0e-5
+    return (f(xprime + h) - f(xprime - h)) / (2h)
 end;
 
 # ╔═╡ 8e953cc0-3de5-4575-8067-d5b20b49f0a5
-begin	
-	f(x) = 3x^2 + 2x + 1
-	
-	flux_df(x) = gradient(f, x)[1] # flux df/dx
-	math_df(x) = 6*x + 2 # analytic df/dx
-	my_df(x) = autodiff1D(f, x) # autodiff df/dx
-	
-	flux_d2f(x) = gradient(flux_df, x)[1]
-	math_d2f(x) = 6
-	my_d2f(x) = autodiff1D(my_df, x)
+begin
+    f(x) = 3x^2 + 2x + 1
+
+    flux_df(x) = gradient(f, x)[1] # flux df/dx
+    math_df(x) = 6 * x + 2 # analytic df/dx
+    my_df(x) = autodiff1D(f, x) # autodiff df/dx
+
+    flux_d2f(x) = gradient(flux_df, x)[1]
+    math_d2f(x) = 6
+    my_d2f(x) = autodiff1D(my_df, x)
 end;
 
 # ╔═╡ 7462ab31-120e-41cd-97be-1e47cf90d718
 let
-	p1 = plot(xlabel=L"$x$", ylabel=L"$f'(x)", legend=:topleft)
-	plot!(p1, math_df, -5, 5, label="Analytic")
-	plot!(p1, flux_df, -5, 5, label="Flux")
-	plot!(p1, my_df, -5, 5, label="Naive Autodiff")
-	
-	p2 = plot(xlabel=L"$x$", ylabel=L"$f''(x)")
-	plot!(p2, my_d2f, -5, 5, label="Naive Autodiff", alpha=0.5)
-	plot!(p2, math_d2f, -5, 5, label="Analytic")
-	plot!(p2, flux_d2f, -5, 5, label="Flux")
-	
-	plot(p1, p2, layout=(1, 2))
+    p1 = plot(; xlabel=L"$x$", ylabel=L"$f'(x)", legend=:topleft)
+    plot!(p1, math_df, -5, 5; label="Analytic")
+    plot!(p1, flux_df, -5, 5; label="Flux")
+    plot!(p1, my_df, -5, 5; label="Naive Autodiff")
+
+    p2 = plot(; xlabel=L"$x$", ylabel=L"$f''(x)")
+    plot!(p2, my_d2f, -5, 5; label="Naive Autodiff", alpha=0.5)
+    plot!(p2, math_d2f, -5, 5; label="Analytic")
+    plot!(p2, flux_d2f, -5, 5; label="Flux")
+
+    plot(p1, p2; layout=(1, 2))
 end
 
 # ╔═╡ ffb08ce0-3321-4c62-9f2e-37953ab19d9b
@@ -116,23 +116,23 @@ Here's another example of a much more complicated function
 
 # ╔═╡ c260d3b7-6775-4033-a82f-5b7e00247f9a
 let
-	g(x) = x ^ sin(1 / x - x^2)
-	xlims = (0.5, 2.5)
+    g(x) = x^sin(1 / x - x^2)
+    xlims = (0.5, 2.5)
 
-	flux_dg(x) = gradient(g, x)[1]
-	my_dg(x) = autodiff1D(g, x)
-	flux_d2g(x) = gradient(flux_dg, x)[1]
-	my_d2g(x) = autodiff1D(my_dg, x)
-	
-	p1 = plot(xlabel=L"$x$", ylabel=L"$f'(x)", legend=:bottomleft)
-	plot!(p1, flux_dg, xlims..., label="Flux")
-	plot!(p1, my_dg, xlims..., label="Naive Autodiff")
-	
-	p2 = plot(xlabel=L"$x$", ylabel=L"$f''(x)", legend=:bottomleft)
-	plot!(p2, flux_d2g, xlims..., label="Flux")
-	plot!(p2, my_d2g, xlims..., label="Naive Autodiff")
-	
-	plot(p1, p2, layout=(1, 2))
+    flux_dg(x) = gradient(g, x)[1]
+    my_dg(x) = autodiff1D(g, x)
+    flux_d2g(x) = gradient(flux_dg, x)[1]
+    my_d2g(x) = autodiff1D(my_dg, x)
+
+    p1 = plot(; xlabel=L"$x$", ylabel=L"$f'(x)", legend=:bottomleft)
+    plot!(p1, flux_dg, xlims...; label="Flux")
+    plot!(p1, my_dg, xlims...; label="Naive Autodiff")
+
+    p2 = plot(; xlabel=L"$x$", ylabel=L"$f''(x)", legend=:bottomleft)
+    plot!(p2, flux_d2g, xlims...; label="Flux")
+    plot!(p2, my_d2g, xlims...; label="Naive Autodiff")
+
+    plot(p1, p2; layout=(1, 2))
 end
 
 # ╔═╡ 5b7262c5-c65a-40df-aa26-70c24e4a049c
@@ -144,10 +144,10 @@ The gradient function also works if we have multidimensional inputs:
 
 # ╔═╡ dd296a9a-d5f6-4139-b5d9-80954be33276
 let
-	f(x, y) = sum((x .- y).^2)
-	x = [2, 1, 1]
-	y = [2, 0, 0.5]
-	gradient(f, x, y)
+    f(x, y) = sum((x .- y) .^ 2)
+    x = [2, 1, 1]
+    y = [2, 0, 0.5]
+    gradient(f, x, y)
 end
 
 # ╔═╡ fdb11e67-0afa-4fcc-af67-13bcff8bfcd5
@@ -173,9 +173,9 @@ Here's how we use this to make predictions.
 
 # ╔═╡ ea05f4e7-b7b1-4e2c-bb3e-ff885616efe5
 begin
-	X_reg = randn(20, 3)
-	θ_reg = (β=randn(3), α=randn())
-	y_reg = X_reg * θ_reg.β .+ θ_reg.α
+    X_reg = randn(20, 3)
+    θ_reg = (β=randn(3), α=randn())
+    y_reg = X_reg * θ_reg.β .+ θ_reg.α
 end;
 
 # ╔═╡ 40438393-de30-43f9-8efe-3f2605c4eb7e
@@ -185,8 +185,8 @@ We don't know these parameters so let's guess
 
 # ╔═╡ 9df9af6f-9822-4380-8aaf-2e3bf78b29a3
 begin
-	α_guess = [randn()]
-	β_guess = randn(size(X_reg, 2))
+    α_guess = [randn()]
+    β_guess = randn(size(X_reg, 2))
 end;
 
 # ╔═╡ 3dc52685-bff9-4e3d-adb6-0fb78a6e68c2
@@ -208,8 +208,8 @@ To improve, let's define a loss function -- mean squared error is a good guess.
 
 # ╔═╡ db301ee6-b6cf-458d-93e9-7bc2efb5608d
 function MSE(y, ŷ)
-	N = length(y)
-	return sum((y .- ŷ) .^ 2) / N
+    N = length(y)
+    return sum((y .- ŷ) .^ 2) / N
 end;
 
 # ╔═╡ 49cbf4fc-772f-425a-a8fc-d9bfd5b9722e
@@ -222,8 +222,8 @@ We can use this to calculate the gradient of the loss function with respect to o
 
 # ╔═╡ 4a91c3b9-8095-44af-aace-c58db76d6587
 grad = gradient(
-	() -> MSE(y_reg, lin_reg(X_reg, α_guess, β_guess)),
-	params(α_guess, β_guess) # convenient way to get named params
+    () -> MSE(y_reg, lin_reg(X_reg, α_guess, β_guess)),
+    params(α_guess, β_guess), # convenient way to get named params
 );
 
 # ╔═╡ 7a2ae282-5d11-49ec-908f-8ed0ea1a6e19
@@ -236,10 +236,11 @@ If we step along this gradient, we can improve our predictions
 
 # ╔═╡ 35a2741d-3890-40e4-8edf-f51b250fba6b
 let
-	γ = 0.1
-	α̂ = α_guess - γ * grad[α_guess]
-	β̂ = β_guess - γ * grad[β_guess]
-	MSE(y_reg, lin_reg(X_reg, α̂, β̂))
+    γ = 0.1
+    α̂ = α_guess - γ * grad[α_guess]
+    β̂ = β_guess - γ * grad[β_guess]
+    ŷ = lin_reg(X_reg, α̂, β̂)
+    MSE(y_reg, ŷ)
 end
 
 # ╔═╡ 9364506f-6440-46a0-8ac8-efbc223ffa0c
@@ -249,31 +250,36 @@ We can even train until we get stable predictions
 
 # ╔═╡ 3ac054c1-07e0-459e-b040-80371d421a2d
 let
-	γ = 0.05
-	α̂ = α_guess
-	β̂ = β_guess
-	old_mse = MSE(y_reg, lin_reg(X_reg, α̂, β̂))
-	new_mse = old_mse
+    γ = 0.05
+    α̂ = α_guess
+    β̂ = β_guess
+    old_mse = MSE(y_reg, lin_reg(X_reg, α̂, β̂))
+    new_mse = old_mse
 
-	improvement = -999
-	iters = 0
-	while abs(improvement) > 0.0001
-		old_mse = new_mse
-		gs = gradient(
-			() -> MSE(y_reg, lin_reg(X_reg, α̂, β̂)),
-			params(α̂, β̂) # convenient way to get named params
-		);
-		α̂ -= γ * gs[α̂]
-		β̂ .-= γ * gs[β̂]
-		new_mse = MSE(y_reg, lin_reg(X_reg, α̂, β̂))
-		improvement = old_mse - new_mse
-		iters += 1
-	end
-	string(
-		"After ", iters, " iterations, MSE is ", round(new_mse; digits=3),
-		", α is ", round(α̂[1], digits=3),
-		", and β is ", round.(β̂, digits=3),
-	)
+    improvement = -999
+    iters = 0
+    while abs(improvement) > 0.0001
+        old_mse = new_mse
+        gs = gradient(
+            () -> MSE(y_reg, lin_reg(X_reg, α̂, β̂)),
+            params(α̂, β̂), # convenient way to get named params
+        )
+        α̂ -= γ * gs[α̂]
+        β̂ .-= γ * gs[β̂]
+        new_mse = MSE(y_reg, lin_reg(X_reg, α̂, β̂))
+        improvement = old_mse - new_mse
+        iters += 1
+    end
+    string(
+        "After ",
+        iters,
+        " iterations, MSE is ",
+        round(new_mse; digits=3),
+        ", α is ",
+        round(α̂[1]; digits=3),
+        ", and β is ",
+        round.(β̂, digits=3),
+    )
 end
 
 # ╔═╡ 66958456-cc45-465f-aa42-5eedd9781f78
@@ -303,39 +309,39 @@ A linear layer can also have an "activation function" $\sigma$ so that it output
 
 # ╔═╡ 0ff65d93-d30a-45e0-8da1-7eae73a3ec5a
 begin
-	# In Pluto we have to put everything that changes the definition of
-	# `Linear` into a single block with begin...end
-	
-	# define a structure
-	# it is `mutable` so we can change W and b (otherwise they are fixed)
-	mutable struct Linear
-		W::Array{AbstractFloat}
-		b::Array{AbstractFloat}
-		σ::Function
-	end
+    # In Pluto we have to put everything that changes the definition of
+    # `Linear` into a single block with begin...end
 
-	# define a constructor
-	function Linear(in::Integer, out::Integer, σ::Function)
-		W = randn(out, in)
-  	b = randn(out)
-		Linear(W, b, σ)	
-	end
+    # define a structure
+    # it is `mutable` so we can change W and b (otherwise they are fixed)
+    mutable struct Linear
+        W::Array{AbstractFloat}
+        b::Array{AbstractFloat}
+        σ::Function
+    end
 
-	# if no activation function is provided, then use a default
-	identity(x) = x
+    # define a constructor
+    function Linear(in::Integer, out::Integer, σ::Function)
+        W = randn(out, in)
+        b = randn(out)
+        return Linear(W, b, σ)
+    end
 
-	# define another constructor if we don't specify an activation
-	# it can call the first one
-	function Linear(in::Integer, out::Integer)
-		Linear(in, out, identity)
-	end
+    # if no activation function is provided, then use a default
+    identity(x) = x
 
-	# if we define this, we can use it as a function
-	# this is the FORWARD STEP
-	(m::Linear)(x) = m.σ.(m.W * x .+ m.b)
+    # define another constructor if we don't specify an activation
+    # it can call the first one
+    function Linear(in::Integer, out::Integer)
+        return Linear(in, out, identity)
+    end
 
-	# this will make the params() work right
-	Flux.@functor Linear
+    # if we define this, we can use it as a function
+    # this is the FORWARD STEP
+    (m::Linear)(x) = m.σ.(m.W * x .+ m.b)
+
+    # this will make the params() work right
+    Flux.@functor Linear
 end;
 
 # ╔═╡ 4eef1b88-f3eb-448f-aa3c-574920ed3a6d
@@ -345,9 +351,9 @@ Here's how this works:
 
 # ╔═╡ ac97d857-4186-4133-a1ce-eb910f4b5f23
 let
-	X = randn(10)
-	l = Linear(10, 5)
-	l(X)
+    X = randn(10)
+    l = Linear(10, 5)
+    l(X)
 end
 
 # ╔═╡ 5e8c1fa0-6ed4-4b9a-b665-ee137c931896
@@ -363,16 +369,16 @@ relu(x) = max(x, 0);
 
 # ╔═╡ fe7381c6-da2a-490b-9131-0b508c33a920
 begin
-	linear1 = Linear(15, 10, relu) # we can access linear1.W etc
-	linear2 = Linear(10, 5, relu) # we can access linear1.W etc
-	linear3 = Linear(5, 1)
-	model(x) = linear3(linear2(linear1(x)))
+    linear1 = Linear(15, 10, relu) # we can access linear1.W etc
+    linear2 = Linear(10, 5, relu) # we can access linear1.W etc
+    linear3 = Linear(5, 1)
+    model(x) = linear3(linear2(linear1(x)))
 end;
 
 # ╔═╡ 02ec9df0-ff2c-46e2-9c12-25c39eb7dcfd
 begin
-	X_nn = randn(15, 100) # note indexing!
-	y_nn = sum(X_nn, dims=1)
+    X_nn = randn(15, 1000) # note indexing!
+    y_nn = sum(X_nn; dims=1)
 end;
 
 # ╔═╡ aabfa89c-c2a0-4d5f-9cff-0190622bc74f
@@ -398,10 +404,7 @@ We can also compute the gradient of the loss function with respect to each of th
 parameters = params(linear1, linear2, linear3); # the parameters to train
 
 # ╔═╡ 78113689-656c-43de-aae4-d3358fda131e
-grad_nn = gradient(
-	() -> loss(X_nn, y_nn),
-	parameters
-);
+grad_nn = gradient(() -> loss(X_nn, y_nn), parameters);
 
 # ╔═╡ 74da04ce-aa89-4b6e-90f9-cb5d8f7823cf
 md"""
@@ -420,55 +423,61 @@ We can access each of them
 # ╔═╡ c29a5061-1616-4edf-86aa-c60e9c95dafc
 grad_nn.grads[grad_nn.params[1]]
 
-# ╔═╡ f9e1d11f-7039-409a-a397-ef6601b824b1
-md"""
-We can use this to reduce our loss by updating each parameter in the direction of its gradient!
-However, this is a bit 
-"""
-
 # ╔═╡ b971a77c-8494-43d6-8e27-317fa1bee8a2
 md"""
-Here comes the magic!
-We can compute the gradients of our neural network model with respect to all its parameters.
+We can use this to reduce our loss by updating each parameter in the direction of its gradient!
+However, this is a bit tricky as we need to match each element of the gradient with the corresponding parameter (you can imagine that this might get difficult for much larger models).
 
-To make life easier, we can use the built-in function to train the model in `Flux.jl`.
+Fortunately instead of writing messy indexing boilerplate, we can use the built-in function to train the model in `Flux.jl`.
 We'll just need to specify
 
-1. Our loss function
-1. The parameters we want to optimize over
-1. The data we will use for training
-1. Our optimizer
+1. Our loss function (we've done that already)
+1. The parameters we want to optimize over (we've done that)
+1. The data we will use for training (as inputs to the loss function)
+1. The optimization algorithm
 """
 
 # ╔═╡ 499f8aa3-8e9e-476c-90cc-98b19dd803a1
 begin
-	data = [(X_nn, y_nn)] # (X, y)
-	opt = Flux.Descent(0.05) # basic gradient descent
+    data = [(X_nn, y_nn)] # (X, y)
+    opt = Flux.Descent(0.05) # basic gradient descent
 end;
 
 # ╔═╡ 0c128997-00b7-4849-9e62-58f7121de348
 let
-	l1 = deepcopy(linear1)
-	l2 = deepcopy(linear2)
-	l3 = deepcopy(linear3)
+    l1 = deepcopy(linear1)
+    l2 = deepcopy(linear2)
+    l3 = deepcopy(linear3)
 
-	newmodel(x) = l3(l2(l1(x)))
-	newloss(x, y) = MSE(newmodel(x), y)
-	newparam = params(l1, l2, l3)
-	
-	for epoch in 1:200
-		Flux.train!(newloss, newparam, data, opt)
-	end
+    newmodel(x) = l3(l2(l1(x)))
+    newloss(x, y) = MSE(newmodel(x), y)
+    newparam = params(l1, l2, l3)
 
-	nl = newloss(X_nn, y_nn)
-	ol = loss(X_nn, y_nn)
+    for epoch in 1:200
+        Flux.train!(newloss, newparam, data, opt)
+    end
 
-	"BEFORE: $ol, AFTER: $nl"
+    nl = newloss(X_nn, y_nn)
+    ol = loss(X_nn, y_nn)
+
+    "BEFORE: $ol, AFTER: $nl"
 end
 
 # ╔═╡ e0679284-8d17-4763-8d50-ade01b78ff30
 md"""
 Unsurprisingly, our loss function has gone down!
+"""
+
+# ╔═╡ a57c7897-f7d7-4117-9372-476514da34bd
+md"""
+## Bayesian Neural Networks
+
+There is no reason, in theory, why we can't define Bayesian neural networks!
+Have a look at the [Turing Tutorial](https://turing.ml/dev/tutorials/03-bayesian-neural-network/).
+A cool feature of Julia is that libraries like Turing and Flux automatically play together -- you don't need to translate all of your Flux code into Turing or Vice-versa.
+
+In practice BNNs are still mostly a thing of the research world; they take a long time to train.
+Other techniques are often used to assess parameter uncertainty in neural networks (but this remains a challenge of the model!)
 """
 
 # ╔═╡ 392644de-f989-415c-a132-122c9be6fd05
@@ -483,7 +492,7 @@ But take a few key points with you
 1. The biggest strength of neural networks is that they scale to high-dimensional inputs.
 1. Training successful neural networks on non-toy problems often requires training large models (hence "deep learning") on very large datasets
 1. Neural networks, like all machine learning problems, are great at finding patterns on the data they are trained with (sometimes unintended patterns -- overfitting or learning data artifacts). They may generalize very poorly beyond the range within which they are trained.
-1. The ideas we've developed in this class about workflow, model validation, and checking still apply. 
+1. The ideas we've developed in this class about workflow, model validation, and checking still apply -- they're just harder!
 """
 
 # ╔═╡ 099d1b33-79ad-4164-8bed-6987f36e980b
@@ -1656,8 +1665,8 @@ version = "0.9.1+5"
 # ╠═35a2741d-3890-40e4-8edf-f51b250fba6b
 # ╟─9364506f-6440-46a0-8ac8-efbc223ffa0c
 # ╠═3ac054c1-07e0-459e-b040-80371d421a2d
-# ╠═66958456-cc45-465f-aa42-5eedd9781f78
-# ╟─2d5f242c-414c-4cc3-b6c8-803a16b7cbd3
+# ╟─66958456-cc45-465f-aa42-5eedd9781f78
+# ╠═2d5f242c-414c-4cc3-b6c8-803a16b7cbd3
 # ╠═0ff65d93-d30a-45e0-8da1-7eae73a3ec5a
 # ╟─4eef1b88-f3eb-448f-aa3c-574920ed3a6d
 # ╠═ac97d857-4186-4133-a1ce-eb910f4b5f23
@@ -1676,11 +1685,11 @@ version = "0.9.1+5"
 # ╠═6dacc4ca-d34f-43c3-b98d-9018c15a5feb
 # ╟─bc6ed3a1-c597-400d-a853-23c001c7dc48
 # ╠═c29a5061-1616-4edf-86aa-c60e9c95dafc
-# ╠═f9e1d11f-7039-409a-a397-ef6601b824b1
 # ╟─b971a77c-8494-43d6-8e27-317fa1bee8a2
 # ╠═499f8aa3-8e9e-476c-90cc-98b19dd803a1
 # ╠═0c128997-00b7-4849-9e62-58f7121de348
 # ╟─e0679284-8d17-4763-8d50-ade01b78ff30
+# ╟─a57c7897-f7d7-4117-9372-476514da34bd
 # ╟─392644de-f989-415c-a132-122c9be6fd05
 # ╟─099d1b33-79ad-4164-8bed-6987f36e980b
 # ╠═eb9cb76a-e9fe-4197-9f66-aee743f74f67

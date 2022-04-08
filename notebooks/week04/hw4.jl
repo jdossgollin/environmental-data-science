@@ -7,15 +7,15 @@ using InteractiveUtils
 
 # ╔═╡ 546a37ce-9805-4689-b99b-15d60c984f80
 begin
-	using CSV
-	using DataFrames
-	using Distributions
-	using Downloads
-	using GLM
-	using Optim
-	using Plots
-	using Turing
-	using PlutoUI
+    using CSV
+    using DataFrames
+    using Distributions
+    using Downloads
+    using GLM
+    using Optim
+    using Plots
+    using Turing
+    using PlutoUI
 end
 
 # ╔═╡ b6a2da06-8165-11ec-1313-dbce9584cc38
@@ -32,12 +32,12 @@ md"We will work with the 'Kid IQ' dataset."
 
 # ╔═╡ d4d51ce6-1368-498a-acb2-51a53412e52e
 function get_kidiq()
-	url = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/KidIQ/data/kidiq.csv"
-	fname = "../../assets/data/kidiq.csv" # CHANGE THIS!!!
-	if !isfile(fname)
-		Downloads.download(url, fname)
-	end
-	DataFrame(CSV.File(fname))
+    url = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/KidIQ/data/kidiq.csv"
+    fname = "../../assets/data/kidiq.csv" # CHANGE THIS!!!
+    if !isfile(fname)
+        Downloads.download(url, fname)
+    end
+    return DataFrame(CSV.File(fname))
 end;
 
 # ╔═╡ 0d567a91-b25d-44ce-88fe-e054f6cd3bdd
@@ -70,9 +70,9 @@ Similarly, reproduce figure 11.2. You can use the model you created in Task 1 an
 
 # ╔═╡ 1b002d2c-a016-45d3-a668-6474ae3ac00e
 let
-	panel_a = plot()
-	panel_b = plot()
-	plot(panel_a, panel_b)
+    panel_a = plot()
+    panel_b = plot()
+    plot(panel_a, panel_b)
 end
 
 # ╔═╡ cf204322-f8bd-4e29-929e-0c5b0da7967a
@@ -140,7 +140,7 @@ md"""
 
 # ╔═╡ bf068cd5-6e8c-429e-ad38-844ec6e8de6b
 function jitter(x; factor=1.0)
-	return a .+ rand(Normal(0, σ), size(a))
+    return a .+ rand(Normal(0, σ), size(a))
 end
 
 # ╔═╡ 73a1dbb5-9bdf-4324-a9a4-3a811742744f
