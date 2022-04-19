@@ -20,8 +20,7 @@ The following syllabus will be adjusted as needed.
 | 10 | Gaussian processes | (1) [1D Gaussian processes](/10_gaussian_process/) | See Notebook | TBD |
 | 11 | Spatial models  | (1) [2D Gaussian processes](/11_gp2d/) (2) [Choosing Variograms](/11_variograms/) | | |
 | 12 | Machine learning | (1) [Neural networks](/12_neural/) | | |
-| 13 | Black-box models | (1) Global sensitivity analysis (2) Joint probability methods (3) approximate Bayesian computation | | |
-| 14 | Final projects | | | |
+| 13 | Black-box models | (1) [Global sensitivity analysis](/13_gsa/) (2) Joint probability methods (3) approximate Bayesian computation | | |
 
 [^1] HW0 is ungraded.
 [^2] Bayesian Data Analysis by Gelman et al (free PDF available on the book's [website](http://www.stat.columbia.edu/~gelman/book/)).
