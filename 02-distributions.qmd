@@ -1,0 +1,139 @@
+---
+jupyter: julia-1.7
+---
+# Distributions and probability
+
+```{julia}
+using Distributions
+using Random: shuffle
+using StatsBase: mean
+using StatsPlots
+using Plots
+```
+
+::: {.callout-note icon=false collapse="true"}
+## Advanced: `using Module: function` syntax
+
+A module such as `StatsBase` may export many functions, and we my not plan to use all of them.
+When we use syntax such as `using StatsBase: mean`, we are only importing the `mean` function from `StatsBase`.
+This can prevent confusion and make it clear that the `mean` function comes from the `StatsBase` module.
+This syntax is not required but can help to make code more readable.
+:::
+
+## What is probability?
+
+## Probability distributions
+
+## Case study: does beer protect you from mosquitos?
+
+::: {.callout-important icon=false collapse="false"}
+## Watch this
+Before proceeding, watch [Statistics Without the Agonizing Pain](https://www.youtube.com/watch?v=5Dnw46eC-0o) by John Rauser (~10 minutes)
+:::
+
+In this class we will use computation and simulation to build fundamental insight into statistical processes without dwelling on "agonizing" details.
+Julia is an example of a language that we could use to do the sort of analysis that Rauser describes!
+Here we'll repeat his analysis of the influence of beer on mosquito bites.
+
+First, let's enter the raw data.
+
+```{julia}
+beer = [27, 20, 21, 26, 27, 31, 24, 21, 20, 19, 23, 24, 28, 19, 24, 29, 18, 20, 17, 31, 20, 25, 28, 21, 27];
+```
+
+What have we done here?
+We've created a *variable* called `beer`.
+We can learn a bit more about it:
+
+```{julia}
+typeof(beer)
+```
+
+In Julia (and other languages), all variables have a type.
+We see that the type of beer is `Vector{Int64}`.
+That's telling us that we've created a Vector (a 1D array) where all elements are `Int64`, which is one way that integers can be represented on a computer.
+When we create this Vector, it's important to keep the comma between entries but line breaks don't matter. 
+Similarly:
+
+```{julia}
+water = [21, 22, 15, 12, 21, 16, 19, 15, 22, 24, 19, 23, 13, 22, 20, 24, 18, 20];
+```
+
+Now that we've entered the data, let's calculate the difference between the average number of bites in each group. 
+We're using the `mean` function from the `StatsBase` package (it's loaded above).
+
+```{julia}
+observed_diff = mean(beer) - mean(water)
+```
+
+This seems large: the participants who drank beer were bitten many times more than the participants who drank water, on average!
+But the skeptic asks whether this might be random chance.
+To answer this question, John Rauser develops a simulation approach: suppose the skeptic is right and all the data points are equivalent.
+We can shuffle the data (randomly divide into two groups by assuming that there is no difference between the two groups), and calculate the difference between each group.
+
+```{julia}
+function get_shuffled_difference(y1, y2)
+
+    # concatenate the data into one vector, then shuffle it
+    y_all = vcat(y1, y2)
+    y_shuffled = shuffle(y_all)
+
+    # create groups consistent w/ skeptic's argument
+    N1 = length(y1) # how many obs in the first vector?
+    ynew1 = y_shuffled[1:N1]
+    ynew2 = y_shuffled[(N1 + 1):end]
+
+    # get the difference
+    difference = mean(ynew1) - mean(ynew2)
+    return difference
+end
+get_shuffled_difference(beer, water)
+```
+
+As we saw in the talk, we can learn about the sampling distribution by repeating this experiment many times over and plotting the results (using the `Plots` package – we'll learn more about this later.)
+
+```{julia}
+N_sim = 50_000
+simulated_diffs = [get_shuffled_difference(beer, water) for i in 1:N_sim];
+first(simulated_diffs, 5) # show first values
+```
+
+::: {.callout-note icon=false collapse="true"}
+## Advanced: `[do_something(x) for x in iterable]` syntax
+
+The syntax `[do_something(x) for x in iterable]` is called a list comprehension.
+This is equivalent to writing a for loop.
+See [here](https://julia.quantecon.org/getting_started_julia/julia_essentials.html#comprehensions) for more discussion.
+We will use list comprehensions all the time!
+:::
+
+::: {.callout-note icon=false collapse="true"}
+## Advanced: `50_000` syntax
+
+`50_000` is equivalent to `50000` but easier to read.
+We cannot use commas (they have other meaning in Julia code) but we can add underscores in the middle of our numbers without changing their value.
+:::
+
+We can plot this as a histogram:
+
+```{julia}
+histogram(
+    simulated_diffs;
+    xlabel="Difference",
+    ylabel="Proportion of samples",
+    label="If Skeptic is Right",
+    bins=-6:0.5:6,
+    legend=:topleft,
+    normalize=true,
+)
+vline!([observed_diff]; label="Observed", linewidth=2)
+```
+
+::: {.callout-note icon=false collapse="true"}
+## Why is `observed_diff` in `[`brackets`]`?
+
+The argument to `vline!` that tells it the $x$ values to plot takes in a vector of values.
+`observed_diff` is a single value, so we need to make it a vector to pass it to `vline!`.
+:::
+
+For more information on plotting, see [the JuliaPlots Tutorial](https://docs.juliaplots.org/latest/tutorial/) page.

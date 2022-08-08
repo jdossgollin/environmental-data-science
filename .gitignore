@@ -1,6 +1,8 @@
+_book/
+.quarto/
+site_libs/
+*.ipynb
 
-.DS_Store
+.quarto/
 
-reduced_phil.png
-assets/data/tds.csv
-assets/data/kidiq.csv
+/.quarto/

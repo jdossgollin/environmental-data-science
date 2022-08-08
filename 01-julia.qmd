@@ -1,0 +1,171 @@
+# Getting Started with Julia
+
+:::{.callout-note}
+This page borrows heavily from the "Getting Started with Julia" page of the [ISCB 2022 Madison](https://crsl4.github.io/julia-workshop/session1-get-started.html) workshop
+:::
+
+## Why Julia?
+
+The creators of Julia [wrote](https://julialang.org/blog/2012/02/why-we-created-julia/) a blog post about why they created Julia:
+
+> We want a language that's open-source, with a liberal license. We want the speed of C with the dynamism of Ruby. We want a language that's homoiconic, with true macros like Lisp, but with obvious, familiar mathematical notation like Matlab. We want something as usable for general programming as Python, as easy for statistics as R, as natural for string processing as Perl, as powerful for linear algebra as Matlab, as good at gluing programs together as the shell. Something that is dirt simple to learn yet keeps the most serious hackers happy. We want it interactive and we want it compiled.
+
+### Comparisons
+
+- Comparison: [Julia touts its speed edge over Python and R](https://www.zdnet.com/article/programming-languages-julia-touts-its-speed-edge-over-python-and-r/)
+- Used for large-scale projects like [CliMA](https://clima.caltech.edu/2020/06/08/clima-0-1-a-first-milestone-in-the-next-generation-of-climate-models/): a first milestone in the next generation of climate models 
+
+## Install Julia
+
+1. Install Julia 1.7.3
+
+    Go to [https://julialang.org/downloads](https://julialang.org/downloads) and download the current stable release, Julia 1.7.3 (this matters), using the correct version for your operating system (Linux x86, Mac, Windows, etc).
+
+1. Run Julia
+
+    After installing, make sure that you can run Julia. On some systems, this means searching for the "Julia 1.6" program installed on your computer; in others, it means running the command julia in a terminal. Make sure that you can execute `1 + 1`:
+
+    ```julia
+    julia> 1 + 1
+    2 # yay! that seems right
+    ```
+
+1. Install Julia packages
+
+## The five stages of programming
+
+1. Use the REPL as a sophisticated calculator
+1. Realize that you are repeating many operations, so you decide to write some functions
+1. To organize all your functions, you begin scripting
+1. You want to share your code with others and thus, you want to write a package
+1. Your package is actually used by others and thus, it should be optimized and have good performance
+
+Julia offers many advantages to data science programmers such as avoid the two-language problem and existing tools that allows programmers to write efficient code without having to write everything from scratch!
+
+In this class we will stick to steps 1-3 but you may want to learn about steps 4 and 5 in your own research!
+
+
+## The Julia REPL
+
+Let's start by looking at the REPL and try:
+
+* `;` to open shell mode
+* `$` to open R mode (after using RCall)
+* `]` to open package mode: try status
+* `?` to open help mode
+* `\beta+TAB` for math symbols
+* `<backspace>` return to Julia mode
+
+## How do I write code?
+
+### Installing dependencies in a project environment
+
+There are two alternatives:
+
+1. Using an existing project with dependencies already in `Project.toml` (this will be the case when you are collaborating with someone that already set up the project dependencies)
+1. Set up the dependencies for your project on your own (this will be the case if your project is new)
+
+For this course, you will use the class GitHub repository as the existing project that already has all the dependencies.
+However, we also show the steps below to create a new project from scratch.
+
+#### Working on an existing project environment
+
+Git clone the repository:
+
+```shell
+git clone https://github.com/crsl4/julia-workshop.git
+```
+
+Open julia and activate the package with:
+
+```shell
+julia --project
+```
+
+Alternatively, you can open julia normally, and type `] activate .`
+
+Then, instantiate the package (install dependencies) in the package mode `]`:
+
+```julia
+(env-dat-sci) pkg> instantiate
+(env-dat-sci) pkg> update
+```
+
+Now, you should be able to follow along.
+
+#### Creating a new project environment
+
+Create a folder in the terminal:
+
+```shell
+mkdir myProject
+cd myProject
+```
+
+Open Julia inside your folder, and activate your environment with:
+
+```julia
+(@v1.7) pkg> activate .
+```
+
+Two files are noteworthy:
+
+- `Project.toml`: Defines project
+- `Manifest.toml`: Contains exact list of project dependencies
+
+See more [here](https://julialang.github.io/Pkg.jl/v1/toml-files/#Project-and-Manifest-1).
+
+### Easily share with collaborators
+
+Share your project to colleagues. Send your entire project folder to your colleague, and all they need to do is:
+
+```julia
+julia> cd("path/to/project")
+pkg> activate .
+pkg> instantiate
+```
+
+All required packages and dependencies will be installed. Scripts that run in your computer will also run in their computer.
+
+### VS Code
+
+There are many ways to work on julia code depending on the editor.
+In this class we will use VS Code.
+
+1. Download VSCode [here](https://code.visualstudio.com/download)
+1. Install the Julia extension and the Quarto extension in VSCode
+1. Open the project with:
+
+    ```shell
+    cd env-dat-sci
+    code .
+    ```
+    You need to have the `code` command in your `PATH` which can be done within VSCode searching in the Command Palette "shell command".
+
+If you open a given file, make sure to activate the project `] activate .` or you will be working on the global environment.
+
+In addition to `.qmd` files, you can work with standard `.jl` julia files.
+
+## Learn more
+
+Creating an effective and accessible introduction to Julia is beyond the scope of this class; replicating existing efforts is not good pedagogy.
+Instead, see the excellent resources listed at @sec-julia-resources.
+
+### Expectations
+
+Going forward, you will need to know the following:
+
+- How to start Julia and run Julia in VS Code
+- How to use packages (how to install them, activate a project environment, and use packages in a script or notebook)
+- How to write simple functions
+- How to use for loops
+- How to use if statements and other conditionals
+- How to use `let` blocks to create local variables
+- How to 
+
+::: {.callout-note icon=false collapse="false"}
+### Pro tips
+
+When more advanced programming tools are used in examples, you may see notes like this explaining them.
+You may need to click the arrow in the top right corner to expand.
+:::

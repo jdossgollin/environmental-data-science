@@ -1,0 +1,24 @@
+# Resources
+
+## Julia {#sec-julia-resources}
+
+There are many fantastic resources for learning Julia listed on [Julia's official website](https://julialang.org/tutorials).
+I especially recommend:
+
+- [Julia Programming: A Hands-On Tutorial](https://www.matecdev.com/posts/julia-tutorial-science-engineering.html) by Martín D. Maas for a quick introduction to Julia
+- Chapters 1-13 of [Quantitative Economics with Julia](https://julia.quantecon.org/intro.html) by the QuantEcon team for a detailed yet accessible reference on using Julia for modeling
+- [ThinkJulia](https://benlauwens.github.io/ThinkJulia.jl/latest/book.html) by Allen Downey and Ben Lauwens for a detailed introduction to computational thinking, using Julia, that is accessible to beginners
+- [MATLAB–Python–Julia cheatsheet](https://cheatsheets.quantecon.org/) by the QuantEcon team is helpful if you know Matlab or Python
+- [Julia for Nervous Beginners](https://juliaacademy.com/p/julia-programming-for-nervous-beginners) is a great resource for nervous beginners
+
+but you may prefer others.
+If you find any resources that you think would be valuable to others, please share them.
+
+## Coding background
+
+- `git` and GitHub
+- basic shell commands
+
+## Math background
+
+Just be magic

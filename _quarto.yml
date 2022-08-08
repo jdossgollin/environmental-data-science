@@ -1,0 +1,42 @@
+project:
+  type: book
+
+book:
+  title: "Environmental Data Science"
+  author: "James Doss-Gollin"
+  subtitle: "Rice CEVE 543"
+  date: "8/8/2022"
+  page-navigation: true
+  sharing: [twitter]
+  sidebar:
+    style: docked
+    background: light
+    search: true
+    header: "James Doss-Gollin"
+
+  page-footer:
+    left: "Copyright 2022, James Doss-Gollin"
+    right:
+      - icon: github
+        href: https://github.com/
+      - icon: twitter
+        href: https://twitter.com/
+  chapters:
+    - index.qmd
+    - part: "Getting Started"
+      chapters:
+        - 01-julia.qmd
+    - part: "Fundamentals"
+      chapters:
+        - 02-distributions.qmd
+    - references.qmd
+  appendices:
+    - A-resources.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+
+jupyter: julia-1.7

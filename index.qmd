@@ -1,0 +1,3 @@
+# Welcome! {.unnumbered}
+
+This online textbook is intended as a reference to accompany CEVE 543: Environmental Data Science at Rice University.
