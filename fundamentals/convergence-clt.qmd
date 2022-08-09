@@ -1,6 +1,61 @@
+---
+jupyter: julia-1.7
+---
+
 # Convergence and the Central Limit Theorem
 
-:::{.callout-important}
+:::{.callout-important collapse="true"}
 ## Pre-requisites
-There are no pre-requisites for this section.
+
+You will need a basic understanding of how to use Julia (see @sec-julia) and how to generate random numbers using statistical distributions (see @sec-probability).
 :::
+
+## The Central Limit Theorem
+
+An important idea in statistics is the [**Central Limit Theorem**](https://en.wikipedia.org/wiki/Central_limit_theorem), which states (much more elegantly and precisely) that the sum of many **independent** random variables is approximately normally distributed, even if the underlying process is not randomly distributed (as long as it's moderately well-behaved).
+This is often used to justify approximating the average of many data points, and the uncertainty in this average, as a Normal distribution.
+If you've ever used a $t$-test, you've applied the CLT!
+
+### Example: Normal Distribution
+
+To build some intuition, let's create a Normal distribution with a very large standard deviation relative to its mean:
+
+```{julia}
+using Distributions
+using StatsBase: mean, std
+dist_normal = Normal(2.5, 10)
+@show mean(dist_normal), std(dist_normal)
+```
+
+We can plot this distribution using the `StatsPlots` package
+
+```{julia}
+using StatsPlots
+plot(dist_normal, label="Normal Distribution", xlims=(-40, 40))
+```
+
+We can see that even though this distribution has a large standard deviation, it still has that classical "bell" shape.
+
+We can also sample from its probability density function and plot a histogram of those samples. 
+That output should look like the probability density function shown above!
+
+```{julia}
+samples_normal = rand(dist_normal, 100_000)
+histogram(
+    samples_normal;
+    normalize=true,
+    label=false,
+    ylabel="Probability Density",
+)
+plot!(dist_normal, label="Normal Distribution", xlims=(-40, 40))
+```
+
+::: {.callout-note icon=false collapse="true"}
+## Histogram syntax
+
+What happens if we change `normalize=true`?
+:::
+
+## Fat Tails
+
+See @taleb_consequences:2020 [Ch. 2] for some discussion and examples.

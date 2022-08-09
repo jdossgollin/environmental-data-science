@@ -1,9 +1,9 @@
 ---
 jupyter: julia-1.7
 ---
-# Distributions and probability
+# Distributions and probability {#sec-probability}
 
-:::{.callout-important}
+:::{.callout-important collapse="true""}
 ## Pre-requisites
 There are no pre-requisites for this section.
 :::

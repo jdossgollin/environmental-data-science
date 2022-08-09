@@ -1,6 +1,6 @@
 # Getting Started with Julia {#sec-julia}
 
-:::{.callout-important}
+:::{.callout-important collapse="true"}
 ## Pre-requisites
 There are no pre-requisites for this section.
 :::

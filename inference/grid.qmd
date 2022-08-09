@@ -1,0 +1,6 @@
+# Inference on a grid
+
+:::{.callout-important collapse="true"}
+## Pre-requisites
+There are no pre-requisites for this section.
+:::

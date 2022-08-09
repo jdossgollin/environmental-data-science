@@ -1,0 +1,6 @@
+# Bayesian inference
+
+:::{.callout-important collapse="true"}
+## Pre-requisites
+There are no pre-requisites for this section.
+:::

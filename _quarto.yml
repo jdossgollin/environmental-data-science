@@ -24,19 +24,27 @@ book:
   chapters:
     - index.qmd
     - 01-julia.qmd
+    - part: "Motivation"
     - part: "Fundamentals"
       chapters:
         - fundamentals/probability-distributions.qmd
         - fundamentals/convergence-clt.qmd
-        - fundamentals/inference.qmd
+    - part: "Inference"
+      chapters:
+        - inference/grid.qmd
+        - inference/mle.qmd
+        - inference/bayesian.qmd
     - references.qmd
   appendices:
     - A-resources.qmd
 
 bibliography: references.bib
+csl: american-geophysical-union.csl
 
 format:
   html:
     theme: cosmo
 
 jupyter: julia-1.7
+
+fig-cap-location: margin
