@@ -1,3 +1,31 @@
 # Welcome! {.unnumbered}
 
-This online textbook is intended as a reference to accompany CEVE 543: Environmental Data Science at Rice University.
+Sensors, satellites, people, robots, and drones collect a wealth of data describing environmental processes relevant for understanding and managing the natural and built environment.
+Making sense of these data sets, sometimes vast and sometimes consisting of a few observations, requires integrating domain knowledge, computational methods, and statistical models. In a nutshell, data science.
+
+The path from data and theory to models, inference, and ultimately decisions is long, winding, and perilous.
+Fortunately, "if you can program a computer, you have direct access to the deepest, most fundamental ideas instatistics" (John Rauser).
+In this open source online textbook, an engaging, efficient, and accessible learning environment and innovative interactive computing will help you build your understanding of environmental data science, preparing you to be an effective producer and skeptical consumer of environmental data analyses.
+The aim of this textbook is to help environmental data scientists choose, apply, and interpret a wide range of data science techniques to be thoughtful producers and skeptical consumers of environmental data analyses.
+
+## How to use this book {.unnumbered}
+
+This book is intended as a *reference* rather than a course outline.
+As such, we  plan to keep adding chapters and sections for the forseeable future; please create an issue on GitHub if you would like to request additions or if you would like to author a chapter. 
+
+Chapters are designed to stand on their own where possible, though some concepts are building blocks for later ones.
+Every chapter is designed with its own set of pre-requisites.
+Since many of the topics covered here, from Julia programming to Gaussian Process models to Bayesian model critique, are very broad, this book provides links to suggested further reading for those wishing to go into more detail.
+We will often spend a single chapter on a topic for which several thorough textbooks have been written!
+
+## Code examples {.unnumbered}
+
+All the examples in this book are written in the Julia programming language, which is open source so you can run them for free on your own machine (see @sec-julia to get started).
+
+## Related resources {.unnumbered}
+
+This book focuses on teaching *methods* of statistics and machine learning.
+The broad field of data science, including environmental data science, includes many other topics, which this book touches upon only briefly.
+The following resources focus on other key aspects of environmental data science.
+
+- the [Earth and Environmental Data Science Book](https://earth-env-data-science.github.io/) by Ryan Abernathey and coauthors is focused on analysis of climate data, such as climate model output. The book provides an excellent introduction to reproducible and scalable research computing through Python, the Pangeo ecosystem, and tools like git.

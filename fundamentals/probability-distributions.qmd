@@ -3,6 +3,11 @@ jupyter: julia-1.7
 ---
 # Distributions and probability
 
+:::{.callout-important}
+## Pre-requisites
+There are no pre-requisites for this section.
+:::
+
 ```{julia}
 using Distributions
 using Random: shuffle
@@ -27,8 +32,8 @@ This syntax is not required but can help to make code more readable.
 ## Case study: does beer protect you from mosquitos?
 
 ::: {.callout-important icon=false collapse="false"}
-## Watch this
-Before proceeding, watch [Statistics Without the Agonizing Pain](https://www.youtube.com/watch?v=5Dnw46eC-0o) by John Rauser (~10 minutes)
+## Before you procceed
+Before going any further, watch [Statistics Without the Agonizing Pain](https://www.youtube.com/watch?v=5Dnw46eC-0o) by John Rauser (~10 minutes)
 :::
 
 In this class we will use computation and simulation to build fundamental insight into statistical processes without dwelling on "agonizing" details.
@@ -121,7 +126,7 @@ histogram(
     simulated_diffs;
     xlabel="Difference",
     ylabel="Proportion of samples",
-    label="If Skeptic is Right",
+    label="If Skeptic is Right ($N_sim draws)",
     bins=-6:0.5:6,
     legend=:topleft,
     normalize=true,

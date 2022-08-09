@@ -1,0 +1,12 @@
+# Inference
+
+:::{.callout-important}
+## Pre-requisites
+There are no pre-requisites for this section.
+:::
+
+## Inference on a grid
+
+## Maximum likelihood estimation
+
+## Bayesian inference

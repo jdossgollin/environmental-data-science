@@ -1,7 +1,13 @@
-# Getting Started with Julia
+# Getting Started with Julia {#sec-julia}
+
+:::{.callout-important}
+## Pre-requisites
+There are no pre-requisites for this section.
+:::
 
 :::{.callout-note}
-This page borrows heavily from the "Getting Started with Julia" page of the [ISCB 2022 Madison](https://crsl4.github.io/julia-workshop/session1-get-started.html) workshop
+## Credit
+This page borrows heavily from the "Getting Started with Julia" page of the [ISCB 2022 Madison](https://crsl4.github.io/julia-workshop/session1-get-started.html) workshop.
 :::
 
 ## Why Julia?
@@ -9,6 +15,13 @@ This page borrows heavily from the "Getting Started with Julia" page of the [ISC
 The creators of Julia [wrote](https://julialang.org/blog/2012/02/why-we-created-julia/) a blog post about why they created Julia:
 
 > We want a language that's open-source, with a liberal license. We want the speed of C with the dynamism of Ruby. We want a language that's homoiconic, with true macros like Lisp, but with obvious, familiar mathematical notation like Matlab. We want something as usable for general programming as Python, as easy for statistics as R, as natural for string processing as Perl, as powerful for linear algebra as Matlab, as good at gluing programs together as the shell. Something that is dirt simple to learn yet keeps the most serious hackers happy. We want it interactive and we want it compiled.
+
+In this textbook, we use Julia for a few reasons:
+
+1. The syntax looks like the mathematical notation commonly used, making it easy to link computation to theory
+1. Writing code that is fast enough "to do stuff" doesn't require using specialized packages
+1. Packages for advanced tools we will use are built *in Julia*, so we can skip lots of annoying dependency/compilation stuff
+1. The language is open-source, so anyone in the world can use it for research and teaching, regardless of their access to financial resources.
 
 ### Comparisons
 
@@ -23,16 +36,21 @@ The creators of Julia [wrote](https://julialang.org/blog/2012/02/why-we-created-
 
 1. Run Julia
 
-    After installing, make sure that you can run Julia. On some systems, this means searching for the "Julia 1.6" program installed on your computer; in others, it means running the command julia in a terminal. Make sure that you can execute `1 + 1`:
+    After installing, make sure that you can run Julia. On some systems, this means searching for the "Julia 1.7" program installed on your computer; in others, it means running the command `julia` in a terminal.
+    Make sure that you can execute `1 + 1`:
 
     ```julia
     julia> 1 + 1
-    2 # yay! that seems right
+    2 # yay!
     ```
 
-1. Install Julia packages
+1. Install Julia packages <!---TODO--->
 
-## The five stages of programming
+## Basic of writing code
+
+### The five stages of programming
+
+The [ISCB 2022 Madison](https://crsl4.github.io/julia-workshop/session1-get-started.html) workshop defines the five stages of programming as:
 
 1. Use the REPL as a sophisticated calculator
 1. Realize that you are repeating many operations, so you decide to write some functions
@@ -44,10 +62,9 @@ Julia offers many advantages to data science programmers such as avoid the two-l
 
 In this class we will stick to steps 1-3 but you may want to learn about steps 4 and 5 in your own research!
 
+### The REPL
 
-## The Julia REPL
-
-Let's start by looking at the REPL and try:
+Let's start with step 1 by looking at the REPL and try:
 
 * `;` to open shell mode
 * `$` to open R mode (after using RCall)
@@ -55,8 +72,6 @@ Let's start by looking at the REPL and try:
 * `?` to open help mode
 * `\beta+TAB` for math symbols
 * `<backspace>` return to Julia mode
-
-## How do I write code?
 
 ### Installing dependencies in a project environment
 
@@ -160,8 +175,9 @@ Going forward, you will need to know the following:
 - How to write simple functions
 - How to use for loops
 - How to use if statements and other conditionals
-- How to use `let` blocks to create local variables
-- How to 
+- What variable scope is and where variables are defined
+- How types work in Julia, at a high level
+
 
 ::: {.callout-note icon=false collapse="false"}
 ### Pro tips

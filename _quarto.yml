@@ -23,12 +23,12 @@ book:
         href: https://twitter.com/
   chapters:
     - index.qmd
-    - part: "Getting Started"
-      chapters:
-        - 01-julia.qmd
+    - 01-julia.qmd
     - part: "Fundamentals"
       chapters:
-        - 02-distributions.qmd
+        - fundamentals/probability-distributions.qmd
+        - fundamentals/convergence-clt.qmd
+        - fundamentals/inference.qmd
     - references.qmd
   appendices:
     - A-resources.qmd
